@@ -1,0 +1,758 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jun 28, 2025 at 03:56 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 7.4.30
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `benangkumode_db`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `activity_logs`
+--
+
+CREATE TABLE `activity_logs` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `action` varchar(100) NOT NULL,
+  `details` text DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `activity_logs`
+--
+
+INSERT INTO `activity_logs` (`id`, `user_id`, `action`, `details`, `ip_address`, `user_agent`, `created_at`) VALUES
+(1, NULL, 'database_setup', 'Database BenangkuMode berhasil dibuat dengan sistem autentikasi lengkap', '127.0.0.1', NULL, '2025-06-28 01:53:01'),
+(2, NULL, 'registration', 'New user registered: izzat@gmail.com', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-06-28 02:29:49'),
+(3, 2, 'login', 'User logged in successfully', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-06-28 02:30:05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coming_soon_products`
+--
+
+CREATE TABLE `coming_soon_products` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `description` text DEFAULT NULL,
+  `estimated_price` decimal(10,2) DEFAULT NULL,
+  `estimated_release_date` date DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`images`)),
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact_messages`
+--
+
+CREATE TABLE `contact_messages` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `subject` varchar(200) DEFAULT NULL,
+  `message` text NOT NULL,
+  `is_read` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `destinations`
+--
+
+CREATE TABLE `destinations` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `description` text DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `location` varchar(200) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `latitude` decimal(10,8) DEFAULT NULL,
+  `longitude` decimal(11,8) DEFAULT NULL,
+  `rating` decimal(3,2) DEFAULT 0.00,
+  `review_count` int(11) DEFAULT 0,
+  `operating_hours` varchar(100) DEFAULT NULL,
+  `ticket_price` varchar(100) DEFAULT NULL,
+  `contact` varchar(100) DEFAULT NULL,
+  `main_image` varchar(255) DEFAULT NULL,
+  `images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`images`)),
+  `features` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`features`)),
+  `tips` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`tips`)),
+  `facilities` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`facilities`)),
+  `is_active` tinyint(1) DEFAULT 1,
+  `is_featured` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `destination_categories`
+--
+
+CREATE TABLE `destination_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `icon` varchar(50) DEFAULT NULL,
+  `color` varchar(7) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `destination_categories`
+--
+
+INSERT INTO `destination_categories` (`id`, `name`, `icon`, `color`, `is_active`, `created_at`) VALUES
+(1, 'Beach', 'fas fa-umbrella-beach', '#FF6B6B', 1, '2025-06-28 01:53:01'),
+(2, 'Mountain', 'fas fa-mountain', '#4ECDC4', 1, '2025-06-28 01:53:01'),
+(3, 'Cultural', 'fas fa-landmark', '#45B7D1', 1, '2025-06-28 01:53:01'),
+(4, 'Adventure', 'fas fa-hiking', '#96CEB4', 1, '2025-06-28 01:53:01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery_categories`
+--
+
+CREATE TABLE `gallery_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gallery_categories`
+--
+
+INSERT INTO `gallery_categories` (`id`, `name`, `description`, `is_active`, `created_at`) VALUES
+(1, 'Product Gallery', 'Galeri produk unggulan', 1, '2025-06-28 01:53:01'),
+(2, 'Workshop Gallery', 'Galeri kegiatan workshop', 1, '2025-06-28 01:53:01'),
+(3, 'Customer Creations', 'Kreasi customer', 1, '2025-06-28 01:53:01'),
+(4, 'Behind the Scenes', 'Dibalik layar', 1, '2025-06-28 01:53:01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery_images`
+--
+
+CREATE TABLE `gallery_images` (
+  `id` int(11) NOT NULL,
+  `title` varchar(200) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `image_path` varchar(255) NOT NULL,
+  `thumbnail_path` varchar(255) DEFAULT NULL,
+  `file_size` int(11) DEFAULT NULL,
+  `dimensions` varchar(20) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `is_featured` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletter_subscribers`
+--
+
+CREATE TABLE `newsletter_subscribers` (
+  `id` int(11) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `subscribed_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `order_number` varchar(50) NOT NULL,
+  `customer_name` varchar(100) NOT NULL,
+  `customer_email` varchar(100) NOT NULL,
+  `customer_phone` varchar(20) DEFAULT NULL,
+  `customer_address` text DEFAULT NULL,
+  `total_amount` decimal(10,2) NOT NULL,
+  `status` enum('pending','processing','shipped','delivered','cancelled') DEFAULT 'pending',
+  `payment_method` varchar(50) DEFAULT NULL,
+  `payment_status` enum('pending','paid','failed','refunded') DEFAULT 'pending',
+  `shipping_method` varchar(50) DEFAULT NULL,
+  `tracking_number` varchar(100) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `product_name` varchar(200) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `price` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `subtotal` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Triggers `order_items`
+--
+DELIMITER $$
+CREATE TRIGGER `calculate_subtotal` BEFORE INSERT ON `order_items` FOR EACH ROW BEGIN
+    SET NEW.subtotal = NEW.quantity * NEW.price;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `update_subtotal` BEFORE UPDATE ON `order_items` FOR EACH ROW BEGIN
+    SET NEW.subtotal = NEW.quantity * NEW.price;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `description` text DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `images` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`images`)),
+  `stock_quantity` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `is_featured` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_categories`
+--
+
+CREATE TABLE `product_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product_categories`
+--
+
+INSERT INTO `product_categories` (`id`, `name`, `description`, `image`, `is_active`, `created_at`) VALUES
+(1, 'Scarf & Shawl', 'Produk scarf dan shawl merajut', NULL, 1, '2025-06-28 01:53:01'),
+(2, 'Cardigan & Sweater', 'Produk cardigan dan sweater', NULL, 1, '2025-06-28 01:53:01'),
+(3, 'Accessories', 'Aksesoris merajut', NULL, 1, '2025-06-28 01:53:01'),
+(4, 'Home Decor', 'Dekorasi rumah merajut', NULL, 1, '2025-06-28 01:53:01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_votes`
+--
+
+CREATE TABLE `product_votes` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `voter_name` varchar(100) NOT NULL,
+  `voter_email` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings`
+--
+
+CREATE TABLE `settings` (
+  `id` int(11) NOT NULL,
+  `setting_key` varchar(100) NOT NULL,
+  `setting_value` text DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `description`, `created_at`, `updated_at`) VALUES
+(1, 'site_name', 'BenangkuMode', 'Nama website', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(2, 'site_description', 'Tempat terbaik untuk kerajinan tangan dan workshop knitting', 'Deskripsi website', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(3, 'contact_email', 'info@benangkumode.com', 'Email kontak utama', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(4, 'contact_phone', '+62 812-3456-7890', 'Nomor telepon kontak', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(5, 'address', 'Jl. Contoh No. 123, Jakarta', 'Alamat utama', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(6, 'social_facebook', 'https://facebook.com/benangkumode', 'Link Facebook', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(7, 'social_instagram', 'https://instagram.com/benangkumode', 'Link Instagram', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(8, 'social_twitter', 'https://twitter.com/benangkumode', 'Link Twitter', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(9, 'maintenance_mode', '0', 'Mode maintenance (0=off, 1=on)', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(10, 'currency', 'IDR', 'Mata uang default', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(11, 'timezone', 'Asia/Jakarta', 'Timezone default', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(12, 'date_format', 'd/m/Y', 'Format tanggal default', '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(13, 'time_format', 'H:i', 'Format waktu default', '2025-06-28 01:53:01', '2025-06-28 01:53:01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `role` enum('admin','customer') DEFAULT 'customer',
+  `is_active` tinyint(1) DEFAULT 1,
+  `reset_token` varchar(255) DEFAULT NULL,
+  `reset_expiry` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `full_name`, `phone`, `address`, `role`, `is_active`, `reset_token`, `reset_expiry`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'admin@benangkumode.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrator', NULL, NULL, 'admin', 1, NULL, NULL, '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(2, 'izzatnazhiefa_429', 'izzat@gmail.com', '$2y$10$svIFKae6HQlXCYUwXJtau.Sy.O5g5Twu8V9MK2mY2/T/ctCflHQfS', 'Izzat Nazhiefa', '089612345678', 'mataram', 'customer', 1, NULL, NULL, '2025-06-28 02:29:49', '2025-06-28 02:29:49'),
+(3, '', '', '', '', NULL, NULL, 'customer', 1, NULL, NULL, '2025-06-28 02:50:24', '2025-06-28 02:50:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workshops`
+--
+
+CREATE TABLE `workshops` (
+  `id` int(11) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `description` text DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `instructor` varchar(100) DEFAULT NULL,
+  `max_participants` int(11) DEFAULT 20,
+  `current_participants` int(11) DEFAULT 0,
+  `price` decimal(10,2) NOT NULL,
+  `duration` varchar(50) DEFAULT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `location` varchar(200) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `is_past_event` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workshop_categories`
+--
+
+CREATE TABLE `workshop_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `workshop_categories`
+--
+
+INSERT INTO `workshop_categories` (`id`, `name`, `description`, `is_active`, `created_at`) VALUES
+(1, 'Basic Knitting', 'Workshop merajut dasar', 1, '2025-06-28 01:53:01'),
+(2, 'Advanced Techniques', 'Workshop teknik lanjutan', 1, '2025-06-28 01:53:01'),
+(3, 'Pattern Design', 'Workshop desain pola', 1, '2025-06-28 01:53:01'),
+(4, 'Color Theory', 'Workshop teori warna', 1, '2025-06-28 01:53:01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workshop_registrations`
+--
+
+CREATE TABLE `workshop_registrations` (
+  `id` int(11) NOT NULL,
+  `workshop_id` int(11) NOT NULL,
+  `participant_name` varchar(100) NOT NULL,
+  `participant_email` varchar(100) NOT NULL,
+  `participant_phone` varchar(20) DEFAULT NULL,
+  `participant_age` int(11) DEFAULT NULL,
+  `experience_level` enum('beginner','intermediate','advanced') DEFAULT 'beginner',
+  `special_requests` text DEFAULT NULL,
+  `registration_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('pending','confirmed','cancelled') DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_activity_logs_user` (`user_id`),
+  ADD KEY `idx_activity_logs_action` (`action`),
+  ADD KEY `idx_activity_logs_date` (`created_at`);
+
+--
+-- Indexes for table `coming_soon_products`
+--
+ALTER TABLE `coming_soon_products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contact_messages`
+--
+ALTER TABLE `contact_messages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `destinations`
+--
+ALTER TABLE `destinations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_destinations_category` (`category_id`),
+  ADD KEY `idx_destinations_active` (`is_active`),
+  ADD KEY `idx_destinations_featured` (`is_featured`);
+
+--
+-- Indexes for table `destination_categories`
+--
+ALTER TABLE `destination_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `gallery_categories`
+--
+ALTER TABLE `gallery_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `gallery_images`
+--
+ALTER TABLE `gallery_images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_gallery_category` (`category_id`),
+  ADD KEY `idx_gallery_active` (`is_active`);
+
+--
+-- Indexes for table `newsletter_subscribers`
+--
+ALTER TABLE `newsletter_subscribers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `order_number` (`order_number`),
+  ADD KEY `idx_orders_status` (`status`),
+  ADD KEY `idx_orders_date` (`created_at`),
+  ADD KEY `idx_orders_customer` (`customer_email`);
+
+--
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_order_items_order` (`order_id`),
+  ADD KEY `idx_order_items_product` (`product_id`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_products_category` (`category_id`),
+  ADD KEY `idx_products_active` (`is_active`),
+  ADD KEY `idx_products_featured` (`is_featured`);
+
+--
+-- Indexes for table `product_categories`
+--
+ALTER TABLE `product_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_votes`
+--
+ALTER TABLE `product_votes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `setting_key` (`setting_key`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `idx_users_reset_token` (`reset_token`),
+  ADD KEY `idx_users_email` (`email`),
+  ADD KEY `idx_users_role` (`role`),
+  ADD KEY `idx_users_active` (`is_active`);
+
+--
+-- Indexes for table `workshops`
+--
+ALTER TABLE `workshops`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_workshops_category` (`category_id`),
+  ADD KEY `idx_workshops_date` (`start_date`),
+  ADD KEY `idx_workshops_active` (`is_active`);
+
+--
+-- Indexes for table `workshop_categories`
+--
+ALTER TABLE `workshop_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `workshop_registrations`
+--
+ALTER TABLE `workshop_registrations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `workshop_id` (`workshop_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `coming_soon_products`
+--
+ALTER TABLE `coming_soon_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `contact_messages`
+--
+ALTER TABLE `contact_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `destinations`
+--
+ALTER TABLE `destinations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `destination_categories`
+--
+ALTER TABLE `destination_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `gallery_categories`
+--
+ALTER TABLE `gallery_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `gallery_images`
+--
+ALTER TABLE `gallery_images`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `newsletter_subscribers`
+--
+ALTER TABLE `newsletter_subscribers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product_categories`
+--
+ALTER TABLE `product_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `product_votes`
+--
+ALTER TABLE `product_votes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT for table `workshops`
+--
+ALTER TABLE `workshops`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `workshop_categories`
+--
+ALTER TABLE `workshop_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `workshop_registrations`
+--
+ALTER TABLE `workshop_registrations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  ADD CONSTRAINT `activity_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `destinations`
+--
+ALTER TABLE `destinations`
+  ADD CONSTRAINT `destinations_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `destination_categories` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `gallery_images`
+--
+ALTER TABLE `gallery_images`
+  ADD CONSTRAINT `gallery_images_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `gallery_categories` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `product_categories` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `product_votes`
+--
+ALTER TABLE `product_votes`
+  ADD CONSTRAINT `product_votes_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `coming_soon_products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `workshops`
+--
+ALTER TABLE `workshops`
+  ADD CONSTRAINT `workshops_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `workshop_categories` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `workshop_registrations`
+--
+ALTER TABLE `workshop_registrations`
+  ADD CONSTRAINT `workshop_registrations_ibfk_1` FOREIGN KEY (`workshop_id`) REFERENCES `workshops` (`id`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

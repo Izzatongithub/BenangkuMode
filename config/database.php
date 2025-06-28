@@ -25,6 +25,7 @@ function getDbConnection() {
  * Execute a query
  */
 function dbQuery($sql, $params = array()) {
+    define('DEBUG_MODE', true);
     try {
         $conn = getDbConnection();
         $stmt = mysqli_prepare($conn, $sql);
