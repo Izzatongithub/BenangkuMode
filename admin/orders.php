@@ -37,12 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get orders list with user and product details
-$sql = "SELECT oi.*, u.full_name as customer_name, u.email as customer_email, 
-               p.name as product_name, p.price as product_price
-        FROM order_items oi 
-        LEFT JOIN users u ON oi.user_id = u.id 
-        LEFT JOIN products p ON oi.product_id = p.id 
-        ORDER BY oi.created_at DESC";
+$sql = "SELECT 
+        oi.*, 
+        u.full_name as customer_name, 
+        u.email as customer_email, 
+        p.name as product_name, 
+        p.price as product_price
+    FROM order_items oi
+    LEFT JOIN orders o ON oi.order_id = o.id
+    LEFT JOIN users u ON o.customer_email = u.email
+    LEFT JOIN products p ON oi.product_id = p.id
+    ORDER BY oi.created_at DESC";
 $result = mysqli_query($conn, $sql);
 ?>
 <!DOCTYPE html>
