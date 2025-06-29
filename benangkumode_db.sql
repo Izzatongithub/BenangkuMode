@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 28, 2025 at 03:56 PM
+-- Generation Time: Jun 28, 2025 at 05:42 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.30
 
@@ -372,9 +372,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `full_name`, `phone`, `address`, `role`, `is_active`, `reset_token`, `reset_expiry`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@benangkumode.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrator', NULL, NULL, 'admin', 1, NULL, NULL, '2025-06-28 01:53:01', '2025-06-28 01:53:01'),
+(1, 'admin', 'admin@benangkumode.com', '$2y$10$9m5X5/9oMhS8Gmi3Q/FXpu5zPJYvmJ9DfUfJruiy6nuDWtuDzmfba', 'Administrator', NULL, NULL, 'admin', 1, NULL, NULL, '2025-06-28 01:53:01', '2025-06-28 15:10:06'),
 (2, 'izzatnazhiefa_429', 'izzat@gmail.com', '$2y$10$svIFKae6HQlXCYUwXJtau.Sy.O5g5Twu8V9MK2mY2/T/ctCflHQfS', 'Izzat Nazhiefa', '089612345678', 'mataram', 'customer', 1, NULL, NULL, '2025-06-28 02:29:49', '2025-06-28 02:29:49'),
-(3, '', '', '', '', NULL, NULL, 'customer', 1, NULL, NULL, '2025-06-28 02:50:24', '2025-06-28 02:50:24');
+(3, 'admin_1', 'admin1@benangkumode.com', 'admin1', 'joko', NULL, NULL, 'admin', 1, NULL, NULL, '2025-06-28 02:50:24', '2025-06-28 14:16:43');
 
 -- --------------------------------------------------------
 

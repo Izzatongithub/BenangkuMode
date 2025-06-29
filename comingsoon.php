@@ -10,6 +10,39 @@ require_once 'config/database.php';
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .auth-buttons .btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .auth-buttons .btn-login {
+            background: transparent;
+            color: #333;
+            border: 1px solid #333;
+        }
+        .auth-buttons .btn-login:hover {
+            background: #333;
+            color: white;
+        }
+        .auth-buttons .btn-register {
+            background: #667eea;
+            color: white;
+            border: 1px solid #667eea;
+        }
+        .auth-buttons .btn-register:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -42,6 +75,39 @@ require_once 'config/database.php';
                         <a href="wisata.php" class="nav-link">Wisata Lombok</a>
                     </li>
                 </ul>
+                <!-- Auth Section -->
+                <div class="auth-section">
+                    <?php if (isLoggedIn()): ?>
+                        <div class="user-menu">
+                            <div class="user-avatar">
+                                <?php echo strtoupper(substr($_SESSION['user_name'], 0, 1)); ?>
+                            </div>
+                            <div class="dropdown-menu">
+                                <a href="profile.php">
+                                    <i class="fas fa-user me-2"></i>Profil
+                                </a>
+                                <a href="orders.php">
+                                    <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                </a>
+                                <?php if (isAdmin()): ?>
+                                    <div class="divider"></div>
+                                    <a href="admin/dashboard.php">
+                                        <i class="fas fa-cog me-2"></i>Admin Panel
+                                    </a>
+                                <?php endif; ?>
+                                <div class="divider"></div>
+                                <a href="logout.php">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="auth-buttons">
+                            <a href="login.php" class="btn btn-login">Login</a>
+                            <a href="register.php" class="btn btn-register">Daftar</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
                 <div class="hamburger">
                     <span class="bar"></span>
                     <span class="bar"></span>
