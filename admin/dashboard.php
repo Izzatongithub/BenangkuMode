@@ -39,7 +39,8 @@ $result_activities = mysqli_query($conn, $sql_activities);
 // Recent orders
 $sql_recent_orders = "SELECT oi.*, u.full_name, p.name as product_name 
                       FROM order_items oi 
-                      LEFT JOIN users u ON oi.user_id = u.id 
+                      LEFT JOIN orders o ON oi.order_id = o.id
+                      LEFT JOIN users u ON o.customer_email = u.email
                       LEFT JOIN products p ON oi.product_id = p.id 
                       ORDER BY oi.created_at DESC LIMIT 5";
 $result_recent_orders = mysqli_query($conn, $sql_recent_orders);
