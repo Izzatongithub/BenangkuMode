@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'config/database.php';
 
 $workshops = [];
@@ -20,6 +21,38 @@ if ($result) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        .user-menu .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            padding: 8px 0;
+        }
+        .user-menu:hover .dropdown-menu {
+            display: block;
+        }
+        .user-menu .dropdown-menu a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .user-menu .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+        .user-menu .dropdown-menu .divider {
+            border-top: 1px solid #ddd;
+            margin: 8px 0;
+        }
         .auth-buttons {
             display: flex;
             gap: 10px;
@@ -50,6 +83,22 @@ if ($result) {
         .auth-buttons .btn-register:hover {
             background: #5a6fd8;
             transform: translateY(-2px);
+        }
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .user-avatar:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
