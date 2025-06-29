@@ -280,44 +280,22 @@ if ($result) {
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <div class="footer-logo">
-                        <i class="fas fa-scroll"></i>
-                        <span>BenangkuMode</span>
-                    </div>
-                    <p>Karya tangan yang memukau dari Pulau Lombok. Setiap benang bercerita tentang keindahan dan keunikan budaya lokal.</p>
+                    <h3>BenangkuMode</h3>
+                    <p>Pengrajin tangan merajut terbaik di Lombok, menghadirkan produk berkualitas dengan sentuhan tradisional dan desain modern.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Kontak</h4>
+                    <p><i class="fas fa-phone"></i> +62 812-3456-7890</p>
+                    <p><i class="fas fa-envelope"></i> info@benangkumode.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Lombok, Nusa Tenggara Barat</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Ikuti Kami</h4>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-facebook"></i></a>
                         <a href="#"><i class="fab fa-whatsapp"></i></a>
                         <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h3>Menu</h3>
-                    <ul>
-                        <li><a href="index.php">Beranda</a></li>
-                        <li><a href="about.php">Tentang Kami</a></li>
-                        <li><a href="products.php">Produk</a></li>
-                        <li><a href="workshop.php">Workshop</a></li>
-                        <li><a href="gallery.php">Galeri</a></li>
-                        <li><a href="wisata.php">Wisata</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Layanan</h3>
-                    <ul>
-                        <li><a href="products.php">Pembelian Produk</a></li>
-                        <li><a href="workshop.php">Workshop Knitting</a></li>
-                        <li><a href="comingsoon.php">Produk Coming Soon</a></li>
-                        <li><a href="gallery.php">Galeri Koleksi</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Kontak</h3>
-                    <div class="contact-info">
-                        <p><i class="fas fa-map-marker-alt"></i> Lombok, Nusa Tenggara Barat</p>
-                        <p><i class="fas fa-phone"></i> +62 812-3456-7890</p>
-                        <p><i class="fas fa-envelope"></i> info@benangkumode.com</p>
                     </div>
                 </div>
             </div>
