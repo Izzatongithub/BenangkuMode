@@ -79,8 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if (empty($error)) {
             // Update product
-            $sql = "UPDATE products SET name = '$name', description = '$description', category = '$category', 
-                    price = $price, stock = $stock, image = '$image_name', is_active = $is_active 
+            $sql = "UPDATE products SET name = '$name', description = '$description', category_id = '$category', 
+                    price = $price, stock_quantity = $stock, image = '$image_name', is_active = $is_active 
                     WHERE id = $product_id";
             
             if (mysqli_query($conn, $sql)) {
@@ -224,11 +224,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="mb-3">
                                                     <label for="category" class="form-label">Category *</label>
                                                     <select class="form-select" id="category" name="category" required>
-                                                        <option value="clothing" <?php echo $product['category'] === 'clothing' ? 'selected' : ''; ?>>Clothing</option>
-                                                        <option value="accessories" <?php echo $product['category'] === 'accessories' ? 'selected' : ''; ?>>Accessories</option>
-                                                        <option value="shoes" <?php echo $product['category'] === 'shoes' ? 'selected' : ''; ?>>Shoes</option>
-                                                        <option value="bags" <?php echo $product['category'] === 'bags' ? 'selected' : ''; ?>>Bags</option>
-                                                        <option value="other" <?php echo $product['category'] === 'other' ? 'selected' : ''; ?>>Other</option>
+                                                        <option selected>Select category</option>
+                                                            <?php
+                                                            $no = 1;
+                                                            $qry = mysqli_query($conn, "SELECT * FROM product_categories");
+                                                            while ($data = mysqli_fetch_array($qry)) {
+                                                            ?>
+                                                            <option data="<?= htmlspecialchars($data['name']) ?>"value="<?= $data['id'] ?>"<?= ($product['category_id'] == $data['id']) ? 'selected' : '' ?>>
+                                                                <?= htmlspecialchars($data['name']) ?>
+                                                            </option>
+
+                                                            <?php }
+                                                            ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -237,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="mb-3">
                                                     <label for="price" class="form-label">Price (Rp) *</label>
                                                     <input type="number" class="form-control" id="price" name="price" 
-                                                           value="<?php echo $product['price']; ?>" min="0" step="1000" required>
+                                                        value="<?php echo $product['price']; ?>" min="0" step="1000" required>
                                                 </div>
                                             </div>
                                             
@@ -245,7 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="mb-3">
                                                     <label for="stock" class="form-label">Stock *</label>
                                                     <input type="number" class="form-control" id="stock" name="stock" 
-                                                           value="<?php echo $product['stock']; ?>" min="0" required>
+                                                           value="<?php echo $product['stock_quantity']; ?>" min="0" required>
                                                 </div>
                                             </div>
                                         </div>

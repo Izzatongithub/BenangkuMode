@@ -222,7 +222,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <?php foreach ($products as $product): ?>
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="<?= htmlspecialchars($product['image'] ?? 'assets/img/default.png') ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+                        <!-- <img src="<?= htmlspecialchars($product['image'] ?? 'assets/images/products/') ?>" alt="<?= htmlspecialchars($product['name']) ?>"> -->
+                            <!-- <img src="assets/images/products/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>"> -->
+                            <img src="assets/images/products/<?= htmlspecialchars($product['image'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>">
                     </div>
                     <h3><?= htmlspecialchars($product['name']) ?></h3>
                     <p><?= htmlspecialchars($product['description']) ?></p>

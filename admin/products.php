@@ -49,7 +49,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Get products list
-$sql = "SELECT * FROM products ORDER BY created_at DESC";
+// $sql = "SELECT * FROM products ORDER BY created_at DESC";
+$sql = "SELECT 
+            products.*, 
+            product_categories.name AS category 
+        FROM 
+            products 
+        LEFT JOIN 
+            product_categories 
+        ON 
+            products.category_id = product_categories.id 
+        ORDER BY 
+            products.created_at DESC";
+
 $result = mysqli_query($conn, $sql);
 ?>
 <!DOCTYPE html>
@@ -187,8 +199,8 @@ $result = mysqli_query($conn, $sql);
                                                 <td><?php echo htmlspecialchars($product['category']); ?></td>
                                                 <td><?php echo formatCurrency($product['price']); ?></td>
                                                 <td>
-                                                    <span class="badge bg-<?php echo $product['stock'] > 0 ? 'success' : 'danger'; ?>">
-                                                        <?php echo $product['stock']; ?> units
+                                                    <span class="badge bg-<?php echo $product['stock_quantity'] > 0 ? 'success' : 'danger'; ?>">
+                                                        <?php echo $product['stock_quantity']; ?> units
                                                     </span>
                                                 </td>
                                                 <td>

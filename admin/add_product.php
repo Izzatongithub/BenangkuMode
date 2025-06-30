@@ -54,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if (empty($error)) {
             // Insert product
-            $sql = "INSERT INTO products (name, description, category, price, stock, image, is_active) 
-                    VALUES ('$name', '$description', '$category', $price, $stock, '$image_name', 1)";
+            $sql = "INSERT INTO products (name, description, price, category_id, stock_quantity, image, is_active) 
+                    VALUES ('$name', '$description', $price, $category, $stock, '$image_name', 1)";
             
             if (mysqli_query($conn, $sql)) {
                 $message = 'Product added successfully';
@@ -197,12 +197,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="mb-3">
                                                     <label for="category" class="form-label">Category *</label>
                                                     <select class="form-select" id="category" name="category" required>
-                                                        <option value="">Select Category</option>
-                                                        <option value="clothing" <?php echo ($category ?? '') === 'clothing' ? 'selected' : ''; ?>>Clothing</option>
+                                                        <!-- <option value="">Select Category</option> -->
+                                                        <!-- <option value="clothing" <?php echo ($category ?? '') === 'clothing' ? 'selected' : ''; ?>>Clothing</option>
                                                         <option value="accessories" <?php echo ($category ?? '') === 'accessories' ? 'selected' : ''; ?>>Accessories</option>
                                                         <option value="shoes" <?php echo ($category ?? '') === 'shoes' ? 'selected' : ''; ?>>Shoes</option>
                                                         <option value="bags" <?php echo ($category ?? '') === 'bags' ? 'selected' : ''; ?>>Bags</option>
-                                                        <option value="other" <?php echo ($category ?? '') === 'other' ? 'selected' : ''; ?>>Other</option>
+                                                        <option value="other" <?php echo ($category ?? '') === 'other' ? 'selected' : ''; ?>>Other</option> -->
+                                                        <option selected>Select category</option>
+                                                            <?php
+
+                                                            $no = 1;
+                                                            $qry = mysqli_query($conn, "SELECT * FROM product_categories");
+                                                            while ($data = mysqli_fetch_array($qry)) {
+                                                            ?>
+                                                                <option data="<?= $data['name'] ?>" value="<?= $data['id'] ?>"><?= $data['name'] ?>
+                                                                </option>
+                                                            <?php }
+                                                            ?>
                                                     </select>
                                                 </div>
                                             </div>

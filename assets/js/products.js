@@ -1,114 +1,114 @@
 // Product data
-const products = [
-    {
-        id: 1,
-        name: "Scarf Merajut Tradisional",
-        category: "scarf",
-        price: 150000,
-        description: "Scarf hangat dengan motif tradisional Lombok yang elegan",
-        image: "fas fa-scarf",
-        color: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
-    },
-    {
-        id: 2,
-        name: "Cardigan Handmade",
-        category: "cardigan",
-        price: 350000,
-        description: "Cardigan nyaman dengan detail merajut yang indah dan trendy",
-        image: "fas fa-tshirt",
-        color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-    },
-    {
-        id: 3,
-        name: "Tas Merajut Unik",
-        category: "bag",
-        price: 200000,
-        description: "Tas unik dengan teknik merajut yang kuat dan fashionable",
-        image: "fas fa-bag-shopping",
-        color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
-    },
-    {
-        id: 4,
-        name: "Topi Merajut",
-        category: "accessories",
-        price: 120000,
-        description: "Topi merajut yang hangat dan stylish untuk cuaca dingin",
-        image: "fas fa-hat-cowboy",
-        color: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
-    },
-    {
-        id: 5,
-        name: "Sarung Tangan Merajut",
-        category: "accessories",
-        price: 80000,
-        description: "Sarung tangan merajut yang nyaman dan hangat",
-        image: "fas fa-hand-paper",
-        color: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"
-    },
-    {
-        id: 6,
-        name: "Syal Merajut Premium",
-        category: "scarf",
-        price: 180000,
-        description: "Syal premium dengan bahan wol berkualitas tinggi",
-        image: "fas fa-scarf",
-        color: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)"
-    },
-    {
-        id: 7,
-        name: "Vest Merajut",
-        category: "cardigan",
-        price: 280000,
-        description: "Vest merajut yang cocok untuk layering outfit",
-        image: "fas fa-tshirt",
-        color: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"
-    },
-    {
-        id: 8,
-        name: "Tas Ransel Merajut",
-        category: "bag",
-        price: 250000,
-        description: "Tas ransel merajut yang praktis dan stylish",
-        image: "fas fa-bag-shopping",
-        color: "linear-gradient(135deg, #a8caba 0%, #5d4e75 100%)"
-    },
-    {
-        id: 9,
-        name: "Bandana Merajut",
-        category: "accessories",
-        price: 60000,
-        description: "Bandana merajut yang trendy dan multifungsi",
-        image: "fas fa-scarf",
-        color: "linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)"
-    },
-    {
-        id: 10,
-        name: "Sweater Merajut",
-        category: "cardigan",
-        price: 400000,
-        description: "Sweater merajut yang hangat dan nyaman dipakai",
-        image: "fas fa-tshirt",
-        color: "linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)"
-    },
-    {
-        id: 11,
-        name: "Tas Tote Merajut",
-        category: "bag",
-        price: 180000,
-        description: "Tas tote merajut yang eco-friendly dan stylish",
-        image: "fas fa-bag-shopping",
-        color: "linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%)"
-    },
-    {
-        id: 12,
-        name: "Scarf Infinity",
-        category: "scarf",
-        price: 160000,
-        description: "Scarf infinity yang trendy dan mudah dipakai",
-        image: "fas fa-scarf",
-        color: "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)"
-    }
-];
+// const products = [
+//     {
+//         id: 1,
+//         name: "Scarf Merajut Tradisional",
+//         category: "scarf",
+//         price: 150000,
+//         description: "Scarf hangat dengan motif tradisional Lombok yang elegan",
+//         image: "fas fa-scarf",
+//         color: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+//     },
+//     {
+//         id: 2,
+//         name: "Cardigan Handmade",
+//         category: "cardigan",
+//         price: 350000,
+//         description: "Cardigan nyaman dengan detail merajut yang indah dan trendy",
+//         image: "fas fa-tshirt",
+//         color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+//     },
+//     {
+//         id: 3,
+//         name: "Tas Merajut Unik",
+//         category: "bag",
+//         price: 200000,
+//         description: "Tas unik dengan teknik merajut yang kuat dan fashionable",
+//         image: "fas fa-bag-shopping",
+//         color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+//     },
+//     {
+//         id: 4,
+//         name: "Topi Merajut",
+//         category: "accessories",
+//         price: 120000,
+//         description: "Topi merajut yang hangat dan stylish untuk cuaca dingin",
+//         image: "fas fa-hat-cowboy",
+//         color: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
+//     },
+//     {
+//         id: 5,
+//         name: "Sarung Tangan Merajut",
+//         category: "accessories",
+//         price: 80000,
+//         description: "Sarung tangan merajut yang nyaman dan hangat",
+//         image: "fas fa-hand-paper",
+//         color: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"
+//     },
+//     {
+//         id: 6,
+//         name: "Syal Merajut Premium",
+//         category: "scarf",
+//         price: 180000,
+//         description: "Syal premium dengan bahan wol berkualitas tinggi",
+//         image: "fas fa-scarf",
+//         color: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)"
+//     },
+//     {
+//         id: 7,
+//         name: "Vest Merajut",
+//         category: "cardigan",
+//         price: 280000,
+//         description: "Vest merajut yang cocok untuk layering outfit",
+//         image: "fas fa-tshirt",
+//         color: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"
+//     },
+//     {
+//         id: 8,
+//         name: "Tas Ransel Merajut",
+//         category: "bag",
+//         price: 250000,
+//         description: "Tas ransel merajut yang praktis dan stylish",
+//         image: "fas fa-bag-shopping",
+//         color: "linear-gradient(135deg, #a8caba 0%, #5d4e75 100%)"
+//     },
+//     {
+//         id: 9,
+//         name: "Bandana Merajut",
+//         category: "accessories",
+//         price: 60000,
+//         description: "Bandana merajut yang trendy dan multifungsi",
+//         image: "fas fa-scarf",
+//         color: "linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)"
+//     },
+//     {
+//         id: 10,
+//         name: "Sweater Merajut",
+//         category: "cardigan",
+//         price: 400000,
+//         description: "Sweater merajut yang hangat dan nyaman dipakai",
+//         image: "fas fa-tshirt",
+//         color: "linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%)"
+//     },
+//     {
+//         id: 11,
+//         name: "Tas Tote Merajut",
+//         category: "bag",
+//         price: 180000,
+//         description: "Tas tote merajut yang eco-friendly dan stylish",
+//         image: "fas fa-bag-shopping",
+//         color: "linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%)"
+//     },
+//     {
+//         id: 12,
+//         name: "Scarf Infinity",
+//         category: "scarf",
+//         price: 160000,
+//         description: "Scarf infinity yang trendy dan mudah dipakai",
+//         image: "fas fa-scarf",
+//         color: "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)"
+//     }
+// ];
 
 // Shopping cart
 let cart = [];
