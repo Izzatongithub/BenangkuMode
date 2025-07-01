@@ -307,14 +307,9 @@ function checkout() {
         showNotification('Keranjang belanja kosong!', 'error');
         return;
     }
-    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    let message = `Halo! Saya ingin membeli produk dari BenangkuMode:\n\n`;
-    cart.forEach(item => {
-        message += `• ${item.name} (${item.quantity}x) - Rp ${(item.price * item.quantity).toLocaleString()}\n`;
-    });
-    message += `\nTotal: Rp ${total.toLocaleString()}\n\nMohon informasi lebih lanjut untuk proses pembayaran.`;
-    const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    
+    // Redirect to checkout page
+    window.location.href = 'checkout.php';
 }
 
 // Show notification

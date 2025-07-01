@@ -197,9 +197,9 @@ if ($result) {
                 </div>
             </div>
         </div>
-        <div class="hero-image">
+        <!-- <div class="hero-image">
             <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Lombok Landscape">
-        </div>
+        </div> -->
     </section>
 
     <!-- Search and Filter Section -->

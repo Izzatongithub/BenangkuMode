@@ -257,7 +257,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <span id="cartTotal">Rp 0</span>
                 </div>
                 <button class="btn btn-primary" onclick="checkout()">
-                    <i class="fab fa-whatsapp"></i> Beli via WhatsApp
+                    <i class="fas fa-shopping-cart"></i> Lanjut ke Checkout
                 </button>
             </div>
         </div>
