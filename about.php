@@ -257,7 +257,7 @@ require_once 'config/database.php';
     </section>
 
     <!-- Team -->
-    <section class="team">
+    <!-- <section class="team">
         <div class="container">
             <h2 class="section-title">Tim Kami</h2>
             <div class="team-grid">
@@ -287,10 +287,10 @@ require_once 'config/database.php';
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Stats -->
-    <section class="stats">
+    <!-- <section class="stats">
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-item">
@@ -311,7 +311,7 @@ require_once 'config/database.php';
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Footer -->
     <footer class="footer">

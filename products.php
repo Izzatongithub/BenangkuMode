@@ -221,18 +221,18 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="products-grid" id="productsGrid">
                 <?php foreach ($products as $product): ?>
                 <div class="product-card">
-                    <div class="product-image">
-                        <!-- <img src="<?= htmlspecialchars($product['image'] ?? 'assets/images/products/') ?>" alt="<?= htmlspecialchars($product['name']) ?>"> -->
-                            <!-- <img src="assets/images/products/<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>"> -->
+                    <a href="detail_produk.php?id=<?= $product['id'] ?>" style="text-decoration:none; color:inherit;">
+                        <div class="product-image">
                             <img src="assets/images/products/<?= htmlspecialchars($product['image'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>">
-                    </div>
-                    <h3><?= htmlspecialchars($product['name']) ?></h3>
+                        </div>
+                        <h3><?= htmlspecialchars($product['name']) ?></h3>
+                    </a>
                     <p><?= htmlspecialchars($product['description']) ?></p>
                     <span class="price">Rp <?= number_format($product['price'], 0, ',', '.') ?></span>
                     <!-- Tombol tambah ke keranjang bisa dihubungkan ke JS -->
-                    <button class="btn btn-primary add-to-cart" onclick="addToCart(<?= $product['id'] ?>)">
+                    <a href="add_to_cart.php?product_id=<?= $product['id'] ?>" class="btn btn-primary">
                         <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
-                    </button>
+                    </a>
                 </div>
                 <?php endforeach; ?>
             </div>

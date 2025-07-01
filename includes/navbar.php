@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../config/database.php';
-session_start();
+// session_start();
 ?>
 <!-- Header -->
 <header class="header">

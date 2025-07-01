@@ -1,6 +1,14 @@
 <?php
 session_start();
 require_once 'config/database.php';
+
+// Ambil semua produk aktif
+$products = [];
+$result = mysqli_query($conn, "SELECT * FROM products WHERE is_active = 1");
+while ($row = mysqli_fetch_assoc($result)) {
+    $products[] = $row;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -234,31 +242,21 @@ require_once 'config/database.php';
         <div class="container">
             <h2 class="section-title">Produk Unggulan</h2>
             <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-scarf"></i>
+                <?php foreach ($products as $product): ?>
+                    <div class="product-card">
+                        <a href="detail_produk.php?id=<?= $product['id'] ?>" style="text-decoration:none; color:inherit;">
+                            <div class="product-image">
+                                <img src="assets/images/products/<?= htmlspecialchars($product['image'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+                            </div>
+                            <h3><?= htmlspecialchars($product['name']) ?></h3>
+                        </a>
+                        <p><?= htmlspecialchars($product['description']) ?></p>
+                        <span class="price">Rp <?= number_format($product['price'], 0, ',', '.') ?></span>
+                        <a href="detail_produk.php?id=<?= $product['id'] ?>" class="btn btn-secondary">
+                            Lihat Detail
+                        </a>
                     </div>
-                    <h3>Scarf Merajut</h3>
-                    <p>Scarf hangat dengan motif tradisional Lombok</p>
-                    <span class="price">Rp 150.000</span>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-tshirt"></i>
-                    </div>
-                    <h3>Cardigan Handmade</h3>
-                    <p>Cardigan nyaman dengan detail merajut yang indah</p>
-                    <span class="price">Rp 350.000</span>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-bag-shopping"></i>
-                    </div>
-                    <h3>Tas Merajut</h3>
-                    <p>Tas unik dengan teknik merajut yang kuat</p>
-                    <span class="price">Rp 200.000</span>
-                </div>
-            </div>
+                <?php endforeach; ?>
             <div class="text-center">
                 <a href="products.php" class="btn btn-primary">Lihat Semua Produk</a>
             </div>
