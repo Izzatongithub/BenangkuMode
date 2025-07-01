@@ -133,15 +133,14 @@ require_once 'config/database.php';
                                 <?php echo strtoupper(substr($_SESSION['user_name'], 0, 1)); ?>
                             </div>
                             <div class="dropdown-menu">
-                                <a href="profile.php">
-                                    <i class="fas fa-user me-2"></i>Profil
-                                </a>
                                 <?php if (isAdmin()): ?>
-                                    <div class="divider"></div>
                                     <a href="admin/dashboard.php">
                                         <i class="fas fa-cog me-2"></i>Admin Panel
                                     </a>
                                 <?php else: ?>
+                                <a href="profile.php">
+                                    <i class="fas fa-user me-2"></i>Profil
+                                </a>
                                 <div class="divider"></div>
                                 <a href="orders.php">
                                     <i class="fas fa-shopping-bag me-2"></i>Pesanan
