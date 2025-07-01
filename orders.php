@@ -56,7 +56,6 @@ while ($row = mysqli_fetch_assoc($result)) {
             'quantity' => $row['quantity'],
             'price' => $row['price'],
             'subtotal' => $row['subtotal'],
-            'status' => $row['item_status'],
             'product_image' => $row['product_image']
         ];
     }
@@ -165,17 +164,61 @@ while ($row = mysqli_fetch_assoc($result)) {
             padding: 15px 20px;
         }
         .order-item {
-            padding: 15px 20px;
+            background: #fff;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
             border-bottom: 1px solid #f0f0f0;
+            transition: box-shadow 0.2s;
         }
         .order-item:last-child {
             border-bottom: none;
         }
-        .product-image {
+        .order-item .product-image {
             width: 60px;
             height: 60px;
             object-fit: cover;
             border-radius: 8px;
+            margin-right: 18px;
+            background: #f8f9fa;
+        }
+        .order-item .item-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .order-item .item-info strong {
+            font-size: 1.05rem;
+            color: #2c3e50;
+        }
+        .order-item .item-info .qty {
+            color: #888;
+            font-size: 0.95rem;
+        }
+        .order-item .item-price,
+        .order-item .item-subtotal {
+            min-width: 90px;
+            text-align: right;
+            font-weight: 500;
+            color: #e74c3c;
+            font-size: 1rem;
+            margin-left: 18px;
+        }
+        @media (max-width: 600px) {
+            .order-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 14px 8px;
+            }
+            .order-item .item-price,
+            .order-item .item-subtotal {
+                margin-left: 0;
+                text-align: left;
+            }
         }
         .status-badge {
             padding: 4px 12px;
@@ -341,42 +384,17 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 
                                 <?php foreach ($order['items'] as $item): ?>
                                     <div class="order-item">
-                                        <div class="row align-items-center">
-                                            <div class="col-md-2">
-                                                <?php if ($item['product_image']): ?>
-                                                    <img src="assets/images/products/<?php echo htmlspecialchars($item['product_image']); ?>" 
-                                                         alt="<?php echo htmlspecialchars($item['product_name']); ?>" 
-                                                         class="product-image">
-                                                <?php else: ?>
-                                                    <div class="product-image bg-light d-flex align-items-center justify-content-center">
-                                                        <i class="fas fa-image text-muted"></i>
-                                                    </div>
-                                                <?php endif; ?>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h6 class="mb-1"><?php echo htmlspecialchars($item['product_name']); ?></h6>
-                                                <small class="text-muted">Qty: <?php echo $item['quantity']; ?></small>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <span class="text-muted"><?php echo formatCurrency($item['price']); ?></span>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <span class="fw-bold"><?php echo formatCurrency($item['subtotal']); ?></span>
-                                            </div>
-                                            <div class="col-md-2 text-end">
-                                                <span class="status-badge status-<?php echo $item['status']; ?>">
-                                                    <?php 
-                                                    switch($item['status']) {
-                                                        case 'pending': echo 'Menunggu'; break;
-                                                        case 'processing': echo 'Diproses'; break;
-                                                        case 'completed': echo 'Selesai'; break;
-                                                        case 'cancelled': echo 'Dibatalkan'; break;
-                                                        default: echo ucfirst($item['status']);
-                                                    }
-                                                    ?>
-                                                </span>
-                                            </div>
+                                        <?php if ($item['product_image']): ?>
+                                            <img src="assets/images/products/<?php echo htmlspecialchars($item['product_image']); ?>" class="product-image" alt="<?php echo htmlspecialchars($item['product_name']); ?>">
+                                        <?php else: ?>
+                                            <div class="product-image" style="display:flex;align-items:center;justify-content:center;"><i class="fas fa-image text-muted"></i></div>
+                                        <?php endif; ?>
+                                        <div class="item-info">
+                                            <strong><?php echo htmlspecialchars($item['product_name']); ?></strong>
+                                            <span class="qty">Qty: <?php echo $item['quantity']; ?></span>
                                         </div>
+                                        <div class="item-price">Rp <?php echo number_format($item['price'],0,',','.'); ?></div>
+                                        <div class="item-subtotal">Rp <?php echo number_format($item['subtotal'],0,',','.'); ?></div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>

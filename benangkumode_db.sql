@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 28, 2025 at 05:42 PM
+-- Generation Time: Jul 01, 2025 at 03:15 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.30
 
@@ -63,6 +63,13 @@ CREATE TABLE `coming_soon_products` (
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `coming_soon_products`
+--
+
+INSERT INTO `coming_soon_products` (`id`, `name`, `description`, `estimated_price`, `estimated_release_date`, `image`, `images`, `is_active`, `created_at`) VALUES
+(1, 'bucket cap rajut', 'topi', '75000.00', '2025-07-24', 'comingsoon_6863c124af3d73.20127203.jpeg', NULL, 1, '2025-07-01 11:06:12');
 
 -- --------------------------------------------------------
 
@@ -218,6 +225,13 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `order_number`, `customer_name`, `customer_email`, `customer_phone`, `customer_address`, `total_amount`, `status`, `payment_method`, `payment_status`, `shipping_method`, `tracking_number`, `notes`, `created_at`, `updated_at`) VALUES
+(2, 'ORD-20250701-E74E8511', 'Izzat Nazhiefa', 'izzat@gmail.com', '089999', 'mtm', '395000.00', 'pending', 'cod', 'pending', 'jne', NULL, NULL, '2025-07-01 13:09:51', '2025-07-01 13:09:51');
+
 -- --------------------------------------------------------
 
 --
@@ -234,6 +248,14 @@ CREATE TABLE `order_items` (
   `subtotal` decimal(10,2) NOT NULL DEFAULT 0.00,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `quantity`, `price`, `subtotal`, `created_at`) VALUES
+(1, 2, 5, 'topi rajut', 2, '75000.00', '150000.00', '2025-07-01 13:09:51'),
+(2, 2, 4, 'cardigan rajut', 1, '245000.00', '245000.00', '2025-07-01 13:09:51');
 
 --
 -- Triggers `order_items`
@@ -272,6 +294,14 @@ CREATE TABLE `products` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_id`, `image`, `images`, `stock_quantity`, `is_active`, `is_featured`, `created_at`, `updated_at`) VALUES
+(4, 'cardigan rajut', 'warna biru', '245000.00', 1, '6862096a08aea.jpeg', NULL, 4, 1, 0, '2025-06-30 03:50:02', '2025-06-30 05:02:58'),
+(5, 'topi rajut', 'mantap', '75000.00', 1, '68621aa967ebf.jpeg', NULL, 5, 1, 0, '2025-06-30 05:03:37', '2025-06-30 05:03:37');
+
 -- --------------------------------------------------------
 
 --
@@ -292,10 +322,10 @@ CREATE TABLE `product_categories` (
 --
 
 INSERT INTO `product_categories` (`id`, `name`, `description`, `image`, `is_active`, `created_at`) VALUES
-(1, 'Scarf & Shawl', 'Produk scarf dan shawl merajut', NULL, 1, '2025-06-28 01:53:01'),
-(2, 'Cardigan & Sweater', 'Produk cardigan dan sweater', NULL, 1, '2025-06-28 01:53:01'),
-(3, 'Accessories', 'Aksesoris merajut', NULL, 1, '2025-06-28 01:53:01'),
-(4, 'Home Decor', 'Dekorasi rumah merajut', NULL, 1, '2025-06-28 01:53:01');
+(1, 'clothing', 'Produk scarf dan shawl merajut', NULL, 1, '2025-06-28 01:53:01'),
+(2, 'accessories', 'Produk cardigan dan sweater', NULL, 1, '2025-06-28 01:53:01'),
+(3, 'shoes', 'Aksesoris merajut', NULL, 1, '2025-06-28 01:53:01'),
+(4, 'bags', 'Dekorasi rumah merajut', NULL, 1, '2025-06-28 01:53:01');
 
 -- --------------------------------------------------------
 
@@ -310,6 +340,13 @@ CREATE TABLE `product_votes` (
   `voter_email` varchar(100) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product_votes`
+--
+
+INSERT INTO `product_votes` (`id`, `product_id`, `voter_name`, `voter_email`, `created_at`) VALUES
+(3, 1, 'Izzat Nazhiefa', 'izzat@gmail.com', '2025-07-01 12:03:05');
 
 -- --------------------------------------------------------
 
@@ -401,6 +438,15 @@ CREATE TABLE `workshops` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `workshops`
+--
+
+INSERT INTO `workshops` (`id`, `title`, `description`, `category_id`, `instructor`, `max_participants`, `current_participants`, `price`, `duration`, `start_date`, `end_date`, `location`, `image`, `is_active`, `is_past_event`, `created_at`, `updated_at`) VALUES
+(1, 'Dasar Merajut', 'Mempelajari teknik dasar merajut fashion', 1, 'Izzat Nazhiefa S.Kom', 10, 0, '50000.00', '5 Jam', '2025-07-01 16:52:00', '2025-07-03 16:52:00', 'Gomong', 'workshop_6863a4940e1b77.15297775.jpeg', 1, 0, '2025-07-01 08:53:07', '2025-07-01 09:04:20'),
+(3, 'Teknik dasar menjahit', 'Belajar teknik dasar menjahit', 1, 'Fadlullah hasan', 10, 0, '0.00', '4 Jam', '2025-07-07 18:15:00', '2025-07-12 18:15:00', 'Kekalik', '', 1, 0, '2025-07-01 10:19:32', '2025-07-01 10:19:32'),
+(4, 'Teknik dasar memotong', 'belajar memotong', 1, 'yusri abdi', 10, 0, '0.00', '2 jam', '2025-07-01 18:20:00', '2025-07-02 18:20:00', 'seruni', '', 0, 1, '2025-07-01 10:20:43', '2025-07-01 10:20:43');
 
 -- --------------------------------------------------------
 
@@ -601,7 +647,7 @@ ALTER TABLE `activity_logs`
 -- AUTO_INCREMENT for table `coming_soon_products`
 --
 ALTER TABLE `coming_soon_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `contact_messages`
@@ -643,19 +689,19 @@ ALTER TABLE `newsletter_subscribers`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `product_categories`
@@ -667,7 +713,7 @@ ALTER TABLE `product_categories`
 -- AUTO_INCREMENT for table `product_votes`
 --
 ALTER TABLE `product_votes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -685,7 +731,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `workshops`
 --
 ALTER TABLE `workshops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `workshop_categories`

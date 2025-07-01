@@ -9,13 +9,15 @@ if (isset($_POST['update_qty'], $_POST['product_id'])) {
     if (isset($_SESSION['cart'][$pid])) {
         $_SESSION['cart'][$pid]['qty'] = $qty;
     }
-    header('Location: cart.php');
+    $redirect = (isset($_GET['redirect']) && $_GET['redirect'] === 'checkout') ? 'checkout.php' : 'cart.php';
+    header('Location: ' . $redirect);
     exit;
 }
 if (isset($_POST['remove'], $_POST['product_id'])) {
     $pid = (int)$_POST['product_id'];
     unset($_SESSION['cart'][$pid]);
-    header('Location: cart.php');
+    $redirect = (isset($_GET['redirect']) && $_GET['redirect'] === 'checkout') ? 'checkout.php' : 'cart.php';
+    header('Location: ' . $redirect);
     exit;
 }
 

@@ -15,8 +15,7 @@ $error = '';
 // Handle checkout process
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action']) && $_POST['action'] === 'checkout') {
-        $cart_items = json_decode($_POST['cart_items'], true);
-        
+        $cart_items = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
         if (empty($cart_items)) {
             $error = 'Keranjang belanja kosong!';
         } else {
@@ -27,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Calculate total amount
                 $total_amount = 0;
                 foreach ($cart_items as $item) {
-                    $total_amount += $item['price'] * $item['quantity'];
+                    $total_amount += $item['price'] * $item['qty'];
                 }
                 
                 // Generate order number
@@ -54,12 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 foreach ($cart_items as $item) {
                     $product_id = mysqli_real_escape_string($conn, $item['id']);
                     $product_name = mysqli_real_escape_string($conn, $item['name']);
-                    $quantity = mysqli_real_escape_string($conn, $item['quantity']);
+                    $quantity = mysqli_real_escape_string($conn, $item['qty']);
                     $price = mysqli_real_escape_string($conn, $item['price']);
                     $subtotal = $price * $quantity;
                     
-                    $order_item_sql = "INSERT INTO order_items (order_id, product_id, product_name, quantity, price, subtotal, status) 
-                                      VALUES ($order_id, $product_id, '$product_name', $quantity, $price, $subtotal, 'pending')";
+                    $order_item_sql = "INSERT INTO order_items (order_id, product_id, product_name, quantity, price, subtotal) 
+                                      VALUES ($order_id, $product_id, '$product_name', $quantity, $price, $subtotal)";
                     
                     if (!mysqli_query($conn, $order_item_sql)) {
                         throw new Exception('Error creating order item: ' . mysqli_error($conn));
@@ -73,6 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Log activity
                 logActivity('create_order', "Created order ID: $order_id with " . count($cart_items) . " items");
+                
+                // Hapus keranjang setelah checkout sukses
+                unset($_SESSION['cart']);
                 
             } catch (Exception $e) {
                 mysqli_rollback($conn);
@@ -89,7 +91,7 @@ $sql = "SELECT
         oi.product_name,
         oi.quantity,
         oi.subtotal,
-        oi.status as item_status,
+        o.status as item_status,
         o.created_at as order_date
     FROM orders o
     LEFT JOIN order_items oi ON o.id = oi.order_id
@@ -106,6 +108,14 @@ $recent_orders = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $recent_orders[] = $row;
 }
+
+$cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+$subtotal = 0;
+foreach ($cart as $item) {
+    $subtotal += $item['price'] * $item['qty'];
+}
+$shipping = 15000;
+$total = $subtotal + $shipping;
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -309,7 +319,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </header>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" style="margin-top:100px;">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -340,31 +350,53 @@ while ($row = mysqli_fetch_assoc($result)) {
                             <h4 class="mb-0">Detail Pesanan</h4>
                         </div>
                         <div class="p-4">
+                            <!-- Daftar Produk Keranjang -->
                             <div id="checkoutItems">
-                                <!-- Cart items will be loaded here -->
+                                <?php
+                                $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+                                if (empty($cart)) {
+                                    echo '<p class="text-center text-muted">Keranjang belanja kosong</p>';
+                                } else {
+                                    echo '<div style="margin-bottom:20px;">';
+                                    foreach ($cart as $item) {
+                                        echo '<div class="cart-item" style="display:flex;align-items:center;gap:1rem;margin-bottom:10px;">';
+                                        echo '<img src="assets/images/products/' . htmlspecialchars($item['image']) . '" style="width:50px;height:50px;object-fit:cover;border-radius:8px;">';
+                                        echo '<div><strong>' . htmlspecialchars($item['name']) . '</strong><br>Qty: ' . $item['qty'] . '</div>';
+                                        echo '<div style="margin-left:auto;font-weight:bold;">Rp ' . number_format($item['price'] * $item['qty'], 0, ',', '.') . '</div>';
+                                        echo '</div>';
+                                    }
+                                    echo '</div>';
+                                }
+                                ?>
                             </div>
-                            
+                            <!-- Ringkasan Pesanan -->
+                            <?php
+                            $subtotal = 0;
+                            foreach ($cart as $item) {
+                                $subtotal += $item['price'] * $item['qty'];
+                            }
+                            $shipping = 15000;
+                            $total = $subtotal + $shipping;
+                            ?>
                             <div class="order-summary mt-4">
                                 <h5>Ringkasan Pesanan</h5>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Subtotal:</span>
-                                    <span id="subtotal">Rp 0</span>
+                                    <span>Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Ongkos Kirim:</span>
-                                    <span>Rp 15.000</span>
+                                    <span>Rp <?= number_format($shipping, 0, ',', '.') ?></span>
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-between fw-bold">
                                     <span>Total:</span>
-                                    <span id="total">Rp 0</span>
+                                    <span>Rp <?= number_format($total, 0, ',', '.') ?></span>
                                 </div>
                             </div>
-
+                            <!-- Form Checkout -->
                             <form id="checkoutForm" method="POST">
                                 <input type="hidden" name="action" value="checkout">
-                                <input type="hidden" name="cart_items" id="cartItemsInput">
-                                
                                 <div class="mt-4">
                                     <h5>Informasi Pengiriman</h5>
                                     <div class="row">
@@ -415,7 +447,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="d-flex justify-content-between align-items-center mt-4">
                                     <a href="products.php" class="btn btn-outline-secondary">
                                         <i class="fas fa-arrow-left me-2"></i>Lanjut Belanja
@@ -505,74 +536,5 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/script.js"></script>
-    <script>
-        // Load cart items from localStorage
-        function loadCartItems() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const checkoutItems = document.getElementById('checkoutItems');
-            const subtotalElement = document.getElementById('subtotal');
-            const totalElement = document.getElementById('total');
-            const cartItemsInput = document.getElementById('cartItemsInput');
-            
-            if (cart.length === 0) {
-                checkoutItems.innerHTML = '<p class="text-center text-muted">Keranjang belanja kosong</p>';
-                subtotalElement.textContent = 'Rp 0';
-                totalElement.textContent = 'Rp 0';
-                return;
-            }
-            
-            let subtotal = 0;
-            checkoutItems.innerHTML = '';
-            
-            cart.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
-                
-                const itemElement = document.createElement('div');
-                itemElement.className = 'cart-item';
-                itemElement.innerHTML = `
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <h6 class="mb-1">${item.name}</h6>
-                            <small class="text-muted">Rp ${item.price.toLocaleString()} per item</small>
-                        </div>
-                        <div class="col-md-2 text-center">
-                            <span class="badge bg-secondary">${item.quantity}</span>
-                        </div>
-                        <div class="col-md-4 text-end">
-                            <span class="fw-bold">Rp ${itemTotal.toLocaleString()}</span>
-                        </div>
-                    </div>
-                `;
-                checkoutItems.appendChild(itemElement);
-            });
-            
-            const shipping = 15000;
-            const total = subtotal + shipping;
-            
-            subtotalElement.textContent = `Rp ${subtotal.toLocaleString()}`;
-            totalElement.textContent = `Rp ${total.toLocaleString()}`;
-            cartItemsInput.value = JSON.stringify(cart);
-        }
-        
-        // Handle form submission
-        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            
-            if (cart.length === 0) {
-                e.preventDefault();
-                alert('Keranjang belanja kosong!');
-                return;
-            }
-            
-            // Clear cart after successful submission
-            localStorage.removeItem('cart');
-        });
-        
-        // Load cart items when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCartItems();
-        });
-    </script>
 </body>
 </html> 
