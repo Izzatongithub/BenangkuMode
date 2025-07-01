@@ -47,6 +47,11 @@ Panel admin untuk mengelola website BenangkuMode dengan fitur lengkap menggunaka
 - Informasi sistem
 - Statistik website
 
+## Workshop Management
+
+- **workshops.php**: List, edit, dan hapus data workshop.
+- **add_workshop.php**: Form tambah workshop baru.
+
 ## Struktur File
 
 ```

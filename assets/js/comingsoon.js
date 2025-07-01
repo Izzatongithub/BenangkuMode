@@ -1,135 +1,135 @@
 // Coming soon products data
-const comingSoonProducts = [
-    {
-        id: 1,
-        name: "Sweater Merajut Oversize",
-        description: "Sweater merajut dengan model oversize yang trendy dan nyaman dipakai. Cocok untuk cuaca dingin dengan desain yang fashionable.",
-        category: "Pakaian",
-        estimatedPrice: "Rp 450.000",
-        releaseDate: "Maret 2024",
-        votes: 45,
-        image: "fas fa-tshirt",
-        color: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-        features: ["Oversize fit", "Bahan wol premium", "Desain modern", "Warna pilihan"]
-    },
-    {
-        id: 2,
-        name: "Tas Merajut Crossbody",
-        description: "Tas crossbody merajut yang praktis dan stylish. Dilengkapi dengan lining dan kompartemen yang terorganisir dengan baik.",
-        category: "Tas",
-        estimatedPrice: "Rp 280.000",
-        releaseDate: "April 2024",
-        votes: 38,
-        image: "fas fa-bag-shopping",
-        color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        features: ["Crossbody style", "Lining waterproof", "Kompartemen dalam", "Adjustable strap"]
-    },
-    {
-        id: 3,
-        name: "Set Scarf & Beanie",
-        description: "Set lengkap scarf dan beanie yang cocok dipakai bersama. Desain yang harmonis dengan motif yang serasi.",
-        category: "Aksesoris",
-        estimatedPrice: "Rp 220.000",
-        releaseDate: "Februari 2024",
-        votes: 52,
-        image: "fas fa-scarf",
-        color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-        features: ["Set lengkap", "Motif serasi", "Bahan hangat", "Ukuran universal"]
-    },
-    {
-        id: 4,
-        name: "Cardigan Merajut Crop",
-        description: "Cardigan crop merajut yang perfect untuk layering. Desain yang modern dan cocok untuk berbagai kesempatan.",
-        category: "Pakaian",
-        estimatedPrice: "Rp 320.000",
-        releaseDate: "Maret 2024",
-        votes: 41,
-        image: "fas fa-tshirt",
-        color: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
-        features: ["Crop length", "Button closure", "Pocket detail", "Versatile design"]
-    },
-    {
-        id: 5,
-        name: "Tas Merajut Backpack",
-        description: "Backpack merajut yang kuat dan nyaman dipakai. Ideal untuk aktivitas sehari-hari dengan kapasitas yang cukup.",
-        category: "Tas",
-        estimatedPrice: "Rp 350.000",
-        releaseDate: "April 2024",
-        votes: 29,
-        image: "fas fa-bag-shopping",
-        color: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
-        features: ["Backpack style", "Reinforced bottom", "Multiple pockets", "Padded straps"]
-    },
-    {
-        id: 6,
-        name: "Sarung Tangan Merajut Fingerless",
-        description: "Sarung tangan fingerless yang trendy dan fungsional. Memungkinkan penggunaan gadget sambil tetap hangat.",
-        category: "Aksesoris",
-        estimatedPrice: "Rp 120.000",
-        releaseDate: "Februari 2024",
-        votes: 35,
-        image: "fas fa-hand-paper",
-        color: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)",
-        features: ["Fingerless design", "Touchscreen compatible", "Elastic cuff", "Grippy palm"]
-    }
-];
+// const comingSoonProducts = [
+//     {
+//         id: 1,
+//         name: "Sweater Merajut Oversize",
+//         description: "Sweater merajut dengan model oversize yang trendy dan nyaman dipakai. Cocok untuk cuaca dingin dengan desain yang fashionable.",
+//         category: "Pakaian",
+//         estimatedPrice: "Rp 450.000",
+//         releaseDate: "Maret 2024",
+//         votes: 45,
+//         image: "fas fa-tshirt",
+//         color: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+//         features: ["Oversize fit", "Bahan wol premium", "Desain modern", "Warna pilihan"]
+//     },
+//     {
+//         id: 2,
+//         name: "Tas Merajut Crossbody",
+//         description: "Tas crossbody merajut yang praktis dan stylish. Dilengkapi dengan lining dan kompartemen yang terorganisir dengan baik.",
+//         category: "Tas",
+//         estimatedPrice: "Rp 280.000",
+//         releaseDate: "April 2024",
+//         votes: 38,
+//         image: "fas fa-bag-shopping",
+//         color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+//         features: ["Crossbody style", "Lining waterproof", "Kompartemen dalam", "Adjustable strap"]
+//     },
+//     {
+//         id: 3,
+//         name: "Set Scarf & Beanie",
+//         description: "Set lengkap scarf dan beanie yang cocok dipakai bersama. Desain yang harmonis dengan motif yang serasi.",
+//         category: "Aksesoris",
+//         estimatedPrice: "Rp 220.000",
+//         releaseDate: "Februari 2024",
+//         votes: 52,
+//         image: "fas fa-scarf",
+//         color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+//         features: ["Set lengkap", "Motif serasi", "Bahan hangat", "Ukuran universal"]
+//     },
+//     {
+//         id: 4,
+//         name: "Cardigan Merajut Crop",
+//         description: "Cardigan crop merajut yang perfect untuk layering. Desain yang modern dan cocok untuk berbagai kesempatan.",
+//         category: "Pakaian",
+//         estimatedPrice: "Rp 320.000",
+//         releaseDate: "Maret 2024",
+//         votes: 41,
+//         image: "fas fa-tshirt",
+//         color: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
+//         features: ["Crop length", "Button closure", "Pocket detail", "Versatile design"]
+//     },
+//     {
+//         id: 5,
+//         name: "Tas Merajut Backpack",
+//         description: "Backpack merajut yang kuat dan nyaman dipakai. Ideal untuk aktivitas sehari-hari dengan kapasitas yang cukup.",
+//         category: "Tas",
+//         estimatedPrice: "Rp 350.000",
+//         releaseDate: "April 2024",
+//         votes: 29,
+//         image: "fas fa-bag-shopping",
+//         color: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
+//         features: ["Backpack style", "Reinforced bottom", "Multiple pockets", "Padded straps"]
+//     },
+//     {
+//         id: 6,
+//         name: "Sarung Tangan Merajut Fingerless",
+//         description: "Sarung tangan fingerless yang trendy dan fungsional. Memungkinkan penggunaan gadget sambil tetap hangat.",
+//         category: "Aksesoris",
+//         estimatedPrice: "Rp 120.000",
+//         releaseDate: "Februari 2024",
+//         votes: 35,
+//         image: "fas fa-hand-paper",
+//         color: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)",
+//         features: ["Fingerless design", "Touchscreen compatible", "Elastic cuff", "Grippy palm"]
+//     }
+// ];
 
-// Initialize the page
-document.addEventListener('DOMContentLoaded', function() {
-    displayComingSoonProducts();
-    displayVoteResults();
-    setupNewsletterForm();
-});
+// // Initialize the page
+// document.addEventListener('DOMContentLoaded', function() {
+//     displayComingSoonProducts();
+//     displayVoteResults();
+//     setupNewsletterForm();
+// });
 
-// Display coming soon products
-function displayComingSoonProducts() {
-    const grid = document.getElementById('comingSoonGrid');
-    grid.innerHTML = '';
+// // Display coming soon products
+// function displayComingSoonProducts() {
+//     const grid = document.getElementById('comingSoonGrid');
+//     grid.innerHTML = '';
     
-    comingSoonProducts.forEach(product => {
-        const productCard = createComingSoonCard(product);
-        grid.appendChild(productCard);
-    });
-}
+//     comingSoonProducts.forEach(product => {
+//         const productCard = createComingSoonCard(product);
+//         grid.appendChild(productCard);
+//     });
+// }
 
-// Create coming soon product card
-function createComingSoonCard(product) {
-    const card = document.createElement('div');
-    card.className = 'coming-soon-card';
+// // Create coming soon product card
+// function createComingSoonCard(product) {
+//     const card = document.createElement('div');
+//     card.className = 'coming-soon-card';
     
-    card.innerHTML = `
-        <div class="product-image" style="background: ${product.color}">
-            <i class="${product.image}"></i>
-            <div class="coming-soon-badge">Coming Soon</div>
-        </div>
-        <div class="product-content">
-            <h3>${product.name}</h3>
-            <p class="product-description">${product.description}</p>
-            <div class="product-meta">
-                <span class="category"><i class="fas fa-tag"></i> ${product.category}</span>
-                <span class="price"><i class="fas fa-tag"></i> ${product.estimatedPrice}</span>
-                <span class="release-date"><i class="fas fa-calendar"></i> ${product.releaseDate}</span>
-            </div>
-            <div class="product-features">
-                <h4>Fitur Utama:</h4>
-                <ul>
-                    ${product.features.map(feature => `<li>${feature}</li>`).join('')}
-                </ul>
-            </div>
-            <div class="vote-section">
-                <div class="vote-count">
-                    <i class="fas fa-heart"></i>
-                    <span>${product.votes} votes</span>
-                </div>
-                <button class="btn btn-primary vote-btn" onclick="voteProduct(${product.id})">
-                    <i class="fas fa-thumbs-up"></i> Vote
-                </button>
-            </div>
-        </div>
-    `;
+//     card.innerHTML = `
+//         <div class="product-image" style="background: ${product.color}">
+//             <i class="${product.image}"></i>
+//             <div class="coming-soon-badge">Coming Soon</div>
+//         </div>
+//         <div class="product-content">
+//             <h3>${product.name}</h3>
+//             <p class="product-description">${product.description}</p>
+//             <div class="product-meta">
+//                 <span class="category"><i class="fas fa-tag"></i> ${product.category}</span>
+//                 <span class="price"><i class="fas fa-tag"></i> ${product.estimatedPrice}</span>
+//                 <span class="release-date"><i class="fas fa-calendar"></i> ${product.releaseDate}</span>
+//             </div>
+//             <div class="product-features">
+//                 <h4>Fitur Utama:</h4>
+//                 <ul>
+//                     ${product.features.map(feature => `<li>${feature}</li>`).join('')}
+//                 </ul>
+//             </div>
+//             <div class="vote-section">
+//                 <div class="vote-count">
+//                     <i class="fas fa-heart"></i>
+//                     <span>${product.votes} votes</span>
+//                 </div>
+//                 <button class="btn btn-primary vote-btn" onclick="voteProduct(${product.id})">
+//                     <i class="fas fa-thumbs-up"></i> Vote
+//                 </button>
+//             </div>
+//         </div>
+//     `;
     
-    return card;
-}
+//     return card;
+// }
 
 // Vote for a product
 function voteProduct(productId) {

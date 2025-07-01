@@ -1,133 +1,133 @@
 // Workshop data
-const workshops = [
-    {
-        id: 1,
-        title: "Workshop Scarf Merajut Dasar",
-        date: "2024-02-15",
-        time: "09:00 - 12:00",
-        location: "Studio BenangkuMode, Lombok",
-        price: 150000,
-        maxParticipants: 15,
-        currentParticipants: 8,
-        level: "Pemula",
-        description: "Belajar teknik dasar merajut scarf dengan motif tradisional Lombok. Cocok untuk pemula yang ingin memulai perjalanan merajut.",
-        materials: ["Jarum rajut", "Benang wol", "Gunting", "Jarum jahit"],
-        instructor: "Sarah Amalia",
-        image: "fas fa-scarf",
-        color: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
-    },
-    {
-        id: 2,
-        title: "Workshop Cardigan Merajut",
-        date: "2024-02-20",
-        time: "13:00 - 17:00",
-        location: "Studio BenangkuMode, Lombok",
-        price: 250000,
-        maxParticipants: 12,
-        currentParticipants: 5,
-        level: "Menengah",
-        description: "Workshop lanjutan untuk membuat cardigan merajut yang nyaman dan stylish. Peserta akan belajar teknik shaping dan finishing.",
-        materials: ["Jarum rajut", "Benang wol premium", "Gunting", "Jarum jahit", "Marker"],
-        instructor: "Budi Santoso",
-        image: "fas fa-tshirt",
-        color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-    },
-    {
-        id: 3,
-        title: "Workshop Tas Merajut Unik",
-        date: "2024-02-25",
-        time: "10:00 - 15:00",
-        location: "Studio BenangkuMode, Lombok",
-        price: 200000,
-        maxParticipants: 10,
-        currentParticipants: 3,
-        level: "Pemula - Menengah",
-        description: "Buat tas merajut yang kuat dan fashionable. Belajar teknik membuat tas yang tahan lama dan memiliki desain unik.",
-        materials: ["Jarum rajut", "Benang katun", "Gunting", "Jarum jahit", "Lining"],
-        instructor: "Dewi Sartika",
-        image: "fas fa-bag-shopping",
-        color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
-    },
-    {
-        id: 4,
-        title: "Workshop Aksesoris Merajut",
-        date: "2024-03-01",
-        time: "14:00 - 16:00",
-        location: "Studio BenangkuMode, Lombok",
-        price: 100000,
-        maxParticipants: 20,
-        currentParticipants: 12,
-        level: "Pemula",
-        description: "Buat berbagai aksesoris merajut seperti topi, sarung tangan, dan bandana. Workshop yang menyenangkan dan produktif.",
-        materials: ["Jarum rajut", "Benang wol", "Gunting", "Jarum jahit"],
-        instructor: "Sarah Amalia",
-        image: "fas fa-hat-cowboy",
-        color: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
-    }
-];
+// const workshops = [
+//     {
+//         id: 1,
+//         title: "Workshop Scarf Merajut Dasar",
+//         date: "2024-02-15",
+//         time: "09:00 - 12:00",
+//         location: "Studio BenangkuMode, Lombok",
+//         price: 150000,
+//         maxParticipants: 15,
+//         currentParticipants: 8,
+//         level: "Pemula",
+//         description: "Belajar teknik dasar merajut scarf dengan motif tradisional Lombok. Cocok untuk pemula yang ingin memulai perjalanan merajut.",
+//         materials: ["Jarum rajut", "Benang wol", "Gunting", "Jarum jahit"],
+//         instructor: "Sarah Amalia",
+//         image: "fas fa-scarf",
+//         color: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+//     },
+//     {
+//         id: 2,
+//         title: "Workshop Cardigan Merajut",
+//         date: "2024-02-20",
+//         time: "13:00 - 17:00",
+//         location: "Studio BenangkuMode, Lombok",
+//         price: 250000,
+//         maxParticipants: 12,
+//         currentParticipants: 5,
+//         level: "Menengah",
+//         description: "Workshop lanjutan untuk membuat cardigan merajut yang nyaman dan stylish. Peserta akan belajar teknik shaping dan finishing.",
+//         materials: ["Jarum rajut", "Benang wol premium", "Gunting", "Jarum jahit", "Marker"],
+//         instructor: "Budi Santoso",
+//         image: "fas fa-tshirt",
+//         color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+//     },
+//     {
+//         id: 3,
+//         title: "Workshop Tas Merajut Unik",
+//         date: "2024-02-25",
+//         time: "10:00 - 15:00",
+//         location: "Studio BenangkuMode, Lombok",
+//         price: 200000,
+//         maxParticipants: 10,
+//         currentParticipants: 3,
+//         level: "Pemula - Menengah",
+//         description: "Buat tas merajut yang kuat dan fashionable. Belajar teknik membuat tas yang tahan lama dan memiliki desain unik.",
+//         materials: ["Jarum rajut", "Benang katun", "Gunting", "Jarum jahit", "Lining"],
+//         instructor: "Dewi Sartika",
+//         image: "fas fa-bag-shopping",
+//         color: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+//     },
+//     {
+//         id: 4,
+//         title: "Workshop Aksesoris Merajut",
+//         date: "2024-03-01",
+//         time: "14:00 - 16:00",
+//         location: "Studio BenangkuMode, Lombok",
+//         price: 100000,
+//         maxParticipants: 20,
+//         currentParticipants: 12,
+//         level: "Pemula",
+//         description: "Buat berbagai aksesoris merajut seperti topi, sarung tangan, dan bandana. Workshop yang menyenangkan dan produktif.",
+//         materials: ["Jarum rajut", "Benang wol", "Gunting", "Jarum jahit"],
+//         instructor: "Sarah Amalia",
+//         image: "fas fa-hat-cowboy",
+//         color: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)"
+//     }
+// ];
 
 // Initialize the page
-document.addEventListener('DOMContentLoaded', function() {
-    displayWorkshops();
-    setupFormHandling();
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//     displayWorkshops();
+//     setupFormHandling();
+// });
 
 // Display workshops
-function displayWorkshops() {
-    const workshopsGrid = document.getElementById('workshopsGrid');
-    workshopsGrid.innerHTML = '';
+// function displayWorkshops() {
+//     const workshopsGrid = document.getElementById('workshopsGrid');
+//     workshopsGrid.innerHTML = '';
     
-    workshops.forEach(workshop => {
-        const workshopCard = createWorkshopCard(workshop);
-        workshopsGrid.appendChild(workshopCard);
-    });
-}
+//     workshops.forEach(workshop => {
+//         const workshopCard = createWorkshopCard(workshop);
+//         workshopsGrid.appendChild(workshopCard);
+//     });
+// }
 
 // Create workshop card
-function createWorkshopCard(workshop) {
-    const card = document.createElement('div');
-    card.className = 'workshop-card';
+// function createWorkshopCard(workshop) {
+//     const card = document.createElement('div');
+//     card.className = 'workshop-card';
     
-    const availableSpots = workshop.maxParticipants - workshop.currentParticipants;
-    const isFull = availableSpots <= 0;
-    const isAlmostFull = availableSpots <= 3 && availableSpots > 0;
+//     const availableSpots = workshop.maxParticipants - workshop.currentParticipants;
+//     const isFull = availableSpots <= 0;
+//     const isAlmostFull = availableSpots <= 3 && availableSpots > 0;
     
-    card.innerHTML = `
-        <div class="workshop-image" style="background: ${workshop.color}">
-            <i class="${workshop.image}"></i>
-        </div>
-        <div class="workshop-content">
-            <h3>${workshop.title}</h3>
-            <div class="workshop-meta">
-                <p><i class="fas fa-calendar"></i> ${formatDate(workshop.date)}</p>
-                <p><i class="fas fa-clock"></i> ${workshop.time}</p>
-                <p><i class="fas fa-map-marker-alt"></i> ${workshop.location}</p>
-                <p><i class="fas fa-user"></i> ${workshop.instructor}</p>
-                <p><i class="fas fa-signal"></i> Level: ${workshop.level}</p>
-            </div>
-            <p class="workshop-description">${workshop.description}</p>
-            <div class="workshop-materials">
-                <h4>Materi yang Disediakan:</h4>
-                <ul>
-                    ${workshop.materials.map(material => `<li>${material}</li>`).join('')}
-                </ul>
-            </div>
-            <div class="workshop-footer">
-                <div class="workshop-price">
-                    <span class="price">Rp ${workshop.price.toLocaleString()}</span>
-                    <span class="spots ${isFull ? 'full' : isAlmostFull ? 'almost-full' : ''}">
-                        ${isFull ? 'Penuh' : `${availableSpots} slot tersisa`}
-                    </span>
-                </div>
-                <button class="btn btn-primary" onclick="registerWorkshop(${workshop.id})" ${isFull ? 'disabled' : ''}>
-                    ${isFull ? 'Workshop Penuh' : 'Daftar Sekarang'}
-                </button>
-            </div>
-        </div>
-    `;
+//     card.innerHTML = `
+//         <div class="workshop-image" style="background: ${workshop.color}">
+//             <i class="${workshop.image}"></i>
+//         </div>
+//         <div class="workshop-content">
+//             <h3>${workshop.title}</h3>
+//             <div class="workshop-meta">
+//                 <p><i class="fas fa-calendar"></i> ${formatDate(workshop.date)}</p>
+//                 <p><i class="fas fa-clock"></i> ${workshop.time}</p>
+//                 <p><i class="fas fa-map-marker-alt"></i> ${workshop.location}</p>
+//                 <p><i class="fas fa-user"></i> ${workshop.instructor}</p>
+//                 <p><i class="fas fa-signal"></i> Level: ${workshop.level}</p>
+//             </div>
+//             <p class="workshop-description">${workshop.description}</p>
+//             <div class="workshop-materials">
+//                 <h4>Materi yang Disediakan:</h4>
+//                 <ul>
+//                     ${workshop.materials.map(material => `<li>${material}</li>`).join('')}
+//                 </ul>
+//             </div>
+//             <div class="workshop-footer">
+//                 <div class="workshop-price">
+//                     <span class="price">Rp ${workshop.price.toLocaleString()}</span>
+//                     <span class="spots ${isFull ? 'full' : isAlmostFull ? 'almost-full' : ''}">
+//                         ${isFull ? 'Penuh' : `${availableSpots} slot tersisa`}
+//                     </span>
+//                 </div>
+//                 <button class="btn btn-primary" onclick="registerWorkshop(${workshop.id})" ${isFull ? 'disabled' : ''}>
+//                     ${isFull ? 'Workshop Penuh' : 'Daftar Sekarang'}
+//                 </button>
+//             </div>
+//         </div>
+//     `;
     
-    return card;
-}
+//     return card;
+// }
 
 // Format date
 function formatDate(dateString) {
@@ -143,6 +143,11 @@ function formatDate(dateString) {
 
 // Register workshop
 function registerWorkshop(workshopId) {
+    if (!window.isLoggedIn) {
+        showNotification('Silakan login untuk mendaftar workshop!', 'error');
+        setTimeout(() => window.location.href = 'login.php', 1200);
+        return;
+    }
     const workshop = workshops.find(w => w.id === workshopId);
     if (!workshop) return;
     

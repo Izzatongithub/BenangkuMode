@@ -9,6 +9,13 @@ while ($row = mysqli_fetch_assoc($result)) {
     $products[] = $row;
 }
 
+// Ambil workshop mendatang
+$workshopPreviews = [];
+$res = mysqli_query($conn, "SELECT * FROM workshops WHERE is_active=1 AND is_past_event=0 ORDER BY start_date ASC LIMIT 3");
+while ($row = mysqli_fetch_assoc($res)) {
+    $workshopPreviews[] = $row;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -280,10 +287,30 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <a href="workshop.php" class="btn btn-primary">Daftar Workshop</a>
                 </div>
                 <div class="workshop-image">
-                    <div class="workshop-placeholder">
-                        <i class="fas fa-users"></i>
-                        <p>Workshop Merajut</p>
-                    </div>
+                    <?php if ($workshopPreviews): ?>
+                        <?php foreach ($workshopPreviews as $w): ?>
+                        <div class="workshop-preview-card" style="margin-bottom:18px; background:#fff; border-radius:12px; box-shadow:0 2px 8px #eee; padding:12px; max-width:220px;">
+                            <?php if (!empty($w['image'])): ?>
+                                <img src="assets/images/workshops/<?= htmlspecialchars($w['image']) ?>" alt="Gambar Workshop" style="width:100%;max-height:100px;object-fit:cover;border-radius:8px;">
+                            <?php else: ?>
+                                <div style="height:100px;display:flex;align-items:center;justify-content:center;background:#f3f3f3;border-radius:8px;">
+                                    <i class="fas fa-chalkboard-teacher" style="font-size:2.5rem;color:#bbb;"></i>
+                                </div>
+                            <?php endif; ?>
+                            <h4 style="font-size:1.1rem;margin:10px 0 4px;"><?= htmlspecialchars($w['title']) ?></h4>
+                            <div style="font-size:0.95em;color:#666;">
+                                <i class="fas fa-calendar"></i> <?= date('d M Y H:i', strtotime($w['start_date'])) ?><br>
+                                <i class="fas fa-user"></i> <?= htmlspecialchars($w['instructor']) ?>
+                            </div>
+                            <a href="workshop.php" class="btn btn-sm btn-outline-primary mt-2">Lihat Detail</a>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="workshop-placeholder">
+                            <i class="fas fa-users"></i>
+                            <p>Workshop Merajut</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

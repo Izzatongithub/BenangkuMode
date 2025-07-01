@@ -2136,4 +2136,20 @@ body {
 .modal-img { max-width: 70vw; max-height: 60vh; display: block; margin: 0 auto 1rem; border-radius: 8px; }
 .modal-close { position: absolute; top: 10px; right: 18px; font-size: 2rem; color: #e74c3c; cursor: pointer; }
 .modal-title { font-weight:600;font-size:1.2rem;margin-top:1rem; }
-.modal-cat { color:#667eea;margin-top:0.3rem; } 
+.modal-cat { color:#667eea;margin-top:0.3rem; }
+
+/* Batalkan Vote button */
+.btn-warning.btn-sm {
+    background: #ffe082;
+    color: #333;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+    margin-left: 10px;
+}
+.btn-warning.btn-sm:hover {
+    background: #ffd54f;
+    color: #222;
+} 
