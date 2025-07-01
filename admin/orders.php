@@ -38,11 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Get orders list with user and product details
 $sql = "SELECT 
-        oi.*, 
+        oi.*,
+        (oi.quantity * oi.price) AS total_price,
+        o.status AS order_status,
         u.full_name as customer_name, 
         u.email as customer_email, 
         p.name as product_name, 
-        p.price as product_price
+        p.price as product_price,
+        oi.subtotal
     FROM order_items oi
     LEFT JOIN orders o ON oi.order_id = o.id
     LEFT JOIN users u ON o.customer_email = u.email
@@ -100,6 +103,9 @@ $result = mysqli_query($conn, $sql);
                         </a>
                         <a class="nav-link" href="products.php">
                             <i class="fas fa-box me-2"></i>Products
+                        </a>
+                        <a class="nav-link" href="add_comingsoon.php">
+                            <i class="fas fa-clock-rotate-left me-2"></i>Tambah Coming Soon
                         </a>
                         <a class="nav-link" href="destinations.php">
                             <i class="fas fa-map-marker-alt me-2"></i>Destinations
@@ -172,7 +178,7 @@ $result = mysqli_query($conn, $sql);
                                                 <td><?php echo formatCurrency($order['total_price']); ?></td>
                                                 <td>
                                                     <span class="badge bg-<?php 
-                                                        switch($order['status']) {
+                                                        switch($order['order_status']) {
                                                             case 'pending': echo 'warning'; break;
                                                             case 'processing': echo 'info'; break;
                                                             case 'completed': echo 'success'; break;
@@ -180,7 +186,7 @@ $result = mysqli_query($conn, $sql);
                                                             default: echo 'secondary';
                                                         }
                                                     ?>">
-                                                        <?php echo ucfirst($order['status']); ?>
+                                                        <?php echo ucfirst($order['order_status']); ?>
                                                     </span>
                                                 </td>
                                                 <td><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></td>
@@ -216,10 +222,10 @@ $result = mysqli_query($conn, $sql);
                                                                         <div class="mb-3">
                                                                             <label for="status<?php echo $order['id']; ?>" class="form-label">Status</label>
                                                                             <select class="form-select" name="status" id="status<?php echo $order['id']; ?>" required>
-                                                                                <option value="pending" <?php echo $order['status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
-                                                                                <option value="processing" <?php echo $order['status'] === 'processing' ? 'selected' : ''; ?>>Processing</option>
-                                                                                <option value="completed" <?php echo $order['status'] === 'completed' ? 'selected' : ''; ?>>Completed</option>
-                                                                                <option value="cancelled" <?php echo $order['status'] === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                                                                                <option value="pending" <?php echo $order['order_status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
+                                                                                <option value="processing" <?php echo $order['order_status'] === 'processing' ? 'selected' : ''; ?>>Processing</option>
+                                                                                <option value="completed" <?php echo $order['order_status'] === 'completed' ? 'selected' : ''; ?>>Completed</option>
+                                                                                <option value="cancelled" <?php echo $order['order_status'] === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
