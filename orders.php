@@ -60,6 +60,18 @@ while ($row = mysqli_fetch_assoc($result)) {
         ];
     }
 }
+
+// Proses konfirmasi pesanan diterima
+if (isset($_POST['confirm_received'], $_POST['order_id'])) {
+    $order_id = (int)$_POST['order_id'];
+    $user_email = mysqli_real_escape_string($conn, $_SESSION['user_email']);
+    $cek = mysqli_query($conn, "SELECT id FROM orders WHERE id=$order_id AND customer_email='$user_email' AND status!='completed'");
+    if (mysqli_num_rows($cek) > 0) {
+        mysqli_query($conn, "UPDATE orders SET status='completed' WHERE id=$order_id");
+    }
+    header('Location: orders.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -366,21 +378,34 @@ while ($row = mysqli_fetch_assoc($result)) {
                                                     }
                                                     ?>
                                                 </span>
-                                                <span class="status-badge status-<?php echo $order['payment_status']; ?> ms-1">
-                                                    <?php 
-                                                    switch($order['payment_status']) {
-                                                        case 'pending': echo 'Belum Bayar'; break;
-                                                        case 'paid': echo 'Lunas'; break;
-                                                        case 'failed': echo 'Gagal'; break;
-                                                        case 'refunded': echo 'Dikembalikan'; break;
-                                                        default: echo ucfirst($order['payment_status']);
-                                                    }
-                                                    ?>
-                                                </span>
+                                                <?php if ($order['status'] !== 'completed'): ?>
+                                                    <span class="status-badge status-<?php echo $order['payment_status']; ?> ms-1">
+                                                        <?php 
+                                                        switch($order['payment_status']) {
+                                                            case 'pending': echo 'Belum Bayar'; break;
+                                                            case 'paid': echo 'Lunas'; break;
+                                                            case 'failed': echo 'Gagal'; break;
+                                                            case 'refunded': echo 'Dikembalikan'; break;
+                                                            default: echo ucfirst($order['payment_status']);
+                                                        }
+                                                        ?>
+                                                    </span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <?php if ($order['status'] !== 'completed'): ?>
+                                    <form method="post" style="display:inline;">
+                                        <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
+                                        <button type="submit" name="confirm_received" class="btn btn-success btn-sm">
+                                            Konfirmasi Diterima
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="badge bg-success">Selesai</span>
+                                <?php endif; ?>
                                 
                                 <?php foreach ($order['items'] as $item): ?>
                                     <div class="order-item">

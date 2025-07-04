@@ -76,8 +76,8 @@ if ($can_review && isset($_POST['rating'], $_POST['review_text'])) {
     <div class="container" style="margin-top: 120px; margin-bottom: 40px;">
         <div class="product-detail-card" style="background: #fff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); padding: 32px; max-width: 900px; margin: 0 auto;">
             <div style="display: flex; flex-wrap: wrap; gap: 32px;">
-                <div class="product-image" style="flex: 1 1 320px; min-width: 280px; max-width: 350px;">
-                    <img src="assets/images/products/<?= htmlspecialchars($product['image'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width: 100%; height: 320px; object-fit: contain; background: #f8f9fa; border-radius: 12px;">
+                <div class="product-image" style="flex: 1 1 340px; min-width: 280px; max-width: 370px; min-height: 340px; background: #f8f9fa; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 0;">
+                    <img src="assets/images/products/<?= htmlspecialchars($product['image'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>" style="width: 100%; height: 360px; object-fit: cover; border-radius: 12px; display: block; margin: 0; padding: 0; aspect-ratio: 1/1;">
                 </div>
                 <div style="flex: 2 1 350px; min-width: 280px;">
                     <h1 style="font-size: 2rem; margin-bottom: 0.5rem; color: #2c3e50;"> <?= htmlspecialchars($product['name']) ?> </h1>
@@ -86,6 +86,11 @@ if ($can_review && isset($_POST['rating'], $_POST['review_text'])) {
                     <div style="margin-bottom: 1.5rem; color: #555;"> <?= nl2br(htmlspecialchars($product['description'])) ?> </div>
                     <div style="margin-bottom: 1.5rem;">
                         <span>Stok: <?= (int)$product['stock_quantity'] ?></span>
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <a href="add_to_cart.php?product_id=<?= $product_id ?>" class="btn btn-primary" style="margin-bottom:10px;">
+                            <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+                        </a>
                     </div>
                     <div>
                         <?php if (isset($_SESSION['user_id'])): ?>
@@ -116,28 +121,6 @@ if ($can_review && isset($_POST['rating'], $_POST['review_text'])) {
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
-            <?php if ($can_review): ?>
-                <hr style="margin: 2.5rem 0;">
-                <div class="review-form">
-                    <h3>Tulis Review Anda</h3>
-                    <?php if ($review_message): ?>
-                        <div style="color: #e74c3c; margin-bottom: 1rem;"> <?= htmlspecialchars($review_message) ?> </div>
-                    <?php endif; ?>
-                    <form method="post">
-                        <label for="rating">Rating:</label>
-                        <select name="rating" id="rating" required style="margin-bottom: 1rem;">
-                            <option value="">Pilih rating</option>
-                            <?php for ($i = 5; $i >= 1; $i--): ?>
-                                <option value="<?= $i ?>"> <?= $i ?> </option>
-                            <?php endfor; ?>
-                        </select>
-                        <br>
-                        <label for="review_text">Review:</label><br>
-                        <textarea name="review_text" id="review_text" rows="4" style="width: 100%; max-width: 500px; margin-bottom: 1rem;" required></textarea><br>
-                        <button type="submit" class="btn btn-primary">Kirim Review</button>
-                    </form>
-                </div>
-            <?php endif; ?>
         </div>
     </div>
     <?php include 'includes/navbar.php'; ?>

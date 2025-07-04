@@ -19,19 +19,6 @@ if ($result) {
         $pastEvents[] = $row;
     }
 }
-
-if (isset($_POST['vote_workshop_id'])) {
-    $wid = (int)$_POST['vote_workshop_id'];
-    $email = $_SESSION['user_email'] ?? $_POST['voter_email'] ?? '';
-    // Cek sudah vote?
-    $cek = mysqli_query($conn, "SELECT id FROM workshop_votes WHERE workshop_id=$wid AND voter_email='$email'");
-    if (mysqli_num_rows($cek) == 0) {
-        mysqli_query($conn, "INSERT INTO workshop_votes (workshop_id, voter_email) VALUES ($wid, '$email')");
-        $vote_msg = 'Vote berhasil!';
-    } else {
-        $vote_msg = 'Anda sudah vote untuk workshop ini.';
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -316,15 +303,6 @@ if (isset($_POST['vote_workshop_id'])) {
                                 <?= ($w['max_participants']-$w['current_participants']<=0)?'Workshop Penuh':'Daftar Sekarang' ?>
                             </button>
                         </div>
-                        <?php
-                        $resVote = mysqli_query($conn, "SELECT COUNT(*) as total FROM workshop_votes WHERE workshop_id=".$w['id']);
-                        $voteCount = mysqli_fetch_assoc($resVote)['total'] ?? 0;
-                        echo "<span class='badge bg-success'>$voteCount Vote</span>";
-                        ?>
-                        <form method="post" action="">
-                            <input type="hidden" name="vote_workshop_id" value="<?= $w['id'] ?>">
-                            <button type="submit" class="btn btn-sm btn-outline-success">Vote</button>
-                        </form>
                     </div>
                 </div>
                 <?php endforeach; ?>

@@ -98,6 +98,110 @@ while ($row = mysqli_fetch_assoc($result)) {
         .user-avatar:hover {
             transform: scale(1.1);
         }
+        .cart-button {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: #e74c3c;
+            color: #fff;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+            z-index: 1000;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+        .cart-count {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #fff;
+            color: #e74c3c;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            font-weight: bold;
+            z-index: 1001;
+        }
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            padding: 0;
+        }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+        .product-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 16px 16px 14px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            transition: box-shadow 0.2s;
+            margin-bottom: 18px;
+            min-width: 300px;
+            max-width: 400px;
+            margin-left: 0;
+        }
+        .product-card h3, .product-card .price {
+            margin-left: 0;
+            padding-left: 0;
+        }
+        .btn.btn-primary {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 24px;
+            padding: 12px 0;
+            font-size: 1.08rem;
+            font-weight: 600;
+            width: 70%;
+            max-width: 180px;
+            text-align: center;
+            margin: 18px auto 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(231,76,60,0.08);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn.btn-primary:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        .products-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 18px;
+            justify-content: flex-start;
+        }
+        .update-btn {
+            display: inline-block !important;
+        }
     </style>
 </head>
 <body>
@@ -130,6 +234,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <li class="nav-item">
                         <a href="wisata.php" class="nav-link">Wisata Lombok</a>
                     </li>
+                    <!-- <li class="nav-item">
+                        <a href="cart.php" class="nav-link"><i class="fas fa-shopping-cart"></i> Keranjang</a>
+                    </li> -->
                 </ul>
                 <!-- Auth Section -->
                 <div class="auth-section">
@@ -150,6 +257,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <div class="divider"></div>
                                 <a href="orders.php">
                                     <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                </a>
+                                <a href="cart.php">
+                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
                                 </a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
@@ -222,53 +332,24 @@ while ($row = mysqli_fetch_assoc($result)) {
             <div class="products-grid" id="productsGrid">
                 <?php foreach ($products as $product): ?>
                 <div class="product-card">
-                    <a href="detail_produk.php?id=<?= $product['id'] ?>" style="text-decoration:none; color:inherit;">
+                    <a href="detail_produk.php?id=<?= $product['id'] ?>" style="text-decoration:none; color:inherit; width:100%;">
                         <div class="product-image">
                             <img src="assets/images/products/<?= htmlspecialchars($product['image'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>">
                         </div>
-                        <h3><?= htmlspecialchars($product['name']) ?></h3>
                     </a>
-                    <p><?= htmlspecialchars($product['description']) ?></p>
-                    <span class="price">Rp <?= number_format($product['price'], 0, ',', '.') ?></span>
-                    <!-- Tombol tambah ke keranjang bisa dihubungkan ke JS -->
-                    <a href="add_to_cart.php?product_id=<?= $product['id'] ?>" class="btn btn-primary">
-                        <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+                    <a href="detail_produk.php?id=<?= $product['id'] ?>" style="text-decoration:none; color:inherit;">
+                        <h3 style="margin-bottom: 4px; margin-top: 0; font-size: 1.08rem; font-weight: 500; letter-spacing:0.01em;">
+                            <?= htmlspecialchars($product['name']) ?>
+                        </h3>
                     </a>
+                    <span class="price" style="font-weight:600; color:#222; font-size:1.08rem; margin-bottom:2px; display:block; line-height:1.1;">
+                        Rp <?= number_format($product['price'], 0, ',', '.') ?>
+                    </span>
                 </div>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
-
-    <!-- Shopping Cart Modal -->
-    <div id="cartModal" class="cart-modal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h3>Keranjang Belanja</h3>
-                <button class="close-cart" onclick="closeCart()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items will be displayed here -->
-            </div>
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <span>Total:</span>
-                    <span id="cartTotal">Rp 0</span>
-                </div>
-                <button class="btn btn-primary" onclick="checkout()">
-                    <i class="fas fa-shopping-cart"></i> Lanjut ke Checkout
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cart Button -->
-    <div class="cart-button" onclick="openCart()">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="cart-count" id="cartCount">0</span>
-    </div>
 
     <!-- Footer -->
     <footer class="footer">

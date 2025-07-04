@@ -215,6 +215,12 @@ if (isset($_POST['add_to_cart']) && isset($_POST['product_id'])) {
             border-radius: 6px;
             text-align: center;
         }
+        .qty-form button {
+            display: inline-block;
+        }
+        .qty-form:hover button {
+            display: inline-block;
+        }
         .cart-summary {
             display: flex;
             justify-content: space-between;

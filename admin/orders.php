@@ -32,6 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $message = 'Error deleting order';
             }
+        } elseif ($_POST['action'] === 'set_paid') {
+            // Update payment_status di tabel orders
+            $sql = "UPDATE orders SET payment_status = 'paid' WHERE id = (SELECT order_id FROM order_items WHERE id = '$order_id' LIMIT 1)";
+            if (mysqli_query($conn, $sql)) {
+                $message = 'Payment status updated to paid';
+            } else {
+                $message = 'Error updating payment status';
+            }
         }
     }
 }
