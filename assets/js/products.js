@@ -151,15 +151,19 @@ function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
     card.innerHTML = `
-        <div class="product-image" style="background: ${product.color}">
-            <i class="${product.image}"></i>
-        </div>
-        <h3>${product.name}</h3>
-        <p>${product.description}</p>
-        <span class="price">Rp ${product.price.toLocaleString()}</span>
-        <button class="btn btn-primary add-to-cart" onclick="addToCart(${product.id})">
-            <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
-        </button>
+        <a href="detail_produk.php?id=${product.id}" style="text-decoration:none; color:inherit; width:100%;">
+            <div class="product-image">
+                <img src="assets/images/products/${product.image ? product.image : 'default.jpg'}" alt="${product.name}">
+            </div>
+        </a>
+        <a href="detail_produk.php?id=${product.id}" style="text-decoration:none; color:inherit;">
+            <h3 style="margin-bottom: 4px; margin-top: 0; font-size: 1.08rem; font-weight: 500; letter-spacing:0.01em;">
+                ${product.name}
+            </h3>
+        </a>
+        <span class="price" style="font-weight:600; color:#222; font-size:1.08rem; margin-bottom:2px; display:block; line-height:1.1;">
+            Rp ${Number(product.price).toLocaleString('id-ID')}
+        </span>
     `;
     return card;
 }

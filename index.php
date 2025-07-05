@@ -249,23 +249,26 @@ while ($row = mysqli_fetch_assoc($res)) {
     <section class="products-preview">
         <div class="container">
             <h2 class="section-title">Produk Unggulan</h2>
-            <div class="products-grid">
+            <div class="products-grid" id="productsGrid">
                 <?php foreach ($products as $product): ?>
-                    <div class="product-card">
-                        <a href="detail_produk.php?id=<?= $product['id'] ?>" style="text-decoration:none; color:inherit;">
-                            <div class="product-image">
-                                <img src="assets/images/products/<?= htmlspecialchars($product['image'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>">
-                            </div>
-                            <h3><?= htmlspecialchars($product['name']) ?></h3>
-                        </a>
-                        <p><?= htmlspecialchars($product['description']) ?></p>
-                        <span class="price">Rp <?= number_format($product['price'], 0, ',', '.') ?></span>
-                        <a href="detail_produk.php?id=<?= $product['id'] ?>" class="btn btn-secondary">
-                            Lihat Detail
-                        </a>
-                    </div>
+                <div class="product-card">
+                    <a href="detail_produk.php?id=<?= $product['id'] ?>" style="text-decoration:none; color:inherit; width:100%;">
+                        <div class="product-image">
+                            <img src="assets/images/products/<?= htmlspecialchars($product['image'] ?? 'default.jpg') ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+                        </div>
+                    </a>
+                    <a href="detail_produk.php?id=<?= $product['id'] ?>" style="text-decoration:none; color:inherit;">
+                        <h3 style="margin-bottom: 4px; margin-top: 0; font-size: 1.08rem; font-weight: 500; letter-spacing:0.01em;">
+                            <?= htmlspecialchars($product['name']) ?>
+                        </h3>
+                    </a>
+                    <span class="price" style="font-weight:600; color:#222; font-size:1.08rem; margin-bottom:2px; display:block; line-height:1.1;">
+                        Rp <?= number_format($product['price'], 0, ',', '.') ?>
+                    </span>
+                </div>
                 <?php endforeach; ?>
-            <div class="text-center">
+            </div>
+            <div class="text-center" style="margin-top: 24px;">
                 <a href="products.php" class="btn btn-primary">Lihat Semua Produk</a>
             </div>
         </div>
@@ -287,23 +290,22 @@ while ($row = mysqli_fetch_assoc($res)) {
                     </ul>
                     <a href="workshop.php" class="btn btn-primary">Daftar Workshop</a>
                 </div>
-                <div class="workshop-image">
+                <div class="workshop-image" style="display: flex; gap: 32px; justify-content: flex-start; align-items: stretch;">
                     <?php if ($workshopPreviews): ?>
                         <?php foreach ($workshopPreviews as $w): ?>
-                        <div class="workshop-preview-card" style="margin-bottom:18px; background:#fff; border-radius:12px; box-shadow:0 2px 8px #eee; padding:12px; max-width:220px;">
+                        <div class="workshop-preview-card" style="background:#fff; border-radius:12px; box-shadow:0 2px 8px #eee; padding:16px; max-width:260px; min-width:220px; min-height:260px; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start; margin-bottom:0;">
                             <?php if (!empty($w['image'])): ?>
-                                <img src="assets/images/workshops/<?= htmlspecialchars($w['image']) ?>" alt="Gambar Workshop" style="width:100%;max-height:100px;object-fit:cover;border-radius:8px;">
+                                <img src="assets/images/workshops/<?= htmlspecialchars($w['image']) ?>" alt="Gambar Workshop" style="width:100%;max-height:110px;object-fit:cover;border-radius:8px; margin-bottom:12px;">
                             <?php else: ?>
-                                <div style="height:100px;display:flex;align-items:center;justify-content:center;background:#f3f3f3;border-radius:8px;">
+                                <div style="height:110px;display:flex;align-items:center;justify-content:center;background:#f3f3f3;border-radius:8px; margin-bottom:12px;">
                                     <i class="fas fa-chalkboard-teacher" style="font-size:2.5rem;color:#bbb;"></i>
                                 </div>
                             <?php endif; ?>
-                            <h4 style="font-size:1.1rem;margin:10px 0 4px;"><?= htmlspecialchars($w['title']) ?></h4>
-                            <div style="font-size:0.95em;color:#666;">
+                            <div style="font-size:0.97em;color:#666; margin-bottom:8px;">
                                 <i class="fas fa-calendar"></i> <?= date('d M Y H:i', strtotime($w['start_date'])) ?><br>
                                 <i class="fas fa-user"></i> <?= htmlspecialchars($w['instructor']) ?>
                             </div>
-                            <a href="workshop.php" class="btn btn-sm btn-outline-primary mt-2">Lihat Detail</a>
+                            <a href="workshop.php" class="btn btn-sm btn-outline-primary mt-2" style="margin-top:auto; color:#5a3fa0; font-weight:600; text-align:left; padding:0; background:none; border:none; box-shadow:none;">Lihat Detail</a>
                         </div>
                         <?php endforeach; ?>
                     <?php else: ?>
@@ -348,5 +350,8 @@ while ($row = mysqli_fetch_assoc($res)) {
     </footer>
 
     <script src="assets/js/script.js"></script>
+    <script>
+        const products = <?= json_encode($products, JSON_UNESCAPED_UNICODE) ?>;
+    </script>
 </body>
 </html> 

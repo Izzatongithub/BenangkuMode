@@ -289,20 +289,24 @@ $voter_email = $_SESSION['user_email'] ?? $_SESSION['guest_email'];
                             </div>
                             <div class="vote-section" style="margin-top:10px;">
                                 <span class="vote-count badge bg-success"><i class="fas fa-heart"></i> <?= $voteCount ?> Vote</span>
-                                <?php if ($sudahVote): ?>
-                                    <form method="post" action="cancel_vote.php" style="display:inline-block;margin-left:10px;">
-                                        <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
-                                        <button type="submit" class="btn btn-warning btn-sm">
-                                            <i class="fas fa-times"></i> Batalkan Vote
-                                        </button>
-                                    </form>
+                                <?php if (!isLoggedIn()): ?>
+                                    <span style="display:inline-block;margin-left:10px;color:#c0392b;font-size:0.98em;vertical-align:middle;">Silakan login untuk melakukan vote.</span>
                                 <?php else: ?>
-                                    <form method="post" style="display:inline-block;margin-left:10px;">
-                                        <input type="hidden" name="vote_product_id" value="<?= $p['id'] ?>">
-                                        <button type="submit" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-thumbs-up"></i> Vote
-                                        </button>
-                                    </form>
+                                    <?php if ($sudahVote): ?>
+                                        <form method="post" action="cancel_vote.php" style="display:inline-block;margin-left:10px;">
+                                            <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
+                                            <button type="submit" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-times"></i> Batalkan Vote
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        <form method="post" style="display:inline-block;margin-left:10px;">
+                                            <input type="hidden" name="vote_product_id" value="<?= $p['id'] ?>">
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-thumbs-up"></i> Vote
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </div>
                         </div>

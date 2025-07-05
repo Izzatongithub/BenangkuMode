@@ -151,6 +151,80 @@ if ($result) {
             color: #666;
             line-height: 1.6;
         }
+        .workshops-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            justify-content: flex-start;
+        }
+        .workshop-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px #eee;
+            padding: 0 0 24px 0;
+            max-width: 340px;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 24px;
+        }
+        .workshop-header {
+            background: #f3eaff;
+            border-radius: 18px 18px 0 0;
+            padding: 24px 24px 12px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .workshop-icon i {
+            font-size: 2.5rem;
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+        .workshop-meta h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .meta-list {
+            font-size: 0.98rem;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+        .workshop-description {
+            padding: 18px 24px 0 24px;
+            color: #444;
+            font-size: 1.02rem;
+            min-height: 48px;
+        }
+        .workshop-footer {
+            margin-top: auto;
+            padding: 18px 24px 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .price {
+            color: #e74c3c;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .slots {
+            color: #666;
+            font-size: 0.98rem;
+        }
+        .btn.btn-primary {
+            margin-top: 8px;
+        }
+        .event-card {
+            max-width: 420px;
+            margin: 0 auto 32px auto;
+        }
     </style>
 </head>
 <body>
@@ -278,31 +352,33 @@ if ($result) {
             <div class="workshops-grid" id="workshopsGrid">
                 <?php foreach ($workshops as $w): ?>
                 <div class="workshop-card">
-                    <div class="workshop-image" style="background: #f3eaff; display:flex; align-items:center; justify-content:center; height:140px;">
-                        <i class="fas fa-chalkboard-teacher" style="font-size:3rem;color:#764ba2;"></i>
-                    </div>
-                    <div class="workshop-content">
-                        <h3><?= htmlspecialchars($w['title']) ?></h3>
+                    <div class="workshop-header">
+                        <div class="workshop-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
                         <div class="workshop-meta">
-                            <p><i class="fas fa-calendar"></i> <?= date('d M Y H:i', strtotime($w['start_date'])) ?></p>
-                            <p><i class="fas fa-clock"></i> <?= htmlspecialchars($w['duration']) ?></p>
-                            <p><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($w['location']) ?></p>
-                            <p><i class="fas fa-user"></i> <?= htmlspecialchars($w['instructor']) ?></p>
-                        </div>
-                        <p class="workshop-description"><?= htmlspecialchars($w['description']) ?></p>
-                        <div class="workshop-footer">
-                            <div class="workshop-price">
-                                <span class="price">
-                                    <?= $w['price'] == 0 ? 'Gratis' : 'Rp ' . number_format($w['price'],0,',','.') ?>
-                                </span>
-                                <span class="spots <?= ($w['max_participants']-$w['current_participants']<=0)?'full':(($w['max_participants']-$w['current_participants']<=3)?'almost-full':'') ?>">
-                                    <?= ($w['max_participants']-$w['current_participants']<=0)?'Penuh':($w['max_participants']-$w['current_participants']).' slot tersisa' ?>
-                                </span>
+                            <h3><?= htmlspecialchars($w['title']) ?></h3>
+                            <div class="meta-list">
+                                <span><i class="fas fa-calendar"></i> <?= date('d M Y H:i', strtotime($w['start_date'])) ?></span>
+                                <span><i class="fas fa-clock"></i> <?= htmlspecialchars($w['duration']) ?></span>
+                                <span><i class="fas fa-map-marker-alt"></i> <?= htmlspecialchars($w['location']) ?></span>
+                                <span><i class="fas fa-user"></i> <?= htmlspecialchars($w['instructor']) ?></span>
                             </div>
-                            <button class="btn btn-primary" onclick="registerWorkshop(<?= $w['id'] ?>)" <?= ($w['max_participants']-$w['current_participants']<=0)?'disabled':'' ?>>
-                                <?= ($w['max_participants']-$w['current_participants']<=0)?'Workshop Penuh':'Daftar Sekarang' ?>
-                            </button>
                         </div>
+                    </div>
+                    <div class="workshop-description">
+                        <?= htmlspecialchars($w['description']) ?>
+                    </div>
+                    <div class="workshop-footer">
+                        <span class="price">
+                            <?= $w['price'] == 0 ? 'Gratis' : 'Rp ' . number_format($w['price'],0,',','.') ?>
+                        </span>
+                        <span class="slots <?= ($w['max_participants']-$w['current_participants']<=0)?'full':(($w['max_participants']-$w['current_participants']<=3)?'almost-full':'') ?>">
+                            <?= ($w['max_participants']-$w['current_participants']<=0)?'Penuh':($w['max_participants']-$w['current_participants']).' slot tersisa' ?>
+                        </span>
+                        <button class="btn btn-primary" onclick="registerWorkshop(<?= $w['id'] ?>)" <?= ($w['max_participants']-$w['current_participants']<=0)?'disabled':'' ?>>
+                            <?= ($w['max_participants']-$w['current_participants']<=0)?'Workshop Penuh':'Daftar Sekarang' ?>
+                        </button>
                     </div>
                 </div>
                 <?php endforeach; ?>

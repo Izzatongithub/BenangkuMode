@@ -67,7 +67,7 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
     $user_email = mysqli_real_escape_string($conn, $_SESSION['user_email']);
     $cek = mysqli_query($conn, "SELECT id FROM orders WHERE id=$order_id AND customer_email='$user_email' AND status!='completed'");
     if (mysqli_num_rows($cek) > 0) {
-        mysqli_query($conn, "UPDATE orders SET status='completed' WHERE id=$order_id");
+        mysqli_query($conn, "UPDATE orders SET status='completed', payment_status='paid' WHERE id=$order_id");
     }
     header('Location: orders.php');
     exit;
@@ -255,6 +255,9 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
             font-size: 64px;
             color: #ddd;
             margin-bottom: 20px;
+        }
+        .main-content {
+            margin-top: 120px;
         }
     </style>
 </head>

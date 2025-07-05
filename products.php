@@ -4,7 +4,7 @@ require_once 'config/database.php';
 
 // Ambil semua produk aktif
 $products = [];
-$result = mysqli_query($conn, "SELECT * FROM products WHERE is_active = 1");
+$result = mysqli_query($conn, "SELECT p.*, pc.name as category FROM products p LEFT JOIN product_categories pc ON p.category_id = pc.id WHERE p.is_active = 1");
 while ($row = mysqli_fetch_assoc($result)) {
     $products[] = $row;
 }
@@ -303,10 +303,10 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div class="filter-options">
                     <select id="categoryFilter">
                         <option value="">Semua Kategori</option>
-                        <option value="scarf">Scarf</option>
-                        <option value="cardigan">Cardigan</option>
-                        <option value="bag">Tas</option>
-                        <option value="accessories">Aksesoris</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="bags">Bags</option>
                     </select>
                     <select id="priceFilter">
                         <option value="">Semua Harga</option>
@@ -382,7 +382,10 @@ while ($row = mysqli_fetch_assoc($result)) {
     </footer>
 
     <script>
-    window.isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+        window.isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+    </script>
+    <script>
+        const products = <?= json_encode($products, JSON_UNESCAPED_UNICODE) ?>;
     </script>
     <script src="assets/js/script.js"></script>
     <script src="assets/js/products.js"></script>

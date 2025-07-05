@@ -63,18 +63,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (!mysqli_query($conn, $order_item_sql)) {
                         throw new Exception('Error creating order item: ' . mysqli_error($conn));
                     }
+                    // Kurangi stok produk
+                    $update_stock_sql = "UPDATE products SET stock_quantity = stock_quantity - $quantity WHERE id = $product_id";
+                    if (!mysqli_query($conn, $update_stock_sql)) {
+                        throw new Exception('Error updating product stock: ' . mysqli_error($conn));
+                    }
                 }
                 
                 // Commit transaction
                 mysqli_commit($conn);
                 
-                $message = 'Pesanan berhasil dibuat! Pesanan Anda akan diproses segera.';
-                
                 // Log activity
                 logActivity('create_order', "Created order ID: $order_id with " . count($cart_items) . " items");
                 
-                // Hapus keranjang setelah checkout sukses
-                unset($_SESSION['cart']);
+                // Redirect ke halaman pembayaran atau pesanan
+                if ($payment_method === 'cod') {
+                    header('Location: orders.php');
+                    exit;
+                } else {
+                    header('Location: payment.php?order_id=' . $order_id . '&method=' . urlencode($payment_method));
+                    exit;
+                }
                 
             } catch (Exception $e) {
                 mysqli_rollback($conn);

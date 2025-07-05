@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 01, 2025 at 03:15 PM
+-- Generation Time: Jul 05, 2025 at 05:57 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.30
 
@@ -215,7 +215,7 @@ CREATE TABLE `orders` (
   `customer_phone` varchar(20) DEFAULT NULL,
   `customer_address` text DEFAULT NULL,
   `total_amount` decimal(10,2) NOT NULL,
-  `status` enum('pending','processing','shipped','delivered','cancelled') DEFAULT 'pending',
+  `status` enum('pending','processing','shipped','delivered','complete','cancelled') DEFAULT 'pending',
   `payment_method` varchar(50) DEFAULT NULL,
   `payment_status` enum('pending','paid','failed','refunded') DEFAULT 'pending',
   `shipping_method` varchar(50) DEFAULT NULL,
@@ -230,7 +230,11 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `order_number`, `customer_name`, `customer_email`, `customer_phone`, `customer_address`, `total_amount`, `status`, `payment_method`, `payment_status`, `shipping_method`, `tracking_number`, `notes`, `created_at`, `updated_at`) VALUES
-(2, 'ORD-20250701-E74E8511', 'Izzat Nazhiefa', 'izzat@gmail.com', '089999', 'mtm', '395000.00', 'pending', 'cod', 'pending', 'jne', NULL, NULL, '2025-07-01 13:09:51', '2025-07-01 13:09:51');
+(2, 'ORD-20250701-E74E8511', 'Izzat Nazhiefa', 'izzat@gmail.com', '089999', 'mtm', '395000.00', '', 'cod', 'paid', 'jne', NULL, NULL, '2025-07-01 13:09:51', '2025-07-05 03:48:19'),
+(3, 'ORD-20250704-0A0285D4', 'Izzat Nazhiefa', 'izzat@gmail.com', '123', 'jjj', '75000.00', '', 'transfer', 'paid', 'jne', NULL, NULL, '2025-07-04 15:58:20', '2025-07-05 03:48:15'),
+(4, 'ORD-20250705-11DCD5B2', 'Izzat Nazhiefa', 'izzat@gmail.com', '333', 'bb', '245000.00', '', 'transfer', 'paid', 'jne', NULL, NULL, '2025-07-05 03:43:53', '2025-07-05 03:44:28'),
+(5, 'ORD-20250705-0D780BD2', 'Izzat Nazhiefa', 'izzat@gmail.com', '78987', 'lolol', '245000.00', '', 'transfer', 'paid', 'jne', NULL, NULL, '2025-07-05 03:54:22', '2025-07-05 03:57:21'),
+(6, 'ORD-20250705-B8004DF7', 'Izzat Nazhiefa', 'izzat@gmail.com', '66868', 'bnnn', '245000.00', 'pending', 'transfer', 'paid', 'jnt', NULL, NULL, '2025-07-05 03:57:42', '2025-07-05 03:57:44');
 
 -- --------------------------------------------------------
 
@@ -255,7 +259,11 @@ CREATE TABLE `order_items` (
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `quantity`, `price`, `subtotal`, `created_at`) VALUES
 (1, 2, 5, 'topi rajut', 2, '75000.00', '150000.00', '2025-07-01 13:09:51'),
-(2, 2, 4, 'cardigan rajut', 1, '245000.00', '245000.00', '2025-07-01 13:09:51');
+(2, 2, 4, 'cardigan rajut', 1, '245000.00', '245000.00', '2025-07-01 13:09:51'),
+(3, 3, 5, 'topi rajut', 1, '75000.00', '75000.00', '2025-07-04 15:58:20'),
+(4, 4, 4, 'cardigan rajut', 1, '245000.00', '245000.00', '2025-07-05 03:43:53'),
+(5, 5, 4, 'cardigan rajut', 1, '245000.00', '245000.00', '2025-07-05 03:54:22'),
+(6, 6, 4, 'cardigan rajut', 1, '245000.00', '245000.00', '2025-07-05 03:57:42');
 
 --
 -- Triggers `order_items`
@@ -299,7 +307,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `category_id`, `image`, `images`, `stock_quantity`, `is_active`, `is_featured`, `created_at`, `updated_at`) VALUES
-(4, 'cardigan rajut', 'warna biru', '245000.00', 1, '6862096a08aea.jpeg', NULL, 4, 1, 0, '2025-06-30 03:50:02', '2025-06-30 05:02:58'),
+(4, 'cardigan rajut', 'warna biru', '245000.00', 1, '6862096a08aea.jpeg', NULL, 2, 1, 0, '2025-06-30 03:50:02', '2025-07-05 03:57:42'),
 (5, 'topi rajut', 'mantap', '75000.00', 1, '68621aa967ebf.jpeg', NULL, 5, 1, 0, '2025-06-30 05:03:37', '2025-06-30 05:03:37');
 
 -- --------------------------------------------------------
@@ -330,6 +338,21 @@ INSERT INTO `product_categories` (`id`, `name`, `description`, `image`, `is_acti
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_reviews`
+--
+
+CREATE TABLE `product_reviews` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `rating` int(11) NOT NULL CHECK (`rating` between 1 and 5),
+  `review_text` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product_votes`
 --
 
@@ -346,7 +369,8 @@ CREATE TABLE `product_votes` (
 --
 
 INSERT INTO `product_votes` (`id`, `product_id`, `voter_name`, `voter_email`, `created_at`) VALUES
-(3, 1, 'Izzat Nazhiefa', 'izzat@gmail.com', '2025-07-01 12:03:05');
+(3, 1, 'Izzat Nazhiefa', 'izzat@gmail.com', '2025-07-01 12:03:05'),
+(4, 1, 'Guest', 'guest_6868980238ac8@guest.com', '2025-07-05 03:12:08');
 
 -- --------------------------------------------------------
 
@@ -586,6 +610,14 @@ ALTER TABLE `product_categories`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `product_reviews`
+--
+ALTER TABLE `product_reviews`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `product_votes`
 --
 ALTER TABLE `product_votes`
@@ -689,13 +721,13 @@ ALTER TABLE `newsletter_subscribers`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -710,10 +742,16 @@ ALTER TABLE `product_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `product_reviews`
+--
+ALTER TABLE `product_reviews`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `product_votes`
 --
 ALTER TABLE `product_votes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -779,6 +817,13 @@ ALTER TABLE `order_items`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `product_categories` (`id`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `product_reviews`
+--
+ALTER TABLE `product_reviews`
+  ADD CONSTRAINT `product_reviews_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `product_reviews_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `product_votes`

@@ -457,23 +457,28 @@ if (isset($_POST['add_to_cart']) && isset($_POST['product_id'])) {
         <h2 class="section-title">Rekomendasi untukmu</h2>
         <div class="recommended-flex">
         <?php foreach ($recommended as $rec): ?>
-        <div class="recommend-card">
-            <div class="image-wrapper">
-            <div class="image-gradient"></div>
-            <img src="assets/images/products/<?= htmlspecialchars($rec['image']) ?>" alt="<?= htmlspecialchars($rec['name']) ?>">
-            <div class="image-gradient right"></div>
+        <div class="recommend-card" style="max-width:220px;min-width:180px;padding:0 0 18px 0;box-shadow:0 2px 8px #eee;border-radius:18px;display:flex;flex-direction:column;align-items:stretch;">
+            <div style="position:relative;">
+                <a href="detail_produk.php?id=<?= $rec['id'] ?>" style="display:block;">
+                    <div class="product-image" style="height:160px;background:#f8f9fa;border-radius:18px 18px 0 0;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+                        <img src="assets/images/products/<?= htmlspecialchars($rec['image']) ?>" alt="<?= htmlspecialchars($rec['name']) ?>" style="width:100%;height:100%;object-fit:cover;">
+                    </div>
+                </a>
+                <form method="post" style="position:absolute;bottom:10px;right:10px;z-index:2;">
+                    <input type="hidden" name="product_id" value="<?= $rec['id'] ?>">
+                    <button type="submit" name="add_to_cart" class="btn btn-primary" style="padding:6px 10px;font-size:0.95rem;border-radius:16px;min-width:unset;">
+                        <i class="fas fa-cart-plus"></i>
+                    </button>
+                </form>
             </div>
-            <div class="content">
-            <h3><?= htmlspecialchars($rec['name']) ?></h3>
-            <p class="desc"><?= htmlspecialchars($rec['description']) ?></p>
-            <p class="price">Rp <?= number_format($rec['price'], 0, ',', '.') ?></p>
+            <div style="padding:12px 14px 0 14px;text-align:left;">
+                <span style="color:#3a4660;font-size:1.05rem;font-weight:500;line-height:1.3;margin-bottom:8px;display:block;">
+                    <?= htmlspecialchars($rec['name']) ?>
+                </span>
+                <span class="price" style="font-weight:700; color:#222; font-size:1.15rem; display:block; line-height:1.1;">
+                    Rp <?= number_format($rec['price'], 0, ',', '.') ?>
+                </span>
             </div>
-            <form method="post">
-            <input type="hidden" name="product_id" value="<?= $rec['id'] ?>">
-            <button type="submit" name="add_to_cart" class="btn-add">
-                <i class="fas fa-shopping-cart"></i> Tambah ke Keranjang
-            </button>
-            </form>
         </div>
         <?php endforeach; ?>
         </div>
