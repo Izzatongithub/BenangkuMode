@@ -126,7 +126,7 @@ $total_orders = mysqli_fetch_assoc($result_orders)['total'];
                         <a class="nav-link" href="products.php">
                             <i class="fas fa-box me-2"></i>Products
                         </a>
-                        <a class="nav-link" href="add_comingsoon.php">
+                        <a class="nav-link" href="comingsoon.php">
                             <i class="fas fa-clock-rotate-left me-2"></i>Tambah Coming Soon
                         </a>
                         <a class="nav-link" href="destinations.php">
