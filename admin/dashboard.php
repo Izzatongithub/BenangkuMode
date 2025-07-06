@@ -117,6 +117,7 @@ $result_recent_orders = mysqli_query($conn, $sql_recent_orders);
                         <a class="nav-link" href="products.php">
                             <i class="fas fa-box me-2"></i>Products
                         </a>
+<<<<<<< HEAD
                         <a class="nav-link" href="workshops.php">
                             <i class="fas fa-chalkboard-teacher me-2"></i>Workshops
                         </a>
@@ -125,6 +126,10 @@ $result_recent_orders = mysqli_query($conn, $sql_recent_orders);
                         </a>
                         <a class="nav-link" href="peserta_workshop.php">
                             <i class="fas fa-users me-2"></i>Peserta per Workshop
+=======
+                        <a class="nav-link" href="comingsoon.php">
+                            <i class="fas fa-clock-rotate-left me-2"></i>Add Coming Soon
+>>>>>>> 5439e2e0db5e73709aef8cce568866b3104253fe
                         </a>
                         <a class="nav-link" href="destinations.php">
                             <i class="fas fa-map-marker-alt me-2"></i>Destinations
