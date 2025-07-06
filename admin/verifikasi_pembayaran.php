@@ -2,11 +2,6 @@
 session_start();
 require_once '../config/database.php';
 
-// Fungsi cek admin (bisa disesuaikan dengan sistem Anda)
-function isAdmin() {
-    return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
-}
-
 if (!isset($_SESSION['user_id']) || !isAdmin()) {
     header('Location: ../login.php');
     exit;
@@ -38,11 +33,21 @@ if (isset($_POST['action'], $_POST['registration_id'])) {
     }
 }
 
-// Ambil daftar pendaftar dengan status pending
-$sql = "SELECT wr.id, wr.name, wr.email, w.title as workshop_title, wr.registration_date, wr.payment_proof, wr.payment_status
-        FROM workshop_registration wr
+// Ambil filter status dari GET
+$statusFilter = isset($_GET['status']) ? $_GET['status'] : 'all';
+
+// Siapkan query sesuai filter
+$where = '';
+if ($statusFilter !== 'all') {
+    $where = "WHERE wr.payment_status='" . mysqli_real_escape_string($conn, $statusFilter) . "'";
+}
+
+$sql = "SELECT wr.id, u.username, u.email as user_email, w.title as workshop_title, wr.registration_date, wr.payment_proof, wr.payment_status
+        FROM workshop_registrations wr
         JOIN workshops w ON wr.workshop_id = w.id
-        WHERE wr.payment_status='pending' ORDER BY wr.registration_date DESC";
+        JOIN users u ON wr.user_id = u.id
+        $where
+        ORDER BY wr.registration_date DESC";
 $result = $conn->query($sql);
 $registrations = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 ?>
@@ -55,6 +60,8 @@ $registrations = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     <style>
         .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #eee; padding: 32px; }
         h2 { text-align: center; margin-bottom: 24px; }
+        .filter-form { margin-bottom: 18px; text-align: right; }
+        .filter-form select { padding: 7px 14px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
         th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
         th { background: #f8f9fa; }
@@ -80,12 +87,21 @@ $registrations = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 <body>
     <div class="container">
         <h2>Verifikasi Pembayaran Workshop</h2>
+        <form class="filter-form" method="get">
+            <label for="status">Filter Status: </label>
+            <select name="status" id="status" onchange="this.form.submit()">
+                <option value="all" <?= $statusFilter==='all'?'selected':''; ?>>Semua</option>
+                <option value="pending" <?= $statusFilter==='pending'?'selected':''; ?>>Pending</option>
+                <option value="paid" <?= $statusFilter==='paid'?'selected':''; ?>>Paid</option>
+                <option value="cancelled" <?= $statusFilter==='cancelled'?'selected':''; ?>>Cancelled</option>
+            </select>
+        </form>
         <?php if (count($registrations) === 0): ?>
-            <div class="no-data">Tidak ada pendaftar workshop yang menunggu pembayaran.</div>
+            <div class="no-data">Tidak ada pendaftar workshop.</div>
         <?php else: ?>
         <table>
             <tr>
-                <th>Nama</th>
+                <th>Nama User</th>
                 <th>Email</th>
                 <th>Workshop</th>
                 <th>Tanggal Daftar</th>
@@ -95,8 +111,8 @@ $registrations = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
             </tr>
             <?php foreach ($registrations as $reg): ?>
             <tr>
-                <td><?= htmlspecialchars($reg['name']) ?></td>
-                <td><?= htmlspecialchars($reg['email']) ?></td>
+                <td><?= htmlspecialchars($reg['username']) ?></td>
+                <td><?= htmlspecialchars($reg['user_email']) ?></td>
                 <td><?= htmlspecialchars($reg['workshop_title']) ?></td>
                 <td><?= date('d M Y H:i', strtotime($reg['registration_date'])) ?></td>
                 <td>
@@ -108,8 +124,11 @@ $registrations = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
                         <span style="color:#aaa;">Belum ada</span>
                     <?php endif; ?>
                 </td>
-                <td class="status-pending">Menunggu Pembayaran</td>
+                <td class="status-<?= htmlspecialchars($reg['payment_status']) ?>">
+                    <?= ucfirst($reg['payment_status']) ?>
+                </td>
                 <td>
+                    <?php if ($reg['payment_status'] === 'pending'): ?>
                     <form method="post" style="display:inline;" onsubmit="return confirm('Konfirmasi pembayaran ini?')">
                         <input type="hidden" name="registration_id" value="<?= $reg['id'] ?>">
                         <input type="hidden" name="action" value="confirm">
@@ -120,6 +139,9 @@ $registrations = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
                         <input type="hidden" name="action" value="reject">
                         <button type="submit" class="btn-action btn-reject">Tolak</button>
                     </form>
+                    <?php else: ?>
+                        <span style="color:#aaa;">-</span>
+                    <?php endif; ?>
                 </td>
             </tr>
             <?php endforeach; ?>
