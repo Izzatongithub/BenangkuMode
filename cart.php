@@ -283,34 +283,34 @@ if (isset($_POST['add_to_cart']) && isset($_POST['product_id'])) {
             background: linear-gradient(to right, #c084fc, transparent);
             left: 0;
             z-index: 0;
-            }
-            .image-gradient.right {
+        }
+        .image-gradient.right {
             left: auto;
             right: 0;
             background: linear-gradient(to left, #ec4899, transparent);
-            }
-            .content {
+        }
+        .content {
             padding: 1rem 1.5rem 0;
             flex-grow: 1;
-            }
-            .content h3 {
+        }
+        .content h3 {
             font-size: 1rem;
             font-weight: 600;
             color: #1e293b;
             margin-bottom: 0.3rem;
-            }
-            .content .desc {
+        }
+        .content .desc {
             font-size: 0.9rem;
             color: #6b7280;
             margin-bottom: 0.5rem;
-            }
-            .content .price {
+        }
+        .content .price {
             color: #d94827;
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            }
-            .btn-add {
+        }
+        .btn-add {
             background: #d94827;
             color: white;
             border: none;
@@ -324,10 +324,13 @@ if (isset($_POST['add_to_cart']) && isset($_POST['product_id'])) {
             justify-content: center;
             gap: 8px;
             transition: background 0.3s;
-            }
-            .btn-add:hover {
+        }
+        .btn-add:hover {
             background: #b3361e;
-            }
+        }
+        .icon-spacing {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -353,9 +356,9 @@ if (isset($_POST['add_to_cart']) && isset($_POST['product_id'])) {
                     <li class="nav-item">
                         <a href="comingsoon.php" class="nav-link">Coming Soon</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="gallery.php" class="nav-link">Galeri</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a href="wisata.php" class="nav-link">Wisata Lombok</a>
                     </li>
@@ -375,16 +378,22 @@ if (isset($_POST['add_to_cart']) && isset($_POST['product_id'])) {
                                     </a>
                                 <?php else: ?>
                                 <a href="profile.php">
-                                    <i class="fas fa-user me-2"></i>Profil
+                                    <i class="fas fa-user me-2 icon-spacing"></i>Profil
                                 </a>
                                 <div class="divider"></div>
                                 <a href="orders.php">
-                                    <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                    <i class="fas fa-shopping-bag me-2 icon-spacing"></i>Pesanan
                                 </a>
+                                <div class="divider"></div>
+                                <a href="cart.php">
+                                    <i class="fas fa-shopping-cart me-2 icon-spacing"></i>Keranjang
+                                </a>
+                                <div class="divider"></div>
+                                <a href="upload_bukti.php"><i class="fas fa-upload me-2 icon-spacing"></i>Upload Bukti Pembayaran</a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    <i class="fas fa-sign-out-alt me-2 icon-spacing"></i>Logout
                                 </a>
                             </div>
                         </div>

@@ -25,9 +25,9 @@ require_once dirname(__FILE__) . '/../config/database.php';
                 <li class="nav-item">
                     <a href="comingsoon.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'comingsoon.php' ? 'active' : ''; ?>">Coming Soon</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="gallery.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'gallery.php' ? 'active' : ''; ?>">Galeri</a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a href="wisata.php" class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'wisata.php' ? 'active' : ''; ?>">Wisata Lombok</a>
                 </li>

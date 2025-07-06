@@ -69,10 +69,168 @@ if ($can_review && isset($_POST['rating'], $_POST['review_text'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Produk - <?= htmlspecialchars($product['name']) ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        .user-menu .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            padding: 8px 0;
+        }
+        .user-menu:hover .dropdown-menu {
+            display: block;
+        }
+        .user-menu .dropdown-menu a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .user-menu .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+        .user-menu .dropdown-menu .divider {
+            border-top: 1px solid #ddd;
+            margin: 8px 0;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .auth-buttons .btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .auth-buttons .btn-login {
+            background: transparent;
+            color: #333;
+            border: 1px solid #333;
+        }
+        .auth-buttons .btn-login:hover {
+            background: #333;
+            color: white;
+        }
+        .auth-buttons .btn-register {
+            background: #667eea;
+            color: white;
+            border: 1px solid #667eea;
+        }
+        .auth-buttons .btn-register:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+        .icon-spacing {
+            margin-right: 8px;
+        }
+    </style>
 </head>
 <body>
-    <?php include 'includes/navbar.php'; ?>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h2>BenangkuMode</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.php" class="nav-link">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="about.php" class="nav-link">Tentang Kami</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="products.php" class="nav-link">Produk</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="workshop.php" class="nav-link">Workshop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="comingsoon.php" class="nav-link">Coming Soon</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a href="gallery.php" class="nav-link">Galeri</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a href="wisata.php" class="nav-link">Wisata Lombok</a>
+                    </li>
+                </ul>
+                
+                <!-- Auth Section -->
+                <div class="auth-section">
+                    <?php if (isLoggedIn()): ?>
+                        <div class="user-menu">
+                            <div class="user-avatar">
+                                <?php echo strtoupper(substr($_SESSION['user_name'], 0, 1)); ?>
+                            </div>
+                            <div class="dropdown-menu">
+                                <?php if (isAdmin()): ?>
+                                    <a href="admin/dashboard.php">
+                                        <i class="fas fa-cog me-2 icon-spacing"></i>Admin Panel
+                                    </a>
+                                <?php else: ?>
+                                <a href="profile.php">
+                                    <i class="fas fa-user me-2 icon-spacing"></i>Profil
+                                </a>
+                                <div class="divider"></div>
+                                <a href="orders.php">
+                                    <i class="fas fa-shopping-bag me-2 icon-spacing"></i>Pesanan
+                                </a>
+                                <div class="divider"></div>
+                                <a href="cart.php">
+                                    <i class="fas fa-shopping-cart me-2 icon-spacing"></i>Keranjang
+                                </a>
+                                <div class="divider"></div>
+                                <a href="upload_bukti.php"><i class="fas fa-upload me-2 icon-spacing"></i>Upload Bukti Pembayaran</a>
+                                <?php endif; ?>
+                                <div class="divider"></div>
+                                <a href="logout.php">
+                                    <i class="fas fa-sign-out-alt me-2 icon-spacing"></i>Logout
+                                </a>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="auth-buttons">
+                            <a href="login.php" class="btn btn-login">Login</a>
+                            <a href="register.php" class="btn btn-register">Daftar</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </nav>
+    </header>
+
     <div class="container" style="margin-top: 120px; margin-bottom: 40px;">
         <div class="product-detail-card" style="background: #fff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); padding: 32px; max-width: 900px; margin: 0 auto;">
             <div style="display: flex; flex-wrap: wrap; gap: 32px;">
@@ -82,7 +240,7 @@ if ($can_review && isset($_POST['rating'], $_POST['review_text'])) {
                 <div style="flex: 2 1 350px; min-width: 280px;">
                     <h1 style="font-size: 2rem; margin-bottom: 0.5rem; color: #2c3e50;"> <?= htmlspecialchars($product['name']) ?> </h1>
                     <div style="margin-bottom: 1rem; color: #888;">Kategori: <?= htmlspecialchars($product['category_name']) ?></div>
-                    <div style="font-size: 1.3rem; color: #e74c3c; font-weight: 600; margin-bottom: 1rem;">Rp <?= number_format($product['price'], 0, ',', '.') ?></div>
+                    <div style="font-size: 1.3rem; font-weight: 600; margin-bottom: 1rem;">Rp <?= number_format($product['price'], 0, ',', '.') ?></div>
                     <div style="margin-bottom: 1.5rem; color: #555;"> <?= nl2br(htmlspecialchars($product['description'])) ?> </div>
                     <div style="margin-bottom: 1.5rem;">
                         <span>Stok: <?= (int)$product['stock_quantity'] ?></span>
@@ -94,7 +252,7 @@ if ($can_review && isset($_POST['rating'], $_POST['review_text'])) {
                     </div>
                     <div>
                         <?php if (isset($_SESSION['user_id'])): ?>
-                            <a href="checkout.php?product_id=<?= $product_id ?>" class="btn btn-primary">Beli Sekarang</a>
+                            <!-- <a href="checkout.php?product_id=<?= $product_id ?>" class="btn btn-primary">Beli Sekarang</a> -->
                         <?php else: ?>
                             <a href="login.php" class="btn btn-primary">Login untuk membeli</a>
                         <?php endif; ?>

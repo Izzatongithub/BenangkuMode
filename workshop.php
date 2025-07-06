@@ -254,9 +254,9 @@ if ($result) {
                     <li class="nav-item">
                         <a href="comingsoon.php" class="nav-link">Coming Soon</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="gallery.php" class="nav-link">Galeri</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a href="wisata.php" class="nav-link">Wisata Lombok</a>
                     </li>

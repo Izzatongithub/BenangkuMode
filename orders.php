@@ -332,7 +332,7 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
             margin: 0;
         }
         .icon-spacing {
-            margin-right: 8px; /* atur sesuai kebutuhan */
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -360,9 +360,9 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
                     <li class="nav-item">
                         <a href="comingsoon.php" class="nav-link">Coming Soon</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="gallery.php" class="nav-link">Galeri</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a href="wisata.php" class="nav-link">Wisata Lombok</a>
                     </li>
@@ -378,26 +378,26 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
                             <div class="dropdown-menu">
                                 <?php if (isAdmin()): ?>
                                     <a href="admin/dashboard.php">
-                                        <i class="fas fa-cog me-2"></i>Admin Panel
+                                        <i class="fas fa-cog me-2 icon-spacing"></i>Admin Panel
                                     </a>
                                 <?php else: ?>
                                 <a href="profile.php">
-                                    <i class="fas fa-user me-2"></i>Profil
+                                    <i class="fas fa-user me-2 icon-spacing"></i>Profil
                                 </a>
                                 <div class="divider"></div>
                                 <a href="orders.php">
-                                    <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                    <i class="fas fa-shopping-bag me-2 icon-spacing"></i>Pesanan
                                 </a>
                                 <div class="divider"></div>
                                 <a href="cart.php">
-                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
+                                    <i class="fas fa-shopping-cart me-2 icon-spacing"></i>Keranjang
                                 </a>
                                 <div class="divider"></div>
-                                <a href="upload_bukti.php"><i class="fas fa-upload me-2"></i>Upload Bukti Pembayaran</a>
+                                <a href="upload_bukti.php"><i class="fas fa-upload me-2 icon-spacing"></i>Upload Bukti Pembayaran</a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    <i class="fas fa-sign-out-alt me-2 icon-spacing"></i>Logout
                                 </a>
                             </div>
                         </div>
