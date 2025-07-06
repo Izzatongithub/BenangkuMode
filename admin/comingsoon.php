@@ -146,45 +146,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="main-content p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2>Tambah Produk Coming Soon</h2>
-                        <a href="comingsoon.php" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </a>
-                    </div>
-                    <?php if ($error): ?><div class="alert alert-danger"><?= $error ?></div><?php endif; ?>
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Product Information</h5>
-                        </div>
-                        <div class="card-body">
-                            <form method="post" enctype="multipart/form-data">
-                                <div class="mb-3">
-                                    <label>Nama Produk *</label>
-                                    <input type="text" name="name" class="form-control" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Deskripsi *</label>
-                                    <textarea name="description" class="form-control" required></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Harga Estimasi</label>
-                                    <input type="number" name="estimated_price" class="form-control" min="0">
-                                </div>
-                                <div class="mb-3">
-                                   <label>Tanggal Rilis Estimasi</label>
-                                    <input type="date" name="estimated_release_date" class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label>Gambar (opsional, JPG/PNG, max 2MB)</label>
-                                    <input type="file" name="image" class="form-control" accept=".jpg,.jpeg,.png">
-                                </div>
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active" checked>
-                                    <label class="form-check-label" for="is_active">Aktif</label>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                                <a href="comingsoon.php" class="btn btn-secondary">Batal</a>
-                            </form>
-                        </div>
+                        <?php if ($error): ?><div class="alert alert-danger"><?= $error ?></div><?php endif; ?>
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label>Nama Produk *</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label>Deskripsi *</label>
+                                <textarea name="description" class="form-control" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label>Harga Estimasi</label>
+                                <input type="number" name="estimated_price" class="form-control" min="0">
+                            </div>
+                            <div class="mb-3">
+                                <label>Tanggal Rilis Estimasi</label>
+                                <input type="date" name="estimated_release_date" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label>Gambar (opsional, JPG/PNG, max 2MB)</label>
+                                <input type="file" name="image" class="form-control" accept=".jpg,.jpeg,.png">
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="is_active" id="is_active" checked>
+                                <label class="form-check-label" for="is_active">Aktif</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <a href="../comingsoon.php" class="btn btn-secondary">Batal</a>
+                        </form>
                     </div>
                 </div>
             </div>
