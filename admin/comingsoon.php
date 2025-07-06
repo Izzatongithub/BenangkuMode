@@ -10,41 +10,48 @@ $conn = getDbConnection();
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $description = mysqli_real_escape_string($conn, $_POST['description']);
-    $estimated_price = $_POST['estimated_price'] !== '' ? (float)$_POST['estimated_price'] : null;
-    $estimated_release_date = $_POST['estimated_release_date'] ?? null;
-    $is_active = isset($_POST['is_active']) ? 1 : 0;
-
-    // Handle upload gambar
-    $image = '';
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $allowed = ['jpg','jpeg','png'];
-        $maxSize = 2*1024*1024;
-        $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-        if (in_array($ext, $allowed) && $_FILES['image']['size'] <= $maxSize) {
-            $newName = uniqid('comingsoon_', true) . '.' . $ext;
-            $target = '../assets/images/products/' . $newName;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
-                $image = $newName;
+    if (isset($_POST['action'])) {
+        $product_id = mysqli_real_escape_string($conn, $_POST['product_id']);
+        
+        if ($_POST['action'] === 'delete') {
+            // Get product image first
+            $sql_get = "SELECT image FROM coming_soon_products WHERE id = '$product_id'";
+            $result_get = mysqli_query($conn, $sql_get);
+            $product = mysqli_fetch_assoc($result_get);
+            
+            // Delete from database
+            $sql = "DELETE FROM coming_soon_products WHERE id = '$product_id'";
+            if (mysqli_query($conn, $sql)) {
+                // Delete image file if exists
+                if ($product && $product['image']) {
+                    $image_path = '../assets/images/products/' . $product['image'];
+                    if (file_exists($image_path)) {
+                        unlink($image_path);
+                    }
+                }
+                $message = 'Product deleted successfully';
+                logActivity('delete_product', "Deleted product ID: $product_id");
+            } else {
+                $message = 'Error deleting product';
+            }
+        } elseif ($_POST['action'] === 'toggle_status') {
+            $sql = "UPDATE coming_soon_products SET is_active = NOT is_active WHERE id = '$product_id'";
+            if (mysqli_query($conn, $sql)) {
+                $message = 'Product status updated successfully';
+                logActivity('toggle_product_status', "Toggled status for product ID: $product_id");
+            } else {
+                $message = 'Error updating product status';
             }
         }
     }
-
-    if (!$name || !$description) {
-        $error = 'Nama dan deskripsi wajib diisi.';
-    } else {
-        $sql = "INSERT INTO coming_soon_products (name, description, estimated_price, estimated_release_date, image, is_active) VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param('ssdssi', $name, $description, $estimated_price, $estimated_release_date, $image, $is_active);
-        if ($stmt->execute()) {
-            header('Location: ../comingsoon.php');
-            exit();
-        } else {
-            $error = 'Gagal menambah produk coming soon.';
-        }
-    }
 }
+
+$sql = "SELECT *
+        FROM coming_soon_products
+        WHERE is_active = 1
+        ORDER BY estimated_release_date ASC";
+
+$result = mysqli_query($conn, $sql);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -163,15 +170,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <tr>
                                             <th>Image</th>
                                             <th>Name</th>
-                                            <th>Category</th>
-                                            <th>Price</th>
-                                            <th>Stock</th>
-                                            <th>Status</th>
+                                            <th>Estimated Price</th>
+                                            <th>Estimated Release Date</th>
                                             <th>Created</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php while ($product = mysqli_fetch_assoc($result)): ?>
+                                            <tr>
+                                                <td>
+                                                    <?php if ($product['image']): ?>
+                                                        <img src="../assets/images/products/<?php echo htmlspecialchars($product['image']); ?>" 
+                                                             alt="<?php echo htmlspecialchars($product['name']); ?>" 
+                                                             class="product-image">
+                                                    <?php else: ?>
+                                                        <div class="product-image bg-light d-flex align-items-center justify-content-center">
+                                                            <i class="fas fa-image text-muted"></i>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <strong><?php echo htmlspecialchars($product['name']); ?></strong>
+                                                    <br>
+                                                    <small class="text-muted"><?php echo htmlspecialchars($product['description']); ?></small>
+                                                </td>
+                                                <td>
+                                                    <strong><?php echo htmlspecialchars($product['estimated_price']); ?></strong>
+                                                </td>
+                                                <td>
+                                                    <?php echo date('d/m/Y', strtotime($product['estimated_release_date'])); ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo date('d/m/Y', strtotime($product['created_at'])); ?>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a href="edit_product.php?id=<?php echo $product['id']; ?>" 
+                                                           class="btn btn-outline-primary">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <form method="POST" style="display: inline;" 
+                                                              onsubmit="return confirm('Are you sure you want to toggle this product status?')">
+                                                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                                                            <input type="hidden" name="action" value="toggle_status">
+                                                            <button type="submit" class="btn btn-outline-warning">
+                                                                <i class="fas fa-toggle-on"></i>
+                                                            </button>
+                                                        </form>
+                                                        <form method="POST" style="display: inline;" 
+                                                              onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                                                            <input type="hidden" name="action" value="delete">
+                                                            <button type="submit" class="btn btn-outline-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endwhile; ?>
                                     </tbody>
                                 </table>
                             </div>
