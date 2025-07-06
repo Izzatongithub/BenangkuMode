@@ -175,6 +175,10 @@ function getCategoryName($id, $categories) {
                                 <a href="orders.php">
                                     <i class="fas fa-shopping-bag me-2"></i>Pesanan
                                 </a>
+                                <div class="divider"></div>
+                                <a href="cart.php">
+                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
+                                </a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">

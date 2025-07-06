@@ -126,7 +126,7 @@ require_once 'config/database.php';
                 </ul>
 
                 <!-- Auth Section -->
-                <div class="auth-section">
+   <div class="auth-section">
                     <?php if (isLoggedIn()): ?>
                         <div class="user-menu">
                             <div class="user-avatar">
@@ -144,6 +144,10 @@ require_once 'config/database.php';
                                 <div class="divider"></div>
                                 <a href="orders.php">
                                     <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                </a>
+                                <div class="divider"></div>
+                                <a href="cart.php">
+                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
                                 </a>
                                 <?php endif; ?>
                                 <div class="divider"></div>

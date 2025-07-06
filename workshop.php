@@ -278,7 +278,14 @@ if ($result) {
                                 <a href="orders.php">
                                     <i class="fas fa-shopping-bag me-2"></i>Pesanan
                                 </a>
+<<<<<<< HEAD
                                 <a href="upload_bukti.php"><i class="fas fa-upload me-2"></i>Upload Bukti Pembayaran</a>
+=======
+                                <div class="divider"></div>
+                                <a href="cart.php">
+                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
+                                </a>
+>>>>>>> 3b88c23c87d223ed96c157fa55971abddf5946f1
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">
