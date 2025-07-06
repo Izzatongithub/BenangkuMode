@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <i class="fas fa-box me-2"></i>Products
                         </a>
                         <a class="nav-link" href="comingsoon.php">
-                            <i class="fas fa-clock-rotate-left me-2"></i>Tambah Coming Soon
+                            <i class="fas fa-clock-rotate-left me-2"></i>Add Coming Soon
                         </a>
                         <a class="nav-link active" href="destinations.php">
                             <i class="fas fa-map-marker-alt me-2"></i>Destinations

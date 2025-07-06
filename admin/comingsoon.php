@@ -48,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $sql = "SELECT *
         FROM coming_soon_products
-        WHERE is_active = 1
         ORDER BY estimated_release_date ASC";
 
 $result = mysqli_query($conn, $sql);
@@ -57,7 +56,7 @@ $result = mysqli_query($conn, $sql);
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Tambah Produk Coming Soon</title>
+    <title>Coming Soon Product</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -126,7 +125,7 @@ $result = mysqli_query($conn, $sql);
                             <i class="fas fa-box me-2"></i>Products
                         </a>
                         <a class="nav-link active" href="comingsoon.php">
-                            <i class="fas fa-clock-rotate-left me-2"></i>Tambah Coming Soon
+                            <i class="fas fa-clock-rotate-left me-2"></i>Add Coming Soon
                         </a>
                         <a class="nav-link" href="destinations.php">
                             <i class="fas fa-map-marker-alt me-2"></i>Destinations
@@ -153,7 +152,7 @@ $result = mysqli_query($conn, $sql);
                 <div class="main-content p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2>Coming Soon Product Management</h2>
-                        <a href="add_product.php" class="btn btn-primary">
+                        <a href="add_comingsoon.php" class="btn btn-primary">
                             <i class="fas fa-plus me-2"></i>Add New Product
                         </a>
                     </div>
@@ -172,6 +171,7 @@ $result = mysqli_query($conn, $sql);
                                             <th>Name</th>
                                             <th>Estimated Price</th>
                                             <th>Estimated Release Date</th>
+                                            <th>Status</th>
                                             <th>Created</th>
                                             <th>Actions</th>
                                         </tr>
@@ -196,20 +196,21 @@ $result = mysqli_query($conn, $sql);
                                                     <small class="text-muted"><?php echo htmlspecialchars($product['description']); ?></small>
                                                 </td>
                                                 <td>
-                                                    <strong><?php echo htmlspecialchars($product['estimated_price']); ?></strong>
+                                                    <?php echo htmlspecialchars($product['estimated_price']); ?></strong>
                                                 </td>
                                                 <td>
                                                     <?php echo date('d/m/Y', strtotime($product['estimated_release_date'])); ?>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-<?php echo $product['is_active'] ? 'success' : 'secondary'; ?>">
+                                                        <?php echo $product['is_active'] ? 'Active' : 'Inactive'; ?>
+                                                    </span>
                                                 </td>
                                                 <td>
                                                     <?php echo date('d/m/Y', strtotime($product['created_at'])); ?>
                                                 </td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm">
-                                                        <a href="edit_product.php?id=<?php echo $product['id']; ?>" 
-                                                           class="btn btn-outline-primary">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
                                                         <form method="POST" style="display: inline;" 
                                                               onsubmit="return confirm('Are you sure you want to toggle this product status?')">
                                                             <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
