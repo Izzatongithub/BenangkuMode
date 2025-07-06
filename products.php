@@ -239,7 +239,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </li> -->
                 </ul>
                 <!-- Auth Section -->
-                <div class="auth-section">
+   <div class="auth-section">
                     <?php if (isLoggedIn()): ?>
                         <div class="user-menu">
                             <div class="user-avatar">
@@ -258,6 +258,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <a href="orders.php">
                                     <i class="fas fa-shopping-bag me-2"></i>Pesanan
                                 </a>
+                                <div class="divider"></div>
                                 <a href="cart.php">
                                     <i class="fas fa-shopping-cart me-2"></i>Keranjang
                                 </a>
@@ -275,12 +276,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                         </div>
                     <?php endif; ?>
                 </div>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
-            </div>
         </nav>
     </header>
 
