@@ -1509,9 +1509,12 @@ body {
 }
 
 .description {
-    color: #34495e;
-    line-height: 1.6;
-    margin-bottom: 1rem;
+    margin: 8px 0 12px 0;
+    color: #555;
+    font-size: 15px;
+    min-height: 40px;
+    line-height: 1.5;
+    word-break: break-word;
 }
 
 .card-meta {

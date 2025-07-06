@@ -3,12 +3,29 @@ session_start();
 require_once 'config/database.php';
 
 $destinations = [];
-$sql = "SELECT * FROM destinations ORDER BY id DESC";
+$sql = "SELECT * FROM destinations WHERE is_active = 1 ORDER BY id DESC";
 $result = mysqli_query($conn, $sql);
+
+// Debug: Check if query was successful
+if (!$result) {
+    error_log("Database error: " . mysqli_error($conn));
+}
+
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $destinations[] = $row;
     }
+}
+
+// Debug: Log the number of destinations found
+error_log("Found " . count($destinations) . " destinations");
+
+// Convert PHP array to JSON for JavaScript
+$destinationsJson = json_encode($destinations);
+
+// Debug: Check if JSON encoding was successful
+if (json_last_error() !== JSON_ERROR_NONE) {
+    error_log("JSON encoding error: " . json_last_error_msg());
 }
 ?>
 <!DOCTYPE html>
@@ -214,9 +231,9 @@ if ($result) {
                     <button class="filter-btn active" data-filter="all">Semua</button>
                     <button class="filter-btn" data-filter="pantai">Pantai</button>
                     <button class="filter-btn" data-filter="gunung">Gunung</button>
-                    <button class="filter-btn" data-filter="air-terjun">Air Terjun</button>
+                    <button class="filter-btn" data-filter="kota">Kota</button>
                     <button class="filter-btn" data-filter="budaya">Budaya</button>
-                    <button class="filter-btn" data-filter="kuliner">Kuliner</button>
+                    <button class="filter-btn" data-filter="petualangan">Petualangan</button>
                 </div>
             </div>
         </div>
@@ -258,16 +275,16 @@ if ($result) {
                             <span>Gunung</span>
                         </div>
                         <div class="legend-item">
-                            <span class="legend-color air-terjun"></span>
-                            <span>Air Terjun</span>
+                            <span class="legend-color kota"></span>
+                            <span>Kota</span>
                         </div>
                         <div class="legend-item">
                             <span class="legend-color budaya"></span>
                             <span>Budaya</span>
                         </div>
                         <div class="legend-item">
-                            <span class="legend-color kuliner"></span>
-                            <span>Kuliner</span>
+                            <span class="legend-color petualangan"></span>
+                            <span>Petualangan</span>
                         </div>
                     </div>
                 </div>
@@ -310,6 +327,19 @@ if ($result) {
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <script>
+        // Pass PHP data to JavaScript
+        const destinationsData = <?php echo $destinationsJson; ?>;
+        
+        // Debug: Log the data received from PHP
+        console.log('Destinations data received:', destinationsData);
+        console.log('Number of destinations:', destinationsData.length);
+        
+        // Check if data is valid
+        if (!Array.isArray(destinationsData)) {
+            console.error('destinationsData is not an array:', typeof destinationsData);
+        }
+    </script>
     <script src="assets/js/script.js"></script>
     <script src="assets/js/wisata.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>

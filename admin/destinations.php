@@ -172,8 +172,8 @@ $result = mysqli_query($conn, $sql);
                                         <?php while ($destination = mysqli_fetch_assoc($result)): ?>
                                             <tr>
                                                 <td>
-                                                    <?php if ($destination['image']): ?>
-                                                        <img src="../assets/images/destinations/<?php echo htmlspecialchars($destination['image']); ?>" 
+                                                    <?php if ($destination['main_image']): ?>
+                                                        <img src="../assets/images/destinations/<?php echo htmlspecialchars($destination['main_image']); ?>" 
                                                              alt="<?php echo htmlspecialchars($destination['name']); ?>" 
                                                              class="destination-image">
                                                     <?php else: ?>
@@ -188,7 +188,7 @@ $result = mysqli_query($conn, $sql);
                                                     <small class="text-muted"><?php echo htmlspecialchars($destination['description']); ?></small>
                                                 </td>
                                                 <td><?php echo htmlspecialchars($destination['location']); ?></td>
-                                                <td><?php echo formatCurrency($destination['price']); ?></td>
+                                                <td><?php echo formatCurrency($destination['ticket_price']); ?></td>
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <span class="text-warning me-1">

@@ -13,29 +13,43 @@ $error = '';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $description = mysqli_real_escape_string($conn, $_POST['description']);
-    $location = mysqli_real_escape_string($conn, $_POST['location']);
-    $price = mysqli_real_escape_string($conn, $_POST['price']);
-    $rating = mysqli_real_escape_string($conn, $_POST['rating']);
+    $name = mysqli_real_escape_string($conn, $_POST['name'] ?? '');
+    $description = mysqli_real_escape_string($conn, $_POST['description'] ?? '');
+    $category_id = mysqli_real_escape_string($conn, $_POST['category_id'] ?? '');
+    $location = mysqli_real_escape_string($conn, $_POST['location'] ?? '');
+    $address = mysqli_real_escape_string($conn, $_POST['address'] ?? '');
+    $latitude = mysqli_real_escape_string($conn, $_POST['latitude'] ?? '');
+    $longitude = mysqli_real_escape_string($conn, $_POST['longitude'] ?? '');
+    $rating = mysqli_real_escape_string($conn, $_POST['rating'] ?? '0.00');
+    $review_count = mysqli_real_escape_string($conn, $_POST['review_count'] ?? '0');
+    $operating_hours = mysqli_real_escape_string($conn, $_POST['operating_hours'] ?? '');
+    $ticket_price = mysqli_real_escape_string($conn, $_POST['ticket_price'] ?? '');
+    $contact = mysqli_real_escape_string($conn, $_POST['contact'] ?? '');
+    $features = mysqli_real_escape_string($conn, $_POST['features'] ?? '');
+    $tips = mysqli_real_escape_string($conn, $_POST['tips'] ?? '');
+    $facilities = mysqli_real_escape_string($conn, $_POST['facilities'] ?? '');
+    $is_active = isset($_POST['is_active']) ? 1 : 0;
+    $is_featured = isset($_POST['is_featured']) ? 1 : 0;
     
     // Validation
-    if (empty($name) || empty($description) || empty($location) || empty($price) || empty($rating)) {
-        $error = 'All fields are required';
-    } elseif (!is_numeric($price) || $price <= 0) {
-        $error = 'Price must be a positive number';
-    } elseif (!is_numeric($rating) || $rating < 1 || $rating > 5) {
-        $error = 'Rating must be between 1 and 5';
+    if (empty($name) || empty($description)) {
+        $error = 'Name and Description are required';
+    } elseif (!empty($rating) && (!is_numeric($rating) || $rating < 0 || $rating > 5)) {
+        $error = 'Rating must be between 0 and 5';
+    } elseif (!empty($latitude) && !is_numeric($latitude)) {
+        $error = 'Latitude must be a valid number';
+    } elseif (!empty($longitude) && !is_numeric($longitude)) {
+        $error = 'Longitude must be a valid number';
     } else {
         // Handle image upload
         $image_name = '';
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        if (isset($_FILES['main_image']) && $_FILES['main_image']['error'] === UPLOAD_ERR_OK) {
             $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
-            $file_extension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+            $file_extension = strtolower(pathinfo($_FILES['main_image']['name'], PATHINFO_EXTENSION));
             
             if (!in_array($file_extension, $allowed_types)) {
                 $error = 'Invalid image format. Allowed: JPG, JPEG, PNG, GIF';
-            } elseif ($_FILES['image']['size'] > 5 * 1024 * 1024) { // 5MB
+            } elseif ($_FILES['main_image']['size'] > 5 * 1024 * 1024) { // 5MB
                 $error = 'Image size too large. Maximum 5MB';
             } else {
                 $image_name = uniqid() . '.' . $file_extension;
@@ -46,23 +60,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     mkdir('../assets/images/destinations/', 0755, true);
                 }
                 
-                if (!move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)) {
+                if (!move_uploaded_file($_FILES['main_image']['tmp_name'], $upload_path)) {
                     $error = 'Error uploading image';
                 }
             }
         }
         
         if (empty($error)) {
-            // Insert destination
-            $sql = "INSERT INTO destinations (name, description, location, price, rating, image, is_active) 
-                    VALUES ('$name', '$description', '$location', $price, $rating, '$image_name', 1)";
+            // Insert destination (without features, tips, facilities first)
+            $sql = "INSERT INTO destinations (name, description, category_id, location, address, latitude, longitude, rating, review_count, operating_hours, ticket_price, contact, main_image, is_active, is_featured) 
+                    VALUES ('$name', '$description', " . ($category_id ? $category_id : "NULL") . ", '$location', '$address', " . ($latitude ? $latitude : "NULL") . ", " . ($longitude ? $longitude : "NULL") . ", $rating, $review_count, '$operating_hours', '$ticket_price', '$contact', '$image_name', $is_active, $is_featured)";
             
             if (mysqli_query($conn, $sql)) {
+                $destination_id = mysqli_insert_id($conn);
+                
+                // Update with features, tips, facilities if they exist
+                if (!empty($features) || !empty($tips) || !empty($facilities)) {
+                    $update_sql = "UPDATE destinations SET ";
+                    $update_parts = [];
+                    
+                    if (!empty($features)) {
+                        // Try JSON format
+                        $features_json = json_encode(explode("\n", trim($features)));
+                        $update_parts[] = "features = '$features_json'";
+                    }
+                    if (!empty($tips)) {
+                        // Try JSON format
+                        $tips_json = json_encode(explode("\n", trim($tips)));
+                        $update_parts[] = "tips = '$tips_json'";
+                    }
+                    if (!empty($facilities)) {
+                        // Try JSON format
+                        $facilities_json = json_encode(explode("\n", trim($facilities)));
+                        $update_parts[] = "facilities = '$facilities_json'";
+                    }
+                    
+                    if (!empty($update_parts)) {
+                        $update_sql .= implode(', ', $update_parts);
+                        $update_sql .= " WHERE id = $destination_id";
+                        
+                        if (!mysqli_query($conn, $update_sql)) {
+                            // Log warning but don't fail the operation
+                            error_log("Warning: Could not update features/tips/facilities for destination ID $destination_id: " . mysqli_error($conn));
+                        }
+                    }
+                }
+                
                 $message = 'Destination added successfully';
                 logActivity('add_destination', "Added new destination: $name");
                 
                 // Clear form
-                $name = $description = $location = $price = $rating = '';
+                $name = $description = $category_id = $location = $address = $latitude = $longitude = $rating = $review_count = $operating_hours = $ticket_price = $contact = $features = $tips = $facilities = '';
+                $is_active = $is_featured = 0;
             } else {
                 $error = 'Error adding destination: ' . mysqli_error($conn);
             }
@@ -179,62 +228,184 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="card-body">
                             <form method="POST" enctype="multipart/form-data">
-                                <div class="row">
-                                    <div class="col-md-8">
+                                <!-- Basic Information -->
+                                <h6 class="mb-3 text-primary"><i class="fas fa-info-circle me-2"></i>Basic Information</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Destination Name *</label>
                                             <input type="text" class="form-control" id="name" name="name" 
                                                    value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
                                         </div>
-                                        
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="description" class="form-label">Description *</label>
-                                            <textarea class="form-control" id="description" name="description" rows="4" required><?php echo htmlspecialchars($description ?? ''); ?></textarea>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="location" class="form-label">Location *</label>
-                                            <input type="text" class="form-control" id="location" name="location" 
-                                                   value="<?php echo htmlspecialchars($location ?? ''); ?>" required>
-                                        </div>
-                                        
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label for="price" class="form-label">Price (Rp) *</label>
-                                                    <input type="number" class="form-control" id="price" name="price" 
-                                                           value="<?php echo htmlspecialchars($price ?? ''); ?>" min="0" step="1000" required>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label for="rating" class="form-label">Rating (1-5) *</label>
-                                                    <select class="form-select" id="rating" name="rating" required>
-                                                        <option value="">Select Rating</option>
-                                                        <option value="1" <?php echo ($rating ?? '') === '1' ? 'selected' : ''; ?>>1 Star</option>
-                                                        <option value="2" <?php echo ($rating ?? '') === '2' ? 'selected' : ''; ?>>2 Stars</option>
-                                                        <option value="3" <?php echo ($rating ?? '') === '3' ? 'selected' : ''; ?>>3 Stars</option>
-                                                        <option value="4" <?php echo ($rating ?? '') === '4' ? 'selected' : ''; ?>>4 Stars</option>
-                                                        <option value="5" <?php echo ($rating ?? '') === '5' ? 'selected' : ''; ?>>5 Stars</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            <label for="category_id" class="form-label">Category</label>
+                                            <select class="form-select" id="category_id" name="category_id">
+                                                <option value="">Select Category</option>
+                                                <option value="1" <?php echo ($category_id ?? '') === '1' ? 'selected' : ''; ?>>Beach</option>
+                                                <option value="2" <?php echo ($category_id ?? '') === '2' ? 'selected' : ''; ?>>Mountain</option>
+                                                <option value="3" <?php echo ($category_id ?? '') === '3' ? 'selected' : ''; ?>>City</option>
+                                                <option value="4" <?php echo ($category_id ?? '') === '4' ? 'selected' : ''; ?>>Cultural</option>
+                                                <option value="5" <?php echo ($category_id ?? '') === '5' ? 'selected' : ''; ?>>Adventure</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description *</label>
+                                    <textarea class="form-control" id="description" name="description" rows="4" required><?php echo htmlspecialchars($description ?? ''); ?></textarea>
+                                </div>
+
+                                <!-- Location Information -->
+                                <h6 class="mb-3 text-primary"><i class="fas fa-map-marker-alt me-2"></i>Location Information</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="location" class="form-label">Location</label>
+                                            <input type="text" class="form-control" id="location" name="location" 
+                                                   value="<?php echo htmlspecialchars($location ?? ''); ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Address</label>
+                                            <textarea class="form-control" id="address" name="address" rows="2"><?php echo htmlspecialchars($address ?? ''); ?></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="latitude" class="form-label">Latitude</label>
+                                            <input type="number" class="form-control" id="latitude" name="latitude" 
+                                                   value="<?php echo htmlspecialchars($latitude ?? ''); ?>" step="0.00000001">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="longitude" class="form-label">Longitude</label>
+                                            <input type="number" class="form-control" id="longitude" name="longitude" 
+                                                   value="<?php echo htmlspecialchars($longitude ?? ''); ?>" step="0.00000001">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Rating & Reviews -->
+                                <h6 class="mb-3 text-primary"><i class="fas fa-star me-2"></i>Rating & Reviews</h6>
+                                <div class="row mb-4">
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <label for="image" class="form-label">Destination Image</label>
-                                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                            <label for="rating" class="form-label">Rating (0-5)</label>
+                                            <select class="form-select" id="rating" name="rating">
+                                                <option value="0.00" <?php echo ($rating ?? '') === '0.00' ? 'selected' : ''; ?>>No Rating</option>
+                                                <option value="1.00" <?php echo ($rating ?? '') === '1.00' ? 'selected' : ''; ?>>1 Star</option>
+                                                <option value="2.00" <?php echo ($rating ?? '') === '2.00' ? 'selected' : ''; ?>>2 Stars</option>
+                                                <option value="3.00" <?php echo ($rating ?? '') === '3.00' ? 'selected' : ''; ?>>3 Stars</option>
+                                                <option value="4.00" <?php echo ($rating ?? '') === '4.00' ? 'selected' : ''; ?>>4 Stars</option>
+                                                <option value="5.00" <?php echo ($rating ?? '') === '5.00' ? 'selected' : ''; ?>>5 Stars</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="review_count" class="form-label">Review Count</label>
+                                            <input type="number" class="form-control" id="review_count" name="review_count" 
+                                                   value="<?php echo htmlspecialchars($review_count ?? '0'); ?>" min="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="ticket_price" class="form-label">Ticket Price</label>
+                                            <input type="text" class="form-control" id="ticket_price" name="ticket_price" 
+                                                   value="<?php echo htmlspecialchars($ticket_price ?? ''); ?>" placeholder="e.g., Rp 50,000">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Contact & Hours -->
+                                <h6 class="mb-3 text-primary"><i class="fas fa-clock me-2"></i>Contact & Operating Hours</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="contact" class="form-label">Contact</label>
+                                            <input type="text" class="form-control" id="contact" name="contact" 
+                                                   value="<?php echo htmlspecialchars($contact ?? ''); ?>" placeholder="Phone or email">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="operating_hours" class="form-label">Operating Hours</label>
+                                            <input type="text" class="form-control" id="operating_hours" name="operating_hours" 
+                                                   value="<?php echo htmlspecialchars($operating_hours ?? ''); ?>" placeholder="e.g., 08:00-17:00">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Additional Information -->
+                                <h6 class="mb-3 text-primary"><i class="fas fa-list me-2"></i>Additional Information</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="features" class="form-label">Features</label>
+                                            <textarea class="form-control" id="features" name="features" rows="3" placeholder="Key features of the destination"><?php echo htmlspecialchars($features ?? ''); ?></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="tips" class="form-label">Travel Tips</label>
+                                            <textarea class="form-control" id="tips" name="tips" rows="3" placeholder="Useful tips for visitors"><?php echo htmlspecialchars($tips ?? ''); ?></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="facilities" class="form-label">Facilities</label>
+                                            <textarea class="form-control" id="facilities" name="facilities" rows="3" placeholder="Available facilities"><?php echo htmlspecialchars($facilities ?? ''); ?></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Image Upload -->
+                                <h6 class="mb-3 text-primary"><i class="fas fa-image me-2"></i>Image</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="image" class="form-label">Main Image</label>
+                                            <input type="file" class="form-control" id="image" name="main_image" accept="image/*">
                                             <div class="form-text">Max 5MB. Allowed: JPG, JPEG, PNG, GIF</div>
                                         </div>
-                                        
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label">Image Preview</label>
                                             <div class="image-preview d-flex align-items-center justify-content-center bg-light">
                                                 <i class="fas fa-image text-muted fa-3x"></i>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Status -->
+                                <h6 class="mb-3 text-primary"><i class="fas fa-toggle-on me-2"></i>Status</h6>
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" 
+                                                   <?php echo ($is_active ?? 1) ? 'checked' : ''; ?>>
+                                            <label class="form-check-label" for="is_active">
+                                                Active
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" 
+                                                   <?php echo ($is_featured ?? 0) ? 'checked' : ''; ?>>
+                                            <label class="form-check-label" for="is_featured">
+                                                Featured Destination
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
