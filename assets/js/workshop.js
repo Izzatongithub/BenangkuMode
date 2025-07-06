@@ -1189,7 +1189,7 @@ workshopStyles.textContent = `
     }
     
     .past-events {
-        padding: 80px 0;
+        padding: 60px 0;
         background: #f8f9fa;
     }
     

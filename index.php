@@ -1,20 +1,20 @@
 <?php
-session_start();
-require_once 'config/database.php';
+    session_start();
+    require_once 'config/database.php';
 
-// Ambil semua produk aktif
-$products = [];
-$result = mysqli_query($conn, "SELECT * FROM products WHERE is_active = 1");
-while ($row = mysqli_fetch_assoc($result)) {
-    $products[] = $row;
-}
+    // Ambil semua produk aktif
+    $products = [];
+    $result = mysqli_query($conn, "SELECT * FROM products WHERE is_active = 1");
+    while ($row = mysqli_fetch_assoc($result)) {
+        $products[] = $row;
+    }
 
-// Ambil workshop mendatang
-$workshopPreviews = [];
-$res = mysqli_query($conn, "SELECT * FROM workshops WHERE is_active=1 AND is_past_event=0 ORDER BY start_date ASC LIMIT 3");
-while ($row = mysqli_fetch_assoc($res)) {
-    $workshopPreviews[] = $row;
-}
+    // Ambil workshop mendatang
+    $workshopPreviews = [];
+    $res = mysqli_query($conn, "SELECT * FROM workshops WHERE is_active=1 AND is_past_event=0 ORDER BY start_date ASC LIMIT 3");
+    while ($row = mysqli_fetch_assoc($res)) {
+        $workshopPreviews[] = $row;
+    }
 
 ?>
 <!DOCTYPE html>
@@ -36,7 +36,7 @@ while ($row = mysqli_fetch_assoc($res)) {
             position: absolute;
             right: 0;
             background-color: white;
-            min-width: 160px;
+            min-width: 190px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
             border-radius: 8px;
@@ -106,6 +106,65 @@ while ($row = mysqli_fetch_assoc($res)) {
         .user-avatar:hover {
             transform: scale(1.1);
         }
+        .products-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            justify-content: center;
+        }
+        .product-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px #eee;
+            padding: 0 0 24px 0;
+            max-width: 340px;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 24px;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .product-card:hover {
+            box-shadow: 0 8px 24px rgba(102,126,234,0.13);
+            transform: translateY(-4px) scale(1.02);
+        }
+        .product-image {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+            background: #f8f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+            display: block;
+        }
+        .product-card h3 {
+            margin-bottom: 4px;
+            margin-top: 0;
+            font-size: 1.08rem;
+            font-weight: 500;
+            letter-spacing:0.01em;
+            padding: 0 18px;
+        }
+        .product-card .price {
+            font-weight:600;
+            color:#222;
+            font-size:1.08rem;
+            margin-bottom:2px;
+            display:block;
+            line-height:1.1;
+            padding: 0 18px;
+        }
+        .icon-spacing {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -132,9 +191,9 @@ while ($row = mysqli_fetch_assoc($res)) {
                     <li class="nav-item">
                         <a href="comingsoon.php" class="nav-link">Coming Soon</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="gallery.php" class="nav-link">Galeri</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a href="wisata.php" class="nav-link">Wisata Lombok</a>
                     </li>
@@ -154,20 +213,22 @@ while ($row = mysqli_fetch_assoc($res)) {
                                     </a>
                                 <?php else: ?>
                                 <a href="profile.php">
-                                    <i class="fas fa-user me-2"></i>Profil
+                                    <i class="fas fa-user me-2 icon-spacing"></i>Profil
                                 </a>
                                 <div class="divider"></div>
                                 <a href="orders.php">
-                                    <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                    <i class="fas fa-shopping-bag me-2 icon-spacing"></i>Pesanan
                                 </a>
                                 <div class="divider"></div>
                                 <a href="cart.php">
-                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
+                                    <i class="fas fa-shopping-cart me-2 icon-spacing"></i>Keranjang
                                 </a>
+                                <div class="divider"></div>
+                                <a href="upload_bukti.php"><i class="fas fa-upload me-2 icon-spacing"></i>Upload Bukti Pembayaran</a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    <i class="fas fa-sign-out-alt me-2 icon-spacing"></i>Logout
                                 </a>
                             </div>
                         </div>

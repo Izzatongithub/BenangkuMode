@@ -23,6 +23,17 @@ error_log("Found " . count($destinations) . " destinations");
 // Convert PHP array to JSON for JavaScript
 $destinationsJson = json_encode($destinations);
 
+// Statistik dinamis
+$jumlahDestinasi = count($destinations);
+$kabupatenList = [];
+foreach ($destinations as $d) {
+    if (!empty($d['kabupaten'])) {
+        $kabupatenList[] = $d['kabupaten'];
+    }
+}
+$jumlahKabupaten = count(array_unique($kabupatenList));
+$persenLokal = 100; // Jika semua destinasi lokal
+
 // Debug: Check if JSON encoding was successful
 if (json_last_error() !== JSON_ERROR_NONE) {
     error_log("JSON encoding error: " . json_last_error_msg());
@@ -117,6 +128,95 @@ if (json_last_error() !== JSON_ERROR_NONE) {
         .user-avatar:hover {
             transform: scale(1.1);
         }
+        .icon-spacing {
+            margin-right: 8px;
+        }
+        .destination-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(120,120,120,0.08);
+            overflow: hidden;
+            margin-bottom: 32px;
+            transition: box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .destination-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px;
+        }
+        .destination-content {
+            padding: 22px 24px 18px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .destination-title {
+            font-size: 1.18rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            color: #253858;
+        }
+        .destination-location {
+            color: #888;
+            font-size: 0.98em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .destination-desc {
+            color: #666;
+            font-size: 0.97em;
+            margin-bottom: 2px;
+        }
+        .destination-meta {
+            display: flex;
+            gap: 18px;
+            margin: 6px 0 10px 0;
+        }
+        .meta-item {
+            color: #764ba2;
+            font-size: 0.98em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .destination-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .btn-detail, .btn-direction {
+            padding: 7px 18px;
+            border-radius: 16px;
+            font-size: 0.98em;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-detail {
+            background: #764ba2;
+            color: #fff;
+        }
+        .btn-detail:hover {
+            background: #5a3b8c;
+        }
+        .btn-direction {
+            background: #f1f1f1;
+            color: #253858;
+            border: 1px solid #ddd;
+        }
+        .btn-direction:hover {
+            background: #e0e0e0;
+            color: #764ba2;
+            border-color: #764ba2;
+        }
     </style>
 </head>
 <body>
@@ -145,9 +245,9 @@ if (json_last_error() !== JSON_ERROR_NONE) {
                     <li class="nav-item">
                         <a href="comingsoon.php" class="nav-link">Coming Soon</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="gallery.php" class="nav-link">Galeri</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a href="wisata.php" class="nav-link active">Wisata Lombok</a>
                     </li>
@@ -166,20 +266,23 @@ if (json_last_error() !== JSON_ERROR_NONE) {
                                     </a>
                                 <?php else: ?>
                                 <a href="profile.php">
-                                    <i class="fas fa-user me-2"></i>Profil
+                                    <i class="fas fa-user me-2 icon-spacing"></i>Profil
                                 </a>
                                 <div class="divider"></div>
                                 <a href="orders.php">
-                                    <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                    <i class="fas fa-shopping-bag me-2 icon-spacing"></i>Pesanan
                                 </a>
                                 <div class="divider"></div>
                                 <a href="cart.php">
-                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
+                                    <i class="fas fa-shopping-cart me-2 icon-spacing"></i>Keranjang
+                                </a>
+                                <div class="divider"></div>
+                                    <a href="upload_bukti.php"><i class="fas fa-upload me-2 icon-spacing"></i>Upload Bukti Pembayaran
                                 </a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    <i class="fas fa-sign-out-alt me-2 icon-spacing"></i>Logout
                                 </a>
                             </div>
                         </div>
@@ -206,7 +309,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
             <p class="hero-subtitle">Temukan destinasi wisata terbaik di Pulau Lombok yang memukau</p>
             <div class="hero-stats">
                 <div class="stat-item">
-                    <span class="stat-number">15+</span>
+                    <span class="stat-number"><?= $jumlahDestinasi ?></span>
                     <span class="stat-label">Destinasi</span>
                 </div>
                 <div class="stat-item">
@@ -214,7 +317,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
                     <span class="stat-label">Kabupaten</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">100%</span>
+                    <span class="stat-number"><?= $persenLokal ?>%</span>
                     <span class="stat-label">Lokal</span>
                 </div>
             </div>
@@ -259,7 +362,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     </section>
 
     <!-- Map Section -->
-    <section class="map-section">
+    <!-- <section class="map-section">
         <div class="container">
             <div class="section-header">
                 <h2>Peta Wisata Lombok</h2>
@@ -295,7 +398,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Footer -->
     <footer class="footer">
@@ -328,9 +431,9 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     </footer>
 
     <!-- Back to Top Button -->
-    <button id="backToTop" class="back-to-top">
+    <!-- <button id="backToTop" class="back-to-top">
         <i class="fas fa-arrow-up"></i>
-    </button>
+    </button> -->
 
     <script>
         // Pass PHP data to JavaScript

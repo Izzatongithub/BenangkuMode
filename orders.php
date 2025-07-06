@@ -82,7 +82,7 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <style>
         .user-menu {
             position: relative;
@@ -93,7 +93,7 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
             position: absolute;
             right: 0;
             background-color: white;
-            min-width: 160px;
+            min-width: 190px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
             z-index: 1;
             border-radius: 8px;
@@ -166,15 +166,60 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
         .order-card {
             border: 1px solid #e0e0e0;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: #fff;
         }
         .order-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
         }
+        .order-header .order-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .order-header .order-info h5 {
+            margin: 0 0 2px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .order-header .order-info small {
+            font-size: 0.98rem;
+            color: #e0e0e0;
+        }
+        .order-header .order-total {
+            text-align: right;
+        }
+        .order-header .order-total h6 {
+            margin: 0;
+            font-size: 1.08rem;
+            font-weight: 600;
+        }
+        .order-header .order-total .status-badges {
+            margin-top: 4px;
+        }
+        .status-badge {
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-right: 4px;
+            display: inline-block;
+        }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-processing { background: #d1ecf1; color: #0c5460; }
+        .status-shipped { background: #d1ecf1; color: #0c5460; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        .status-paid { background: #d4edda; color: #155724; }
+        .status-failed { background: #f8d7da; color: #721c24; }
+        .status-refunded { background: #f8d7da; color: #721c24; }
         .order-item {
             background: #fff;
             border-radius: 10px;
@@ -220,32 +265,6 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
             font-size: 1rem;
             margin-left: 18px;
         }
-        @media (max-width: 600px) {
-            .order-item {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 14px 8px;
-            }
-            .order-item .item-price,
-            .order-item .item-subtotal {
-                margin-left: 0;
-                text-align: left;
-            }
-        }
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .status-pending { background: #fff3cd; color: #856404; }
-        .status-processing { background: #d1ecf1; color: #0c5460; }
-        .status-shipped { background: #d1ecf1; color: #0c5460; }
-        .status-delivered { background: #d4edda; color: #155724; }
-        .status-cancelled { background: #f8d7da; color: #721c24; }
-        .status-paid { background: #d4edda; color: #155724; }
-        .status-failed { background: #f8d7da; color: #721c24; }
-        .status-refunded { background: #f8d7da; color: #721c24; }
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -258,6 +277,62 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
         }
         .main-content {
             margin-top: 120px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 16px;
+        }
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .orders-header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        .btn-custom {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 22px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-custom:hover {
+            background: #c0392b;
+        }
+        .btn-success-custom {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 7px 18px;
+            font-size: 0.98rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-success-custom:hover {
+            background: #219150;
+        }
+        .confirm-form {
+            display: flex;
+            justify-content: flex-start;
+            padding-left: 24px;
+            padding-top: 0px;
+            padding-bottom: 10px;
+            margin: 0;
+        }
+        .icon-spacing {
+            margin-right: 8px; /* atur sesuai kebutuhan */
         }
     </style>
 </head>
@@ -271,7 +346,7 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
                 </div>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="index.php" class="nav-link">Beranda</a>
+                        <a href="index.php" class="nav-link active">Beranda</a>
                     </li>
                     <li class="nav-item">
                         <a href="about.php" class="nav-link">Tentang Kami</a>
@@ -301,17 +376,24 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
                                 <?php echo strtoupper(substr($_SESSION['user_name'], 0, 1)); ?>
                             </div>
                             <div class="dropdown-menu">
-                                <a href="profile.php">
-                                    <i class="fas fa-user me-2"></i>Profil
-                                </a>
-                                <a href="orders.php">
-                                    <i class="fas fa-shopping-bag me-2"></i>Pesanan
-                                </a>
                                 <?php if (isAdmin()): ?>
-                                    <div class="divider"></div>
                                     <a href="admin/dashboard.php">
                                         <i class="fas fa-cog me-2"></i>Admin Panel
                                     </a>
+                                <?php else: ?>
+                                <a href="profile.php">
+                                    <i class="fas fa-user me-2"></i>Profil
+                                </a>
+                                <div class="divider"></div>
+                                <a href="orders.php">
+                                    <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                </a>
+                                <div class="divider"></div>
+                                <a href="cart.php">
+                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
+                                </a>
+                                <div class="divider"></div>
+                                <a href="upload_bukti.php"><i class="fas fa-upload me-2"></i>Upload Bukti Pembayaran</a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">
@@ -338,98 +420,92 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h1 class="h3">Riwayat Pesanan</h1>
-                        <a href="products.php" class="btn btn-primary">
-                            <i class="fas fa-shopping-cart me-2"></i>Belanja Lagi
-                        </a>
-                    </div>
-
-                    <?php if (empty($orders)): ?>
-                        <div class="empty-state">
-                            <i class="fas fa-shopping-bag"></i>
-                            <h4>Belum Ada Pesanan</h4>
-                            <p>Anda belum memiliki pesanan. Mulai belanja sekarang!</p>
-                            <a href="products.php" class="btn btn-primary">
-                                <i class="fas fa-shopping-cart me-2"></i>Lihat Produk
-                            </a>
-                        </div>
-                    <?php else: ?>
-                        <?php foreach ($orders as $order): ?>
-                            <div class="order-card">
-                                <div class="order-header">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h5 class="mb-0">Pesanan #<?php echo $order['order_number']; ?></h5>
-                                            <small><?php echo date('d F Y H:i', strtotime($order['order_date'])); ?></small>
-                                        </div>
-                                        <div class="text-end">
-                                            <h6 class="mb-0">Total: <?php echo formatCurrency($order['total_amount']); ?></h6>
-                                            <div class="mt-1">
-                                                <span class="status-badge status-<?php echo $order['status']; ?>">
-                                                    <?php 
-                                                    switch($order['status']) {
-                                                        case 'pending': echo 'Menunggu'; break;
-                                                        case 'processing': echo 'Diproses'; break;
-                                                        case 'shipped': echo 'Dikirim'; break;
-                                                        case 'delivered': echo 'Terkirim'; break;
-                                                        case 'cancelled': echo 'Dibatalkan'; break;
-                                                        default: echo ucfirst($order['status']);
-                                                    }
-                                                    ?>
-                                                </span>
-                                                <?php if ($order['status'] !== 'completed'): ?>
-                                                    <span class="status-badge status-<?php echo $order['payment_status']; ?> ms-1">
-                                                        <?php 
-                                                        switch($order['payment_status']) {
-                                                            case 'pending': echo 'Belum Bayar'; break;
-                                                            case 'paid': echo 'Lunas'; break;
-                                                            case 'failed': echo 'Gagal'; break;
-                                                            case 'refunded': echo 'Dikembalikan'; break;
-                                                            default: echo ucfirst($order['payment_status']);
-                                                        }
-                                                        ?>
-                                                    </span>
-                                                <?php endif; ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <?php if ($order['status'] !== 'completed'): ?>
-                                    <form method="post" style="display:inline;">
-                                        <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
-                                        <button type="submit" name="confirm_received" class="btn btn-success btn-sm">
-                                            Konfirmasi Diterima
-                                        </button>
-                                    </form>
-                                <?php else: ?>
-                                    <span class="badge bg-success">Selesai</span>
-                                <?php endif; ?>
-                                
-                                <?php foreach ($order['items'] as $item): ?>
-                                    <div class="order-item">
-                                        <?php if ($item['product_image']): ?>
-                                            <img src="assets/images/products/<?php echo htmlspecialchars($item['product_image']); ?>" class="product-image" alt="<?php echo htmlspecialchars($item['product_name']); ?>">
-                                        <?php else: ?>
-                                            <div class="product-image" style="display:flex;align-items:center;justify-content:center;"><i class="fas fa-image text-muted"></i></div>
-                                        <?php endif; ?>
-                                        <div class="item-info">
-                                            <strong><?php echo htmlspecialchars($item['product_name']); ?></strong>
-                                            <span class="qty">Qty: <?php echo $item['quantity']; ?></span>
-                                        </div>
-                                        <div class="item-price">Rp <?php echo number_format($item['price'],0,',','.'); ?></div>
-                                        <div class="item-subtotal">Rp <?php echo number_format($item['subtotal'],0,',','.'); ?></div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
+        <div>
+            <div class="orders-header">
+                <h1>Riwayat Pesanan</h1>
+                <a href="products.php" class="btn-custom">
+                    <i class="fas fa-shopping-cart me-2 icon-spacing"></i>Belanja Lagi
+                </a>
             </div>
+
+            <?php if (empty($orders)): ?>
+                <div class="empty-state">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h4>Belum Ada Pesanan</h4>
+                    <p>Anda belum memiliki pesanan. Mulai belanja sekarang!</p>
+                    <a href="products.php" class="btn-custom">
+                        <i class="fas fa-shopping-cart me-2"></i>Lihat Produk
+                    </a>
+                </div>
+            <?php else: ?>
+                <?php foreach ($orders as $order): ?>
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-info">
+                                <h5>Pesanan #<?php echo $order['order_number']; ?></h5>
+                                <small><?php echo date('d F Y H:i', strtotime($order['order_date'])); ?></small>
+                            </div>
+                            <div class="order-total">
+                                <h6>Total: <?php echo formatCurrency($order['total_amount']); ?></h6>
+                                <div class="status-badges">
+                                    <span class="status-badge status-<?php echo $order['status']; ?>">
+                                        <?php 
+                                        switch($order['status']) {
+                                            case 'pending': echo 'Menunggu'; break;
+                                            case 'processing': echo 'Diproses'; break;
+                                            case 'shipped': echo 'Dikirim'; break;
+                                            case 'delivered': echo 'Terkirim'; break;
+                                            case 'cancelled': echo 'Dibatalkan'; break;
+                                            default: echo ucfirst($order['status']);
+                                        }
+                                        ?>
+                                    </span>
+                                    <?php if ($order['status'] !== 'completed'): ?>
+                                        <span class="status-badge status-<?php echo $order['payment_status']; ?>">
+                                            <?php 
+                                            switch($order['payment_status']) {
+                                                case 'pending': echo 'Belum Bayar'; break;
+                                                case 'paid': echo 'Lunas'; break;
+                                                case 'failed': echo 'Gagal'; break;
+                                                case 'refunded': echo 'Dikembalikan'; break;
+                                                default: echo ucfirst($order['payment_status']);
+                                            }
+                                            ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php foreach ($order['items'] as $item): ?>
+                            <div class="order-item">
+                                <?php if ($item['product_image']): ?>
+                                    <img src="assets/images/products/<?php echo htmlspecialchars($item['product_image']); ?>" class="product-image" alt="<?php echo htmlspecialchars($item['product_name']); ?>">
+                                <?php else: ?>
+                                    <div class="product-image" style="display:flex;align-items:center;justify-content:center;"><i class="fas fa-image text-muted"></i></div>
+                                <?php endif; ?>
+                                <div class="item-info">
+                                    <strong><?php echo htmlspecialchars($item['product_name']); ?></strong>
+                                    <span class="qty">Qty: <?php echo $item['quantity']; ?></span>
+                                </div>
+                                <div class="item-price">Rp <?php echo number_format($item['price'],0,',','.'); ?></div>
+                                <div class="item-subtotal">Rp <?php echo number_format($item['subtotal'],0,',','.'); ?></div>
+                            </div>
+                            <?php endforeach; ?>
+                            <?php if ($order['status'] !== 'completed'): ?>
+                                <form method="post" class="confirm-form">
+                                    <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
+                                    <button type="submit" name="confirm_received" class="btn-success-custom">
+                                        Konfirmasi Diterima
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                            <div class="confirm-form">
+                                <span class="status-badge status-paid">Selesai</span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </main>
 

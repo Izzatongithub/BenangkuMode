@@ -1,13 +1,13 @@
 <?php
-session_start();
-require_once 'config/database.php';
+    session_start();
+    require_once 'config/database.php';
 
-// Ambil semua produk aktif
-$products = [];
-$result = mysqli_query($conn, "SELECT p.*, pc.name as category FROM products p LEFT JOIN product_categories pc ON p.category_id = pc.id WHERE p.is_active = 1");
-while ($row = mysqli_fetch_assoc($result)) {
-    $products[] = $row;
-}
+    // Ambil semua produk aktif
+    $products = [];
+    $result = mysqli_query($conn, "SELECT p.*, pc.name as category FROM products p LEFT JOIN product_categories pc ON p.category_id = pc.id WHERE p.is_active = 1");
+    while ($row = mysqli_fetch_assoc($result)) {
+        $products[] = $row;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -202,6 +202,9 @@ while ($row = mysqli_fetch_assoc($result)) {
         .update-btn {
             display: inline-block !important;
         }
+        .icon-spacing {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -228,9 +231,9 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <li class="nav-item">
                         <a href="comingsoon.php" class="nav-link">Coming Soon</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="gallery.php" class="nav-link">Galeri</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a href="wisata.php" class="nav-link">Wisata Lombok</a>
                     </li>
@@ -239,7 +242,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </li> -->
                 </ul>
                 <!-- Auth Section -->
-   <div class="auth-section">
+                <div class="auth-section">
                     <?php if (isLoggedIn()): ?>
                         <div class="user-menu">
                             <div class="user-avatar">
@@ -252,23 +255,25 @@ while ($row = mysqli_fetch_assoc($result)) {
                                     </a>
                                 <?php else: ?>
                                 <a href="profile.php">
-                                    <i class="fas fa-user me-2"></i>Profil
+                                    <i class="fas fa-user me-2 icon-spacing"></i>Profil
                                 </a>
                                 <div class="divider"></div>
                                 <a href="orders.php">
-                                    <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                    <i class="fas fa-shopping-bag me-2 icon-spacing"></i>Pesanan
                                 </a>
                                 <div class="divider"></div>
                                 <a href="cart.php">
-                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
+                                    <i class="fas fa-shopping-cart me-2 icon-spacing"></i>Keranjang
+                                </a>
+                                <div class="divider"></div>
+                                    <a href="upload_bukti.php"><i class="fas fa-upload me-2 icon-spacing"></i>Upload Bukti Pembayaran
                                 </a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    <i class="fas fa-sign-out-alt me-2 icon-spacing"></i>Logout
                                 </a>
                             </div>
-                        </div>
                     <?php else: ?>
                         <div class="auth-buttons">
                             <a href="login.php" class="btn btn-login">Login</a>
@@ -276,6 +281,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         </div>
                     <?php endif; ?>
                 </div>
+            </div>
         </nav>
     </header>
 
@@ -283,7 +289,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <section class="page-hero">
         <div class="container">
             <h1>Produk Kami</h1>
-            <p>Temukan kerajinan tangan merajut berkualitas tinggi dengan desain unik</p>
+            <p>Temukan kerajinan tangan dengan desain unik</p>
         </div>
     </section>
 

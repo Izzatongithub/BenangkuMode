@@ -225,6 +225,9 @@ if ($result) {
             max-width: 420px;
             margin: 0 auto 32px auto;
         }
+        .icon-spacing {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -272,24 +275,23 @@ if ($result) {
                                     </a>
                                 <?php else: ?>
                                 <a href="profile.php">
-                                    <i class="fas fa-user me-2"></i>Profil
+                                    <i class="fas fa-user me-2 icon-spacing"></i>Profil
                                 </a>
                                 <div class="divider"></div>
                                 <a href="orders.php">
-                                    <i class="fas fa-shopping-bag me-2"></i>Pesanan
+                                    <i class="fas fa-shopping-bag me-2 icon-spacing"></i>Pesanan
                                 </a>
-<<<<<<< HEAD
-                                <a href="upload_bukti.php"><i class="fas fa-upload me-2"></i>Upload Bukti Pembayaran</a>
-=======
                                 <div class="divider"></div>
                                 <a href="cart.php">
-                                    <i class="fas fa-shopping-cart me-2"></i>Keranjang
+                                    <i class="fas fa-shopping-cart me-2 icon-spacing"></i>Keranjang
                                 </a>
->>>>>>> 3b88c23c87d223ed96c157fa55971abddf5946f1
+                                <div class="divider"></div>
+                                    <a href="upload_bukti.php"><i class="fas fa-upload me-2 icon-spacing"></i>Upload Bukti Pembayaran
+                                </a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    <i class="fas fa-sign-out-alt me-2 icon-spacing"></i>Logout
                                 </a>
                             </div>
                         </div>
