@@ -200,8 +200,9 @@ require_once 'config/database.php';
                 </div>
                 <div class="about-image">
                     <div class="about-placeholder">
-                        <i class="fas fa-scarf"></i>
-                        <p>Gambar Workshop</p>
+                        <!-- <i class="fas fa-scarf"></i>
+                        <p>Gambar Workshop</p> -->
+                        <img src="assets/images/logo_bm-removebg-preview.png"  class="img-fluid" style="max-width: 400px;">
                     </div>
                 </div>
             </div>

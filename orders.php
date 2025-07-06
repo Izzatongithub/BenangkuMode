@@ -455,6 +455,7 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
                                             case 'processing': echo 'Diproses'; break;
                                             case 'shipped': echo 'Dikirim'; break;
                                             case 'delivered': echo 'Terkirim'; break;
+                                            case 'completed': echo 'Diterima'; break;
                                             case 'cancelled': echo 'Dibatalkan'; break;
                                             default: echo ucfirst($order['status']);
                                         }
@@ -489,57 +490,60 @@ if (isset($_POST['confirm_received'], $_POST['order_id'])) {
                                 </div>
                                 <div class="item-price">Rp <?php echo number_format($item['price'],0,',','.'); ?></div>
                                 <div class="item-subtotal">Rp <?php echo number_format($item['subtotal'],0,',','.'); ?></div>
+                                <?php if ($order['status'] === 'completed'): ?>
+                                    <a href="detail_produk.php?id=<?= $item['product_id'] ?>" class="btn-custom" style="margin-left:12px; margin-top:8px;">Review Produk</a>
+                                <?php endif; ?>
                             </div>
-                            <?php endforeach; ?>
-                            <?php if ($order['status'] !== 'completed'): ?>
-                                <form method="post" class="confirm-form">
-                                    <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
-                                    <button type="submit" name="confirm_received" class="btn-success-custom">
-                                        Konfirmasi Diterima
-                                    </button>
-                                </form>
-                            <?php else: ?>
-                            <div class="confirm-form">
-                                <span class="status-badge status-paid">Selesai</span>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-    </main>
+                        <?php endforeach; ?>
+                        <?php if ($order['status'] !== 'completed'): ?>
+                            <form method="post" class="confirm-form">
+                                <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
+                                <button type="submit" name="confirm_received" class="btn-success-custom">
+                                    Konfirmasi Diterima
+                                </button>
+                            </form>
+                        <?php else: ?>
+                        <div class="confirm-form">
+                            <span class="status-badge status-paid">Selesai</span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>BenangkuMode</h3>
-                    <p>Pengrajin tangan merajut terbaik di Lombok, menghadirkan produk berkualitas dengan sentuhan tradisional dan desain modern.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Kontak</h4>
-                    <p><i class="fas fa-phone"></i> +62 812-3456-7890</p>
-                    <p><i class="fas fa-envelope"></i> info@benangkumode.com</p>
-                    <p><i class="fas fa-map-marker-alt"></i> Lombok, Nusa Tenggara Barat</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Ikuti Kami</h4>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BenangkuMode</h3>
+                <p>Pengrajin tangan merajut terbaik di Lombok, menghadirkan produk berkualitas dengan sentuhan tradisional dan desain modern.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Kontak</h4>
+                <p><i class="fas fa-phone"></i> +62 812-3456-7890</p>
+                <p><i class="fas fa-envelope"></i> info@benangkumode.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Lombok, Nusa Tenggara Barat</p>
+            </div>
+            <div class="footer-section">
+                <h4>Ikuti Kami</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 BenangkuMode. All rights reserved.</p>
-            </div>
         </div>
-    </footer>
+        <div class="footer-bottom">
+            <p>&copy; 2024 BenangkuMode. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/script.js"></script>
 </body>
 </html> 
