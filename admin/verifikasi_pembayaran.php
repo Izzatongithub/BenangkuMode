@@ -57,6 +57,8 @@ $registrations = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     <meta charset="UTF-8">
     <title>Verifikasi Pembayaran Workshop - Admin</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #eee; padding: 32px; }
         h2 { text-align: center; margin-bottom: 24px; }
@@ -82,77 +84,164 @@ $registrations = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         .modal-content.error { border-left: 6px solid #e74c3c; }
         .modal-content .close-btn { margin-top: 18px; background: #667eea; color: #fff; border: none; border-radius: 5px; padding: 7px 18px; cursor: pointer; }
         .modal-content .close-btn:hover { background: #5a6fd8; }
+
+        .sidebar {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 2px 0;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+        .main-content {
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Verifikasi Pembayaran Workshop</h2>
-        <form class="filter-form" method="get">
-            <label for="status">Filter Status: </label>
-            <select name="status" id="status" onchange="this.form.submit()">
-                <option value="all" <?= $statusFilter==='all'?'selected':''; ?>>Semua</option>
-                <option value="pending" <?= $statusFilter==='pending'?'selected':''; ?>>Pending</option>
-                <option value="paid" <?= $statusFilter==='paid'?'selected':''; ?>>Paid</option>
-                <option value="cancelled" <?= $statusFilter==='cancelled'?'selected':''; ?>>Cancelled</option>
-            </select>
-        </form>
-        <?php if (count($registrations) === 0): ?>
-            <div class="no-data">Tidak ada pendaftar workshop.</div>
-        <?php else: ?>
-        <table>
-            <tr>
-                <th>Nama User</th>
-                <th>Email</th>
-                <th>Workshop</th>
-                <th>Tanggal Daftar</th>
-                <th>Bukti Pembayaran</th>
-                <th>Status</th>
-                <th>Aksi</th>
-            </tr>
-            <?php foreach ($registrations as $reg): ?>
-            <tr>
-                <td><?= htmlspecialchars($reg['username']) ?></td>
-                <td><?= htmlspecialchars($reg['user_email']) ?></td>
-                <td><?= htmlspecialchars($reg['workshop_title']) ?></td>
-                <td><?= date('d M Y H:i', strtotime($reg['registration_date'])) ?></td>
-                <td>
-                    <?php if ($reg['payment_proof']): ?>
-                        <a href="../<?= htmlspecialchars($reg['payment_proof']) ?>" target="_blank">
-                            <img src="../<?= htmlspecialchars($reg['payment_proof']) ?>" class="proof-img" alt="Bukti Pembayaran">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0">
+                <div class="sidebar p-3">
+                    <div class="text-center mb-4">
+                        <h4 class="text-white">Admin Panel</h4>
+                        <small class="text-white-50">BenangkuMode</small>
+                    </div>
+                    
+                    <nav class="nav flex-column">
+                        <a class="nav-link" href="dashboard.php">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                         </a>
-                    <?php else: ?>
-                        <span style="color:#aaa;">Belum ada</span>
-                    <?php endif; ?>
-                </td>
-                <td class="status-<?= htmlspecialchars($reg['payment_status']) ?>">
-                    <?= ucfirst($reg['payment_status']) ?>
-                </td>
-                <td>
-                    <?php if ($reg['payment_status'] === 'pending'): ?>
-                    <form method="post" style="display:inline;" onsubmit="return confirm('Konfirmasi pembayaran ini?')">
-                        <input type="hidden" name="registration_id" value="<?= $reg['id'] ?>">
-                        <input type="hidden" name="action" value="confirm">
-                        <button type="submit" class="btn-action btn-confirm">Konfirmasi</button>
-                    </form>
-                    <form method="post" style="display:inline;" onsubmit="return confirm('Tolak pembayaran ini?')">
-                        <input type="hidden" name="registration_id" value="<?= $reg['id'] ?>">
-                        <input type="hidden" name="action" value="reject">
-                        <button type="submit" class="btn-action btn-reject">Tolak</button>
-                    </form>
-                    <?php else: ?>
-                        <span style="color:#aaa;">-</span>
-                    <?php endif; ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
-    </div>
-    <!-- Popup Modal -->
-    <div class="modal-bg" id="popupModal">
-        <div class="modal-content <?php if($popup) echo $popup['type']; ?>">
-            <div id="popupMsg"><?php if($popup) echo htmlspecialchars($popup['msg']); ?></div>
-            <button class="close-btn" onclick="closeModal()">Tutup</button>
+                        <a class="nav-link" href="users.php">
+                            <i class="fas fa-users me-2"></i>Users
+                        </a>
+                        <a class="nav-link" href="products.php">
+                            <i class="fas fa-box me-2"></i>Products
+                        </a>
+                        <a class="nav-link" href="comingsoon.php">
+                            <i class="fas fa-clock-rotate-left me-2"></i>Add Coming Soon
+                        </a>
+                        <a class="nav-link" href="workshops.php">
+                            <i class="fas fa-chalkboard-teacher me-2"></i>Workshops
+                        </a>
+                        <a class="nav-link active" href="verifikasi_pembayaran.php">
+                            <i class="fas fa-user-check me-2"></i>Pendaftar Workshop
+                        </a>
+                        <a class="nav-link" href="peserta_workshop.php">
+                            <i class="fas fa-users me-2"></i>Peserta per Workshop
+                        </a>
+                        <a class="nav-link" href="destinations.php">
+                            <i class="fas fa-map-marker-alt me-2"></i>Destinations
+                        </a>
+                        <a class="nav-link" href="orders.php">
+                            <i class="fas fa-shopping-cart me-2"></i>Orders
+                        </a>
+                        <a class="nav-link" href="settings.php">
+                            <i class="fas fa-cog me-2"></i>Settings
+                        </a>
+                        <hr class="text-white-50">
+                        <a class="nav-link" href="../index.php">
+                            <i class="fas fa-home me-2"></i>Back to Site
+                        </a>
+                        <a class="nav-link" href="../logout.php">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10">
+                <div class="main-content p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-4">Verifikasi Pembayaran Workshop</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <form class="m-0" method="get">
+                                <label for="status" class="me-2 mb-0">Filter Status: </label>
+                                <select name="status" id="status" onchange="this.form.submit()" class="form-select d-inline-block w-auto">
+                                    <option value="all" <?= $statusFilter==='all'?'selected':''; ?>>Semua</option>
+                                    <option value="pending" <?= $statusFilter==='pending'?'selected':''; ?>>Pending</option>
+                                    <option value="paid" <?= $statusFilter==='paid'?'selected':''; ?>>Paid</option>
+                                    <option value="cancelled" <?= $statusFilter==='cancelled'?'selected':''; ?>>Cancelled</option>
+                                </select>
+                            </form>
+                         </div>
+                        <div class="card-body">
+                           <?php if (count($registrations) === 0): ?>
+                                <div class="no-data">Tidak ada pendaftar workshop.</div>
+                            <?php else: ?>
+                                <div class="table-responsive">
+                                    <table>
+                                        <tr>
+                                            <th>Nama User</th>
+                                            <th>Email</th>
+                                            <th>Workshop</th>
+                                            <th>Tanggal Daftar</th>
+                                            <th>Bukti Pembayaran</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    <?php foreach ($registrations as $reg): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($reg['username']) ?></td>
+                                            <td><?= htmlspecialchars($reg['user_email']) ?></td>
+                                            <td><?= htmlspecialchars($reg['workshop_title']) ?></td>
+                                            <td><?= date('d M Y H:i', strtotime($reg['registration_date'])) ?></td>
+                                            <td>
+                                                <?php if ($reg['payment_proof']): ?>
+                                                    <a href="../<?= htmlspecialchars($reg['payment_proof']) ?>" target="_blank">
+                                                        <img src="../<?= htmlspecialchars($reg['payment_proof']) ?>" class="proof-img" alt="Bukti Pembayaran">
+                                                    </a>
+                                                <?php else: ?>
+                                                    <span style="color:#aaa;">Belum ada</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td class="status-<?= htmlspecialchars($reg['payment_status']) ?>">
+                                                <?= ucfirst($reg['payment_status']) ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($reg['payment_status'] === 'pending'): ?>
+                                                    <form method="post" style="display:inline;" onsubmit="return confirm('Konfirmasi pembayaran ini?')">
+                                                    <input type="hidden" name="registration_id" value="<?= $reg['id'] ?>">
+                                                    <input type="hidden" name="action" value="confirm">
+                                                        <button type="submit" class="btn-action btn-confirm">Konfirmasi</button>
+                                                    </form>
+                                                    <form method="post" style="display:inline;" onsubmit="return confirm('Tolak pembayaran ini?')">
+                                                        <input type="hidden" name="registration_id" value="<?= $reg['id'] ?>">
+                                                        <input type="hidden" name="action" value="reject">
+                                                        <button type="submit" class="btn-action btn-reject">Tolak</button>
+                                                    </form>
+                                                <?php else: ?>
+                                                    <span style="color:#aaa;">-</span>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </table>
+                            <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Popup Modal -->
+                    <div class="modal-bg" id="popupModal">
+                        <div class="modal-content <?php if($popup) echo $popup['type']; ?>">
+                            <div id="popupMsg"><?php if($popup) echo htmlspecialchars($popup['msg']); ?></div>
+                            <button class="close-btn" onclick="closeModal()">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>

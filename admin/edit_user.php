@@ -136,6 +136,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a class="nav-link" href="comingsoon.php">
                             <i class="fas fa-clock-rotate-left me-2"></i>Add Coming Soon
                         </a>
+                        <a class="nav-link" href="workshops.php">
+                            <i class="fas fa-chalkboard-teacher me-2"></i>Workshops
+                        </a>
+                        <a class="nav-link" href="verifikasi_pembayaran.php">
+                            <i class="fas fa-user-check me-2"></i>Pendaftar Workshop
+                        </a>
+                        <a class="nav-link" href="peserta_workshop.php">
+                            <i class="fas fa-users me-2"></i>Peserta per Workshop
+                        </a>
                         <a class="nav-link" href="destinations.php">
                             <i class="fas fa-map-marker-alt me-2"></i>Destinations
                         </a>
