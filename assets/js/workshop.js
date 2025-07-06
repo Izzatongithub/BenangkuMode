@@ -67,10 +67,12 @@
 // ];
 
 // Initialize the page
-// document.addEventListener('DOMContentLoaded', function() {
-//     displayWorkshops();
-//     setupFormHandling();
-// });
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Initializing workshop page');
+    // displayWorkshops();
+    setupFormHandling();
+    console.log('Workshop page initialized');
+});
 
 // Display workshops
 // function displayWorkshops() {
@@ -143,23 +145,42 @@ function formatDate(dateString) {
 
 // Register workshop
 function registerWorkshop(workshopId) {
+    console.log('registerWorkshop called with ID:', workshopId);
+    console.log('isLoggedIn:', window.isLoggedIn);
+    
     if (!window.isLoggedIn) {
         showNotification('Silakan login untuk mendaftar workshop!', 'error');
         setTimeout(() => window.location.href = 'login.php', 1200);
         return;
     }
-    const workshop = workshops.find(w => w.id === workshopId);
-    if (!workshop) return;
     
-    // Check if workshop is full
-    const availableSpots = workshop.maxParticipants - workshop.currentParticipants;
-    if (availableSpots <= 0) {
-        showNotification('Workshop sudah penuh!', 'error');
+    // Find workshop data from the DOM
+    const button = document.querySelector(`[onclick="registerWorkshop(${workshopId})"]`);
+    if (!button) {
+        console.error('Button not found for workshop ID:', workshopId);
+        showNotification('Terjadi kesalahan saat membuka form pendaftaran!', 'error');
+        return;
+    }
+    
+    const workshopCard = button.closest('.workshop-card');
+    if (!workshopCard) {
+        console.error('Workshop card not found');
+        showNotification('Terjadi kesalahan saat membuka form pendaftaran!', 'error');
+        return;
+    }
+    
+    const workshopTitle = workshopCard.querySelector('h3');
+    if (!workshopTitle) {
+        console.error('Workshop title not found');
+        showNotification('Terjadi kesalahan saat membuka form pendaftaran!', 'error');
         return;
     }
     
     // Set workshop title in form
-    document.getElementById('workshopTitle').value = workshop.title;
+    const titleInput = document.getElementById('workshopTitle');
+    if (titleInput) {
+        titleInput.value = workshopTitle.textContent;
+    }
     
     // Open registration modal
     openRegistration();
@@ -167,32 +188,57 @@ function registerWorkshop(workshopId) {
 
 // Open registration modal
 function openRegistration() {
+    console.log('Opening registration modal');
     const modal = document.getElementById('registrationModal');
+    if (!modal) {
+        console.error('Registration modal not found');
+        showNotification('Terjadi kesalahan saat membuka form pendaftaran!', 'error');
+        return;
+    }
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    console.log('Modal opened successfully');
 }
 
 // Close registration modal
 function closeRegistration() {
+    console.log('Closing registration modal');
     const modal = document.getElementById('registrationModal');
+    if (!modal) {
+        console.error('Registration modal not found');
+        return;
+    }
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
     
     // Reset form
-    document.getElementById('registrationForm').reset();
+    const form = document.getElementById('registrationForm');
+    if (form) {
+        form.reset();
+    }
+    console.log('Modal closed successfully');
 }
 
 // Setup form handling
 function setupFormHandling() {
+    console.log('Setting up form handling');
     const form = document.getElementById('registrationForm');
     
+    if (!form) {
+        console.error('Registration form not found');
+        return;
+    }
+    
     form.addEventListener('submit', function(e) {
+        console.log('Form submitted');
         e.preventDefault();
         
         if (validateForm(form)) {
             submitRegistration(form);
         }
     });
+    
+    console.log('Form handling setup complete');
 }
 
 // Validate form
@@ -233,25 +279,566 @@ function validateForm(form) {
 // Submit registration
 function submitRegistration(form) {
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
     
-    // Add workshop title
-    data.workshopTitle = document.getElementById('workshopTitle').value;
+    // Add workshop title to form data
+    const workshopTitle = document.getElementById('workshopTitle').value;
+    formData.append('workshopTitle', workshopTitle);
     
-    // Simulate form submission
+    // Debug: Log form data
+    console.log('Submitting form data:');
+    for (let [key, value] of formData.entries()) {
+        console.log(key + ': ' + value);
+    }
+    
+    // Show loading notification
     showNotification('Mengirim pendaftaran...', 'info');
     
-    setTimeout(() => {
-        // Simulate success
-        showNotification('Pendaftaran berhasil! Kami akan menghubungi Anda segera.', 'success');
-        closeRegistration();
+    // Send data to server
+    fetch('register_workshop.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        return response.text().then(text => {
+            console.log('Response text:', text);
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('Failed to parse JSON:', e);
+                throw new Error('Invalid JSON response: ' + text);
+            }
+        });
+    })
+    .then(result => {
+        console.log('Parsed result:', result);
+        if (result.success) {
+            showNotification(result.message, 'success');
+            closeRegistration();
+            
+            // Get workshop title from form data
+            const workshopTitle = document.getElementById('workshopTitle').value;
+            
+            // Update workshop display with new slot count
+            if (result.remaining_slots !== undefined) {
+                updateWorkshopSlots(workshopTitle, result.remaining_slots);
+            }
+            
+            // Handle payment flow based on workshop type
+            const data = Object.fromEntries(formData);
+            if (result.is_free) {
+                // Free workshop - show WhatsApp confirmation
+                showWhatsAppConfirmation(data);
+            } else {
+                // Paid workshop - show payment confirmation
+                showPaymentConfirmation(data, result);
+            }
+        } else {
+            showNotification(result.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Terjadi kesalahan saat mengirim pendaftaran. Silakan coba lagi.', 'error');
+    });
+}
+
+// Show WhatsApp confirmation dialog
+function showWhatsAppConfirmation(data) {
+    // Create confirmation modal
+    const confirmationModal = document.createElement('div');
+    confirmationModal.className = 'whatsapp-confirmation-modal';
+    confirmationModal.innerHTML = `
+        <div class="whatsapp-confirmation-content">
+            <div class="whatsapp-confirmation-header">
+                <h3>Pendaftaran Berhasil! 🎉</h3>
+                <button class="close-whatsapp-confirmation" onclick="closeWhatsAppConfirmation()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="whatsapp-confirmation-body">
+                <p>Pendaftaran workshop Anda telah berhasil disimpan.</p>
+                <p>Apakah Anda ingin menghubungi admin untuk konfirmasi atau pertanyaan lebih lanjut?</p>
+                <div class="whatsapp-options">
+                    <button class="btn btn-success" onclick="sendWhatsAppNotification(${JSON.stringify(data).replace(/"/g, '&quot;')})">
+                        <i class="fab fa-whatsapp"></i> Hubungi Admin via WhatsApp
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeWhatsAppConfirmation()">
+                        Tidak, Terima Kasih
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(confirmationModal);
+    
+    // Add styles for the modal
+    const styles = document.createElement('style');
+    styles.textContent = `
+        .whatsapp-confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10002;
+        }
         
-        // In a real application, you would send this data to your server
-        console.log('Registration data:', data);
+        .whatsapp-confirmation-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
         
-        // Send WhatsApp notification
-        sendWhatsAppNotification(data);
-    }, 2000);
+        .whatsapp-confirmation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .whatsapp-confirmation-header h3 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .close-whatsapp-confirmation {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-whatsapp-confirmation:hover {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .whatsapp-confirmation-body {
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .whatsapp-confirmation-body p {
+            margin-bottom: 1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .whatsapp-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .whatsapp-options .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .whatsapp-options .btn-success {
+            background: #25d366;
+            color: white;
+        }
+        
+        .whatsapp-options .btn-success:hover {
+            background: #128c7e;
+            transform: translateY(-1px);
+        }
+        
+        .whatsapp-options .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .whatsapp-options .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 768px) {
+            .whatsapp-options {
+                flex-direction: column;
+            }
+            
+            .whatsapp-options .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    `;
+    
+    if (!document.querySelector('#whatsapp-confirmation-styles')) {
+        styles.id = 'whatsapp-confirmation-styles';
+        document.head.appendChild(styles);
+    }
+}
+
+// Close WhatsApp confirmation
+function closeWhatsAppConfirmation() {
+    const modal = document.querySelector('.whatsapp-confirmation-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Update workshop slots display
+function updateWorkshopSlots(workshopTitle, remainingSlots) {
+    // Find the workshop card by title
+    const workshopCards = document.querySelectorAll('.workshop-card');
+    workshopCards.forEach(card => {
+        const titleElement = card.querySelector('h3');
+        if (titleElement && titleElement.textContent.trim() === workshopTitle.trim()) {
+            // Update slots display
+            const slotsElement = card.querySelector('.slots');
+            if (slotsElement) {
+                if (remainingSlots <= 0) {
+                    slotsElement.textContent = 'Penuh';
+                    slotsElement.className = 'slots full';
+                    
+                    // Disable register button
+                    const registerButton = card.querySelector('.btn-primary');
+                    if (registerButton) {
+                        registerButton.textContent = 'Workshop Penuh';
+                        registerButton.disabled = true;
+                    }
+                } else if (remainingSlots <= 3) {
+                    slotsElement.textContent = remainingSlots + ' slot tersisa';
+                    slotsElement.className = 'slots almost-full';
+                } else {
+                    slotsElement.textContent = remainingSlots + ' slot tersisa';
+                    slotsElement.className = 'slots';
+                }
+            }
+        }
+    });
+}
+
+// Show payment confirmation for paid workshops
+function showPaymentConfirmation(data, result) {
+    // Create payment confirmation modal
+    const paymentModal = document.createElement('div');
+    paymentModal.className = 'payment-confirmation-modal';
+    paymentModal.innerHTML = `
+        <div class="payment-confirmation-content">
+            <div class="payment-confirmation-header">
+                <h3>Pendaftaran Berhasil! 💳</h3>
+                <button class="close-payment-confirmation" onclick="closePaymentConfirmation()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="payment-confirmation-body">
+                <div class="payment-info">
+                    <h4>Detail Pembayaran</h4>
+                    <p><strong>Workshop:</strong> ${data.workshopTitle}</p>
+                    <p><strong>Nama:</strong> ${data.name}</p>
+                    <p><strong>Email:</strong> ${data.email}</p>
+                    <p><strong>Total Bayar:</strong> Rp ${Number(result.workshop_price).toLocaleString()}</p>
+                    <p><strong>Status:</strong> <span class="status-pending">Menunggu Pembayaran</span></p>
+                </div>
+                
+                <div class="payment-methods">
+                    <h4>Metode Pembayaran</h4>
+                    <div class="payment-options">
+                        <button class="payment-option" onclick="processPayment('transfer', ${result.registration_id})">
+                            <i class="fas fa-university"></i>
+                            <span>Transfer Bank</span>
+                        </button>
+                        <button class="payment-option" onclick="processPayment('ewallet', ${result.registration_id})">
+                            <i class="fas fa-wallet"></i>
+                            <span>E-Wallet</span>
+                        </button>
+                        <button class="payment-option" onclick="processPayment('whatsapp', ${result.registration_id})">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>Bayar via WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="payment-actions">
+                    <button class="btn btn-secondary" onclick="closePaymentConfirmation()">
+                        Bayar Nanti
+                    </button>
+                    <button class="btn btn-primary" onclick="viewPaymentInstructions(${result.registration_id})">
+                        Lihat Instruksi Pembayaran
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(paymentModal);
+    
+    // Add styles for the payment modal
+    const styles = document.createElement('style');
+    styles.textContent = `
+        .payment-confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10002;
+        }
+        
+        .payment-confirmation-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .payment-confirmation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .payment-confirmation-header h3 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .close-payment-confirmation {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-payment-confirmation:hover {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .payment-confirmation-body {
+            padding: 2rem;
+        }
+        
+        .payment-info {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .payment-info h4 {
+            margin: 0 0 1rem 0;
+            color: #2c3e50;
+        }
+        
+        .payment-info p {
+            margin: 0.5rem 0;
+            color: #666;
+        }
+        
+        .status-pending {
+            color: #f39c12;
+            font-weight: 600;
+        }
+        
+        .payment-methods h4 {
+            margin: 0 0 1rem 0;
+            color: #2c3e50;
+        }
+        
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .payment-option {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .payment-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .payment-option i {
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+        
+        .payment-option span {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .payment-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        .payment-actions .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 768px) {
+            .payment-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-actions {
+                flex-direction: column;
+            }
+            
+            .payment-actions .btn {
+                width: 100%;
+            }
+        }
+    `;
+    
+    if (!document.querySelector('#payment-confirmation-styles')) {
+        styles.id = 'payment-confirmation-styles';
+        document.head.appendChild(styles);
+    }
+}
+
+// Close payment confirmation
+function closePaymentConfirmation() {
+    const modal = document.querySelector('.payment-confirmation-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Process payment method selection
+function processPayment(method, registrationId) {
+    console.log('Processing payment:', method, 'for registration:', registrationId);
+    
+    switch (method) {
+        case 'transfer':
+            showTransferInstructions(registrationId);
+            break;
+        case 'ewallet':
+            showEWalletInstructions(registrationId);
+            break;
+        case 'whatsapp':
+            showWhatsAppPayment(registrationId);
+            break;
+    }
+}
+
+// Show transfer instructions
+function showTransferInstructions(registrationId) {
+    const message = `Instruksi Transfer Bank:\n\n` +
+                   `Bank: BCA\n` +
+                   `No. Rekening: 1234567890\n` +
+                   `Atas Nama: BenangkuMode\n` +
+                   `ID Registrasi: ${registrationId}\n\n` +
+                   `Silakan transfer sesuai nominal dan kirim bukti transfer.`;
+    
+    alert(message);
+}
+
+// Show e-wallet instructions
+function showEWalletInstructions(registrationId) {
+    const message = `Instruksi E-Wallet:\n\n` +
+                   `Pilih e-wallet favorit Anda:\n` +
+                   `• GoPay\n` +
+                   `• OVO\n` +
+                   `• DANA\n` +
+                   `• LinkAja\n\n` +
+                   `ID Registrasi: ${registrationId}\n\n` +
+                   `Silakan pilih metode pembayaran.`;
+    
+    alert(message);
+}
+
+// Show WhatsApp payment
+function showWhatsAppPayment(registrationId) {
+    const message = `Halo! Saya ingin melakukan pembayaran untuk workshop.\n\n` +
+                   `ID Registrasi: ${registrationId}\n\n` +
+                   `Mohon bantu proses pembayaran saya.`;
+    
+    const whatsappUrl = `https://wa.me/62895608491832?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+// View payment instructions
+function viewPaymentInstructions(registrationId) {
+    const message = `Detail Pembayaran untuk ID: ${registrationId}\n\n` +
+                   `1. Transfer Bank BCA: 1234567890\n` +
+                   `2. E-Wallet: Scan QR Code\n` +
+                   `3. Bayar via WhatsApp\n\n` +
+                   `Setelah pembayaran, kirim bukti transfer ke WhatsApp kami.`;
+    
+    alert(message);
 }
 
 // Send WhatsApp notification
@@ -268,6 +855,9 @@ function sendWhatsAppNotification(data) {
     
     const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+    
+    // Close the confirmation modal
+    closeWhatsAppConfirmation();
 }
 
 // Show notification
@@ -297,6 +887,18 @@ document.addEventListener('click', function(event) {
     const modal = document.getElementById('registrationModal');
     if (event.target === modal) {
         closeRegistration();
+    }
+    
+    // Close WhatsApp confirmation modal when clicking outside
+    const whatsappModal = document.querySelector('.whatsapp-confirmation-modal');
+    if (event.target === whatsappModal) {
+        closeWhatsAppConfirmation();
+    }
+    
+    // Close payment confirmation modal when clicking outside
+    const paymentModal = document.querySelector('.payment-confirmation-modal');
+    if (event.target === paymentModal) {
+        closePaymentConfirmation();
     }
 });
 

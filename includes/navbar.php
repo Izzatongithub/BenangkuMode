@@ -42,6 +42,7 @@ require_once dirname(__FILE__) . '/../config/database.php';
                         </div>
                         <div class="dropdown-menu">
                             <a href="profile.php">Profil Saya</a>
+                            <a href="upload_bukti.php"><i class="fas fa-upload me-2"></i>Upload Bukti Pembayaran</a>
                             <div class="divider"></div>
                             <a href="logout.php">Logout</a>
                         </div>

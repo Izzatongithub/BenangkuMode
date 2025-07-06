@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 05, 2025 at 05:57 AM
+-- Generation Time: Jul 06, 2025 at 06:03 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.30
 
@@ -117,6 +117,19 @@ CREATE TABLE `destinations` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `destinations`
+--
+
+INSERT INTO `destinations` (`id`, `name`, `description`, `category_id`, `location`, `address`, `latitude`, `longitude`, `rating`, `review_count`, `operating_hours`, `ticket_price`, `contact`, `main_image`, `images`, `features`, `tips`, `facilities`, `is_active`, `is_featured`, `created_at`, `updated_at`) VALUES
+(2, 'pantai sire', 'pantai di klu', 1, 'pemenang, klu', 'pemenang, klu', '-8.36615100', '116.10222880', '4.00', 45, '08:00 - 20:00', '10000', 'pantaisire@gmail.com', '6869830766d27.jpeg', NULL, NULL, NULL, NULL, 1, 1, '2025-07-05 19:54:47', '2025-07-05 19:54:47'),
+(3, 'pantai sire', 'pantai di klu', 1, 'pemenang, klu', 'pemenang, klu', '-8.36615100', '116.10222880', '4.00', 45, '08:00 - 20:00', '10000', 'pantaisire@gmail.com', '6869831a7fe04.jpeg', NULL, NULL, NULL, NULL, 1, 1, '2025-07-05 19:55:06', '2025-07-05 19:55:06'),
+(4, 'pantai sire', 'pantai di klu', 1, 'pemenang, klu', 'pemenang, klu', '-8.36615100', '116.10222880', '4.00', 45, '08:00 - 20:00', '10000', 'pantaisire@gmail.com', '686985d0cd6b0.jpeg', NULL, NULL, NULL, NULL, 1, 1, '2025-07-05 20:06:40', '2025-07-05 20:06:40'),
+(5, 'pantai sire', 'pantai di klu', 1, 'pemenang, klu', 'pemenang, klu', '-8.36615100', '116.10222880', '4.00', 45, '08:00 - 20:00', '10000', 'pantaisire@gmail.com', '6869866057418.jpeg', NULL, NULL, NULL, NULL, 1, 1, '2025-07-05 20:09:04', '2025-07-05 20:09:04'),
+(6, 'pantai senggigi', 'senggigi', 1, 'senggigi', 'senggigi', '-8.47859300', '116.03628470', '4.00', 65, '08:00-00:00', '15000', '19191991', '686986ec46767.jpeg', NULL, NULL, NULL, NULL, 1, 1, '2025-07-05 20:11:24', '2025-07-05 20:11:24'),
+(7, 'pantai senggigi', 'senggigi', 1, 'senggigi', 'senggigi', '-8.47859300', '116.03628470', '4.00', 65, '08:00-00:00', '15000', '19191991', '686987538d5dd.jpeg', NULL, '[\"lorem\"]', '[\"lorem\"]', '[\"lorem\"]', 1, 1, '2025-07-05 20:13:07', '2025-07-05 20:13:07'),
+(8, 'gggg', 'gggg', 2, 'ggg', 'gggg', '99.99999999', '111.00000000', '2.00', 2, '08000', '111', '1111', '68698784e0c20.jpeg', NULL, '[\"nnnn\"]', '[\"nnnn\"]', '[\"nnnn\"]', 1, 1, '2025-07-05 20:13:56', '2025-07-05 20:13:56');
 
 -- --------------------------------------------------------
 
@@ -435,7 +448,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `full_name`, `phone`, `address`, `role`, `is_active`, `reset_token`, `reset_expiry`, `created_at`, `updated_at`) VALUES
 (1, 'admin', 'admin@benangkumode.com', '$2y$10$9m5X5/9oMhS8Gmi3Q/FXpu5zPJYvmJ9DfUfJruiy6nuDWtuDzmfba', 'Administrator', NULL, NULL, 'admin', 1, NULL, NULL, '2025-06-28 01:53:01', '2025-06-28 15:10:06'),
 (2, 'izzatnazhiefa_429', 'izzat@gmail.com', '$2y$10$svIFKae6HQlXCYUwXJtau.Sy.O5g5Twu8V9MK2mY2/T/ctCflHQfS', 'Izzat Nazhiefa', '089612345678', 'mataram', 'customer', 1, NULL, NULL, '2025-06-28 02:29:49', '2025-06-28 02:29:49'),
-(3, 'admin_1', 'admin1@benangkumode.com', 'admin1', 'joko', NULL, NULL, 'admin', 1, NULL, NULL, '2025-06-28 02:50:24', '2025-06-28 14:16:43');
+(3, 'admin_1', 'admin1@benangkumode.com', 'admin1', 'joko', NULL, NULL, 'admin', 1, NULL, NULL, '2025-06-28 02:50:24', '2025-06-28 14:16:43'),
+(26, 'abdi_667', 'abdi@gmail.com', '$2y$10$gRxPer/rDVbP.b8149u48e/./qZWB6tKqHuwiqyRhGmN.W7yiIOGi', 'abdi', '0899999', 'seruni', 'customer', 1, NULL, NULL, '2025-07-06 02:32:12', '2025-07-06 02:32:12');
 
 -- --------------------------------------------------------
 
@@ -468,8 +482,8 @@ CREATE TABLE `workshops` (
 --
 
 INSERT INTO `workshops` (`id`, `title`, `description`, `category_id`, `instructor`, `max_participants`, `current_participants`, `price`, `duration`, `start_date`, `end_date`, `location`, `image`, `is_active`, `is_past_event`, `created_at`, `updated_at`) VALUES
-(1, 'Dasar Merajut', 'Mempelajari teknik dasar merajut fashion', 1, 'Izzat Nazhiefa S.Kom', 10, 0, '50000.00', '5 Jam', '2025-07-01 16:52:00', '2025-07-03 16:52:00', 'Gomong', 'workshop_6863a4940e1b77.15297775.jpeg', 1, 0, '2025-07-01 08:53:07', '2025-07-01 09:04:20'),
-(3, 'Teknik dasar menjahit', 'Belajar teknik dasar menjahit', 1, 'Fadlullah hasan', 10, 0, '0.00', '4 Jam', '2025-07-07 18:15:00', '2025-07-12 18:15:00', 'Kekalik', '', 1, 0, '2025-07-01 10:19:32', '2025-07-01 10:19:32'),
+(1, 'Dasar Merajut', 'Mempelajari teknik dasar merajut fashion', 1, 'Izzat Nazhiefa S.Kom', 10, 2, '50000.00', '5 Jam', '2025-07-01 16:52:00', '2025-07-03 16:52:00', 'Gomong', 'workshop_6863a4940e1b77.15297775.jpeg', 1, 0, '2025-07-01 08:53:07', '2025-07-06 03:40:07'),
+(3, 'Teknik dasar menjahit', 'Belajar teknik dasar menjahit', 1, 'Fadlullah hasan', 10, 1, '0.00', '4 Jam', '2025-07-07 18:15:00', '2025-07-12 18:15:00', 'Kekalik', '', 1, 0, '2025-07-01 10:19:32', '2025-07-06 02:57:41'),
 (4, 'Teknik dasar memotong', 'belajar memotong', 1, 'yusri abdi', 10, 0, '0.00', '2 jam', '2025-07-01 18:20:00', '2025-07-02 18:20:00', 'seruni', '', 0, 1, '2025-07-01 10:20:43', '2025-07-01 10:20:43');
 
 -- --------------------------------------------------------
@@ -504,16 +518,32 @@ INSERT INTO `workshop_categories` (`id`, `name`, `description`, `is_active`, `cr
 
 CREATE TABLE `workshop_registrations` (
   `id` int(11) NOT NULL,
-  `workshop_id` int(11) NOT NULL,
-  `participant_name` varchar(100) NOT NULL,
-  `participant_email` varchar(100) NOT NULL,
-  `participant_phone` varchar(20) DEFAULT NULL,
-  `participant_age` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `workshop_title` varchar(255) NOT NULL,
+  `participant_name` varchar(255) NOT NULL,
+  `participant_email` varchar(255) NOT NULL,
+  `participant_phone` varchar(50) NOT NULL,
+  `participant_age` int(3) DEFAULT NULL,
   `experience_level` enum('beginner','intermediate','advanced') DEFAULT 'beginner',
-  `special_requests` text DEFAULT NULL,
-  `registration_date` timestamp NOT NULL DEFAULT current_timestamp(),
-  `status` enum('pending','confirmed','cancelled') DEFAULT 'pending'
+  `special_needs` text DEFAULT NULL,
+  `registration_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `status` enum('pending','confirmed','cancelled') DEFAULT 'pending',
+  `workshop_price` decimal(10,2) DEFAULT 0.00 COMMENT 'Harga workshop',
+  `payment_status` enum('pending','paid','cancelled','refunded') DEFAULT 'pending' COMMENT 'Status pembayaran',
+  `payment_method` varchar(50) DEFAULT NULL COMMENT 'Metode pembayaran',
+  `payment_date` datetime DEFAULT NULL COMMENT 'Tanggal pembayaran',
+  `payment_reference` varchar(100) DEFAULT NULL COMMENT 'Referensi pembayaran',
+  `payment_amount` decimal(10,2) DEFAULT NULL COMMENT 'Jumlah yang dibayar',
+  `payment_proof` varchar(255) DEFAULT NULL,
+  `workshop_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `workshop_registrations`
+--
+
+INSERT INTO `workshop_registrations` (`id`, `user_id`, `workshop_title`, `participant_name`, `participant_email`, `participant_phone`, `participant_age`, `experience_level`, `special_needs`, `registration_date`, `status`, `workshop_price`, `payment_status`, `payment_method`, `payment_date`, `payment_reference`, `payment_amount`, `payment_proof`, `workshop_id`) VALUES
+(7, 26, '', 'abdi', 'abdi@gmail.com', '89989', 19, 'beginner', 'mmm', '2025-07-06 11:40:07', 'pending', '50000.00', 'pending', NULL, NULL, NULL, NULL, 'assets/images/payment_proof/proof_7_1751774549.jpeg', 1);
 
 --
 -- Indexes for dumped tables
@@ -663,6 +693,8 @@ ALTER TABLE `workshop_categories`
 --
 ALTER TABLE `workshop_registrations`
   ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `registration_date` (`registration_date`),
   ADD KEY `workshop_id` (`workshop_id`);
 
 --
@@ -691,7 +723,7 @@ ALTER TABLE `contact_messages`
 -- AUTO_INCREMENT for table `destinations`
 --
 ALTER TABLE `destinations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `destination_categories`
@@ -763,7 +795,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `workshops`
@@ -781,7 +813,7 @@ ALTER TABLE `workshop_categories`
 -- AUTO_INCREMENT for table `workshop_registrations`
 --
 ALTER TABLE `workshop_registrations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
@@ -841,7 +873,8 @@ ALTER TABLE `workshops`
 -- Constraints for table `workshop_registrations`
 --
 ALTER TABLE `workshop_registrations`
-  ADD CONSTRAINT `workshop_registrations_ibfk_1` FOREIGN KEY (`workshop_id`) REFERENCES `workshops` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `workshop_registrations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `workshop_registrations_ibfk_2` FOREIGN KEY (`workshop_id`) REFERENCES `workshops` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

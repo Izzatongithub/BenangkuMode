@@ -278,6 +278,7 @@ if ($result) {
                                 <a href="orders.php">
                                     <i class="fas fa-shopping-bag me-2"></i>Pesanan
                                 </a>
+                                <a href="upload_bukti.php"><i class="fas fa-upload me-2"></i>Upload Bukti Pembayaran</a>
                                 <?php endif; ?>
                                 <div class="divider"></div>
                                 <a href="logout.php">
