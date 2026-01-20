@@ -197,7 +197,7 @@ if ($can_review && isset($_POST['rating'], $_POST['review_text'])) {
                             <div class="dropdown-menu">
                                 <?php if (isAdmin()): ?>
                                     <a href="admin/dashboard.php">
-                                        <i class="fas fa-cog me-2 icon-spacing"></i>Admin Panel
+                                        <i class="fas fa-cog me-2"></i>Admin Panel
                                     </a>
                                 <?php else: ?>
                                 <a href="profile.php">
@@ -281,6 +281,5 @@ if ($can_review && isset($_POST['rating'], $_POST['review_text'])) {
             </div>
         </div>
     </div>
-    <?php include 'includes/navbar.php'; ?>
 </body>
 </html> 
